@@ -1,28 +1,23 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("References")]
     public GameObject m_Rival;
 
+    [Header ("Movement Settings")]
     public float m_Acceleration = 15.0f;
     public float m_MaxSpeed = 8.0f;
     public float m_Friction = 3.0f;
     public int m_PlayerIndex = 0;
 
-    private CharacterController m_CharacterController;
     private SpriteRenderer m_SpriteRender;
     private Vector2 m_Movement;
     private Vector2 m_Velocity;
 
-    private void Start()
-    {
-        m_SpriteRender = GetComponent<SpriteRenderer>();
-    }
-
     private void Awake()
     {
-        m_CharacterController = GetComponent<CharacterController>();
+        m_SpriteRender = GetComponent<SpriteRenderer>();
     }
 
     public int GetPlayerIndex()
