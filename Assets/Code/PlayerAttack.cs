@@ -18,17 +18,23 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
+        if (m_Target == null)
+        {
+            m_CanAttack = false;
+            return;
+        }
+
         LookAtTarget(m_Target);
 
         float l_DistanceToRival = Vector3.Distance(transform.position, m_Target.transform.position);
-        if (l_DistanceToRival < m_AttackDistance)
-            m_CanAttack = true;
-        else
-            m_CanAttack = false;
+        m_CanAttack = l_DistanceToRival < m_AttackDistance;
+
     }
 
     private void LookAtTarget(GameObject _Target)
     {
+        if (_Target == null) return;
+
         Vector3 l_Direction = _Target.transform.position - transform.position;
         float l_Angle = Mathf.Atan2(l_Direction.y, l_Direction.x) * Mathf.Rad2Deg;
         Quaternion l_Rotation = Quaternion.AngleAxis(l_Angle, Vector3.forward);
@@ -39,18 +45,43 @@ public class PlayerAttack : MonoBehaviour
 
     public void Attack()
     {
+        if (m_Target == null)
+        {
+            Debug.LogWarning($"{gameObject.name} intento atacar pero m_Target es null");
+            return;
+        }
+
         if (Time.time - m_LastAttackTime < m_AttackCooldown)
             return;
 
-        if (m_CanAttack && m_Target != null && !m_IsAttacking)
+        if (!m_CanAttack)
         {
-            m_IsAttacking = true;
-            m_LastAttackTime = Time.time;
-
-            Debug.Log($"{gameObject.name} ataca a {m_Target.name} con {attackDamage} de daño");
-
-            StartCoroutine(ResetAttack());
+            Debug.LogWarning($"{gameObject.name} intento atacar pero está fuera de rango (m_AttackDistance={m_AttackDistance})");
+            return;
         }
+
+        if(m_IsAttacking)
+        {
+            return;
+        }
+
+        m_IsAttacking = true;
+        m_LastAttackTime = Time.time;
+
+        var life = m_Target.GetComponent<LifeController>();
+
+        if (life != null)
+        {
+            life.LoseHealth(attackDamage);
+        }
+        else
+        {
+            Debug.LogWarning($"{gameObject.name} ataca a {m_Target.name} pero el objetivo no tiene LifeController");
+        }
+
+        Debug.Log($"{gameObject.name} ataca a {m_Target.name} con {attackDamage} de daño");
+
+        StartCoroutine(ResetAttack());
     }
 
     private System.Collections.IEnumerator ResetAttack()
@@ -62,5 +93,9 @@ public class PlayerAttack : MonoBehaviour
     public int GetPlayerIndex()
     {
         return m_PlayerIndex;
+    }
+    public void SetTarget(GameObject target)
+    {
+        m_Target = target;
     }
 }

@@ -27,7 +27,11 @@ public class Timer : MonoBehaviour
         if(seconds == 0)
         {
             Debug.Log("Cumbull");
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
             Application.Quit();
+#endif
         }
         text.text = seconds.ToString();
     }
