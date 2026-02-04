@@ -285,7 +285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e16df1c122cc74bba43d96f8177ddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  m_AttackCollider: {fileID: 158139009}
   m_Target: {fileID: 7286670831248186084}
   m_PlayerIndex: 1
   velocidadRotacion: 5
@@ -928,6 +927,7 @@ GameObject:
   - component: {fileID: 740334116}
   - component: {fileID: 740334121}
   - component: {fileID: 740334123}
+  - component: {fileID: 740334124}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player
@@ -1088,7 +1088,23 @@ MonoBehaviour:
       m_Action: Move Input
       m_Flags: 8
     m_Flags: 0
-  m_AttackInput: {fileID: 0}
+  m_AttackKeyInput:
+    m_Name: Attack Key Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f1891237-e3a9-4a9f-90cd-3641f02b1cc0
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: ed3c94a7-15e8-4939-8973-8bfc22f2fafd
+      m_Path: <Keyboard>/b
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Attack Key Input
+      m_Flags: 0
+    m_Flags: 0
 --- !u!61 &740334122
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1148,6 +1164,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LifeController
   Life: {fileID: 1667689812}
+--- !u!114 &740334124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740334115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90e16df1c122cc74bba43d96f8177ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  m_Target: {fileID: 7286670831248186084}
+  m_PlayerIndex: 1
+  velocidadRotacion: 5
+  attackDamage: 10
+  m_AttackDistance: 5
 --- !u!1 &1063965108
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,7 +1755,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e16df1c122cc74bba43d96f8177ddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  m_AttackCollider: {fileID: 1731297406}
   m_Target: {fileID: 740334115}
   m_PlayerIndex: 0
   velocidadRotacion: 5
@@ -1817,6 +1849,7 @@ GameObject:
   - component: {fileID: 8852208222581912450}
   - component: {fileID: 8852208222581912451}
   - component: {fileID: 8852208222581912453}
+  - component: {fileID: 8852208222581912454}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Player
@@ -1902,7 +1935,23 @@ MonoBehaviour:
       m_Action: Move Input
       m_Flags: 8
     m_Flags: 0
-  m_AttackInput: {fileID: 0}
+  m_AttackKeyInput:
+    m_Name: Attack Key Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 2a8cc3c7-0164-41b6-a899-3eab39d3635e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a5f56aca-0768-45d2-9bd3-73a6f2bfe044
+      m_Path: <Keyboard>/f
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Attack Key Input
+      m_Flags: 0
+    m_Flags: 0
 --- !u!61 &8852208222581912452
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1962,6 +2011,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LifeController
   Life: {fileID: 1337144862}
+--- !u!114 &8852208222581912454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7286670831248186084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90e16df1c122cc74bba43d96f8177ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  m_Target: {fileID: 740334115}
+  m_PlayerIndex: 0
+  velocidadRotacion: 5
+  attackDamage: 10
+  m_AttackDistance: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -3,7 +3,6 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     [Header("References")]
-    public Collider2D m_AttackCollider;
     public GameObject m_Target;
 
     [Header("Attack Settings")]
@@ -26,8 +25,6 @@ public class PlayerAttack : MonoBehaviour
             m_CanAttack = true;
         else
             m_CanAttack = false;
-
-        Debug.Log(l_DistanceToRival < m_AttackDistance);
     }
 
     private void LookAtTarget(GameObject _Target)
@@ -53,10 +50,6 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log($"{gameObject.name} ataca a {m_Target.name} con {attackDamage} de daño");
 
             StartCoroutine(ResetAttack());
-        }
-        else if (!m_CanAttack)
-        {
-            Debug.Log("No hay objetivo para atacar");
         }
     }
 

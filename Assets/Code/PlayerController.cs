@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private InputAction m_MoveInput;
-    [SerializeField] private InputActionReference m_AttackInput;
+    [SerializeField] private InputAction m_AttackKeyInput;
 
     private PlayerMovement m_Movement;
     private PlayerAttack m_Attack;
@@ -19,18 +19,23 @@ public class PlayerController : MonoBehaviour
     {
         m_MoveInput.performed += ReadInput;
         m_MoveInput.canceled += ReadInput;
+
+        m_AttackKeyInput.performed += AttackInput;
+        m_AttackKeyInput.canceled += AttackInput;
     }
 
-    //private void OnEnable()
-    //{
-    //    m_MoveInput.Enable();
-    //    m_AttackInput.action.started += AttackInput;
-    //}
+    private void OnEnable()
+    {
+        m_MoveInput.Enable();
+
+        m_AttackKeyInput.Enable();
+    }
 
     private void OnDisable()
     {
         m_MoveInput.Disable();
-        m_AttackInput.action.started -= AttackInput;
+
+        m_AttackKeyInput.Disable();
     }
 
     private void ReadInput(InputAction.CallbackContext _Context)
