@@ -10,18 +10,20 @@ public class LifeController : MonoBehaviour
     void Start()
     {
         CurrentHP = MaxHP;
+        Life.minValue = 0;
+        Life.maxValue = MaxHP;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        Life.value = CurrentHP / 100;
+        Life.value = CurrentHP;
     }
     private void OnCollisionEnter(Collision collision)
     {
         CurrentHP--;
-        Life.value = CurrentHP / 100;
+        Life.value = CurrentHP;
     }
 
     public float LoseHealth (float damage)
