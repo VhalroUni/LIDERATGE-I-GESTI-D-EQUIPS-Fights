@@ -21,11 +21,11 @@ public class PlayerController : MonoBehaviour
         m_MoveInput.canceled += ReadInput;
     }
 
-    private void OnEnable()
-    {
-        m_MoveInput.Enable();
-        m_AttackInput.action.started += AttackInput;
-    }
+    //private void OnEnable()
+    //{
+    //    m_MoveInput.Enable();
+    //    m_AttackInput.action.started += AttackInput;
+    //}
 
     private void OnDisable()
     {
