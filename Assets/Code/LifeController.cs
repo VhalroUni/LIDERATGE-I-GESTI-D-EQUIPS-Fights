@@ -12,6 +12,7 @@ public class LifeController : MonoBehaviour
         CurrentHP = MaxHP;
         Life.minValue = 0;
         Life.maxValue = MaxHP;
+        Life.maxValue = MaxHP;
 
     }
 
@@ -19,17 +20,32 @@ public class LifeController : MonoBehaviour
     void Update()
     {
         Life.value = CurrentHP;
+        CheckDeath();
     }
     private void OnCollisionEnter(Collision collision)
     {
-        CurrentHP--;
-        Life.value = CurrentHP;
+        ApplyDamage(1f);
     }
 
-    public float LoseHealth (float damage)
+    public float LoseHealth(float damage)
+    {
+        ApplyDamage(damage);
+        return CurrentHP;
+    }
+
+    private void ApplyDamage(float damage)
     {
         CurrentHP -= damage;
-        return CurrentHP;
+        if (CurrentHP < 0f) CurrentHP = 0f;
+        Life.value = CurrentHP;
+        CheckDeath();
+    }
+    private void CheckDeath()
+    {
+        if (CurrentHP <= 0f)
+        {
+            Destroy(gameObject);
+        }
     }
 
 }
