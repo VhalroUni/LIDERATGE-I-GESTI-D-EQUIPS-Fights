@@ -4,6 +4,7 @@ public class PlayerAttack : MonoBehaviour
 {
     [Header("References")]
     public GameObject m_Target;
+    public GameObject m_Arrow;
 
     [Header("Attack Settings")]
     public int m_PlayerIndex;
@@ -24,23 +25,22 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        LookAtTarget(m_Target);
+        TargetOrientation(m_Target);
 
         float l_DistanceToRival = Vector3.Distance(transform.position, m_Target.transform.position);
         m_CanAttack = l_DistanceToRival < m_AttackDistance;
 
     }
 
-    private void LookAtTarget(GameObject _Target)
+    private void TargetOrientation(GameObject _Target)
     {
         if (_Target == null) return;
 
-        Vector3 l_Direction = _Target.transform.position - transform.position;
+        Vector3 l_Direction = _Target.transform.position - m_Arrow.transform.position;
         float l_Angle = Mathf.Atan2(l_Direction.y, l_Direction.x) * Mathf.Rad2Deg;
         Quaternion l_Rotation = Quaternion.AngleAxis(l_Angle, Vector3.forward);
 
-        //MIRAR AL ENEMIGO
-        //transform.rotation = Quaternion.Slerp(transform.rotation, l_Rotation, velocidadRotacion * Time.deltaTime);
+        m_Arrow.transform.rotation = Quaternion.Slerp(m_Arrow.transform.rotation, l_Rotation, velocidadRotacion * Time.deltaTime);
     }
 
     public void Attack()
