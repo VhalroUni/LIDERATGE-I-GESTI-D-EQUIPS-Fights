@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
     [Header("References")]
     public GameObject m_Target;
     public GameObject m_Arrow;
+    public Slider PowerBar;
 
     [Header("Attack Settings")]
     public int m_PlayerIndex;
@@ -16,6 +18,8 @@ public class PlayerAttack : MonoBehaviour
     private bool m_IsAttacking = false;
     private float m_AttackCooldown = 0.5f;
     private float m_LastAttackTime = 0f;
+
+    private float m_PowerNeed = 0.05f;
 
     void Update()
     {
@@ -73,6 +77,8 @@ public class PlayerAttack : MonoBehaviour
         if (life != null)
         {
             life.LoseHealth(attackDamage);
+            PowerBar.value -= m_PowerNeed; 
+
         }
         else
         {
