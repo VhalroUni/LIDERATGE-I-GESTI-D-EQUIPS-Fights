@@ -47,7 +47,7 @@ public class PlayerAttack : MonoBehaviour
         m_Arrow.transform.rotation = Quaternion.Slerp(m_Arrow.transform.rotation, l_Rotation, velocidadRotacion * Time.deltaTime);
     }
 
-    public void Attack()
+    public void MeleeAttack()
     {
         if (m_Target == null)
         {
@@ -88,6 +88,31 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log($"{gameObject.name} ataca a {m_Target.name} con {attackDamage} de daño");
 
         StartCoroutine(ResetAttack());
+    }
+
+    public void AreaAtack()
+    {
+        Debug.Log("Ataque area");
+    }
+
+    public void Ultimate()
+    {
+        Debug.Log("Ultimate");
+    }
+
+    public void DistanceAttack()
+    {
+        Debug.Log("Ataque a distancia");
+    }
+
+    public void Teleport()
+    {
+        Debug.Log("Teletransporte");
+    }
+
+    public void Block()
+    {
+        Debug.Log("Cubrir");
     }
 
     private System.Collections.IEnumerator ResetAttack()
