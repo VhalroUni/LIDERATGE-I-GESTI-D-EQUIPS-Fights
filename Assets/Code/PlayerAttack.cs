@@ -6,6 +6,7 @@ public class PlayerAttack : MonoBehaviour
     [Header("References")]
     public GameObject m_Target;
     public GameObject m_Arrow;
+    public GameObject m_Ball;
     public Slider PowerBar;
 
     [Header("Attack Settings")]
@@ -33,7 +34,11 @@ public class PlayerAttack : MonoBehaviour
 
         float l_DistanceToRival = Vector3.Distance(transform.position, m_Target.transform.position);
         m_CanAttack = l_DistanceToRival < m_AttackDistance;
-
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            DistanceAttack();
+        }
+        
     }
 
     private void TargetOrientation(GameObject _Target)
@@ -60,7 +65,7 @@ public class PlayerAttack : MonoBehaviour
 
         if (!m_CanAttack)
         {
-            Debug.LogWarning($"{gameObject.name} intento atacar pero está fuera de rango (m_AttackDistance={m_AttackDistance})");
+            Debug.LogWarning($"{gameObject.name} intento atacar pero estÃ¡ fuera de rango (m_AttackDistance={m_AttackDistance})");
             return;
         }
 
@@ -85,7 +90,7 @@ public class PlayerAttack : MonoBehaviour
             Debug.LogWarning($"{gameObject.name} ataca a {m_Target.name} pero el objetivo no tiene LifeController");
         }
 
-        Debug.Log($"{gameObject.name} ataca a {m_Target.name} con {attackDamage} de daño");
+        Debug.Log($"{gameObject.name} ataca a {m_Target.name} con {attackDamage} de daÃ±o");
 
         StartCoroutine(ResetAttack());
     }
@@ -103,11 +108,19 @@ public class PlayerAttack : MonoBehaviour
     public void DistanceAttack()
     {
         Debug.Log("Ataque a distancia");
+        if (m_Target == null) return;
+
+        GameObject projectile = Instantiate(m_Ball, transform.position, Quaternion.identity);
+
+        Vector3 direction = (m_Target.transform.position - transform.position).normalized;
+
+        projectile.GetComponent<Projectile>().SetDirection(direction);
     }
 
     public void Teleport()
     {
         Debug.Log("Teletransporte");
+        
     }
 
     public void Block()

@@ -1396,6 +1396,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   m_Target: {fileID: 7286670831248186084}
   m_Arrow: {fileID: 1004138930}
+  m_Ball: {fileID: 0}
   PowerBar: {fileID: 811053269}
   m_PlayerIndex: 1
   velocidadRotacion: 5
@@ -2550,7 +2551,15 @@ MonoBehaviour:
     m_Id: fe647db0-4d8d-4af3-a1d6-4d9de8eeb42e
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: ea39b2f6-312b-4a0b-bdc6-56d8d0b35701
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Distance Attack Key Input
+      m_Flags: 0
     m_Flags: 0
   m_TeleportKeyInput:
     m_Name: Teleport Key Input
@@ -2643,6 +2652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   m_Target: {fileID: 740334115}
   m_Arrow: {fileID: 1533739714}
+  m_Ball: {fileID: 393724084761438969, guid: 12091e02d13804440a15a67048bc8f93, type: 3}
   PowerBar: {fileID: 197587247}
   m_PlayerIndex: 0
   velocidadRotacion: 5

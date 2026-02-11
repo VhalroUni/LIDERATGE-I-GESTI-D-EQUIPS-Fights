@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
 
         m_MeleeAttackKeyInput.performed += MeleeAttackInput;
         m_MeleeAttackKeyInput.canceled += MeleeAttackInput;
+        m_MeleeAttackKeyInput.performed += DistanceAttackInput;
+        m_MeleeAttackKeyInput.performed += DistanceAttackInput;
     }
 
     private void OnEnable()
