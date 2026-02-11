@@ -1270,7 +1270,7 @@ MonoBehaviour:
       m_Flags: 8
     m_Flags: 0
   m_MeleeAttackKeyInput:
-    m_Name: 
+    m_Name: Melee Attack Key Input
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 07b52dca-7152-4503-8477-cc9af96e10f3
@@ -1279,7 +1279,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   m_AreaAttackKeyInput:
-    m_Name: 
+    m_Name: Area Attack Key Input
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 36c3956d-b6f6-4924-ba67-e2cc72581c89
@@ -1288,7 +1288,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   m_UltimateKeyInput:
-    m_Name: 
+    m_Name: Ultimate Key Input
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: fb0de3d8-977b-4e1e-9ec4-60f0780cfc28
@@ -1297,7 +1297,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   m_DistanceAttackKeyInput:
-    m_Name: 
+    m_Name: Distance Attack Key Input
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 6473ae57-fb12-4966-8205-1fc563033ddf
@@ -1306,7 +1306,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   m_TeleportKeyInput:
-    m_Name: 
+    m_Name: Teleport Key Input
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 21642704-6bab-4751-955e-9698173b9b1e
@@ -1315,7 +1315,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   m_BlockKeyInput:
-    m_Name: 
+    m_Name: Block Key Input
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: cd116079-4190-49b8-894a-b737ff8f1b94
@@ -1396,7 +1396,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   m_Target: {fileID: 7286670831248186084}
   m_Arrow: {fileID: 1004138930}
-  m_Ball: {fileID: 0}
+  m_Ball: {fileID: 393724084761438969, guid: 12091e02d13804440a15a67048bc8f93, type: 3}
   PowerBar: {fileID: 811053269}
   m_PlayerIndex: 1
   velocidadRotacion: 5
@@ -2524,7 +2524,15 @@ MonoBehaviour:
     m_Id: 1bdcdbc8-e81d-4631-b3af-578c85ecbfca
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 73e1f169-d40a-467e-9d2c-2da343ad0a8f
+      m_Path: <Keyboard>/f
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Melee Attack Key Input
+      m_Flags: 0
     m_Flags: 0
   m_AreaAttackKeyInput:
     m_Name: Area Attack Key Input
@@ -2568,7 +2576,15 @@ MonoBehaviour:
     m_Id: ca5f134e-1b54-4258-a328-37b67b34c01d
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 0d1c20fe-209c-4070-8b51-ff06cea5ee29
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Teleport Key Input
+      m_Flags: 0
     m_Flags: 0
   m_BlockKeyInput:
     m_Name: Block Key Input

@@ -34,11 +34,7 @@ public class PlayerAttack : MonoBehaviour
 
         float l_DistanceToRival = Vector3.Distance(transform.position, m_Target.transform.position);
         m_CanAttack = l_DistanceToRival < m_AttackDistance;
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            DistanceAttack();
-        }
-        
+
     }
 
     private void TargetOrientation(GameObject _Target)
@@ -120,7 +116,13 @@ public class PlayerAttack : MonoBehaviour
     public void Teleport()
     {
         Debug.Log("Teletransporte");
-        
+        float distanceBehind = 1.0f;
+        if (m_Target == null) return;
+
+        Vector3 directionToTarget = (m_Target.transform.position - transform.position).normalized;
+        Vector3 behindDirection = directionToTarget;
+        Vector3 newPosition = m_Target.transform.position + behindDirection * distanceBehind;
+        transform.position = newPosition;
     }
 
     public void Block()

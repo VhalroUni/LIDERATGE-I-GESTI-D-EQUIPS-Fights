@@ -27,8 +27,10 @@ public class PlayerController : MonoBehaviour
 
         m_MeleeAttackKeyInput.performed += MeleeAttackInput;
         m_MeleeAttackKeyInput.canceled += MeleeAttackInput;
-        m_MeleeAttackKeyInput.performed += DistanceAttackInput;
-        m_MeleeAttackKeyInput.performed += DistanceAttackInput;
+        m_DistanceAttackKeyInput.performed += DistanceAttackInput;
+        m_DistanceAttackKeyInput.canceled += DistanceAttackInput;
+        m_TeleportKeyInput.performed += TeleportAttackInput;
+        m_TeleportKeyInput.canceled += TeleportAttackInput;
     }
 
     private void OnEnable()
@@ -36,6 +38,8 @@ public class PlayerController : MonoBehaviour
         m_MoveInput.Enable();
 
         m_MeleeAttackKeyInput.Enable();
+        m_DistanceAttackKeyInput.Enable();
+        m_TeleportKeyInput.Enable();
     }
 
     private void OnDisable()
@@ -43,6 +47,8 @@ public class PlayerController : MonoBehaviour
         m_MoveInput.Disable();
 
         m_MeleeAttackKeyInput.Disable();
+        m_DistanceAttackKeyInput.Disable();
+        m_TeleportKeyInput.Disable();
     }
 
     private void ReadInput(InputAction.CallbackContext _Context)
