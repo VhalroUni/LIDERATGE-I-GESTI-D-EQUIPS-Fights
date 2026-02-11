@@ -4,19 +4,29 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     public GameObject m_Rival;
+    public GameObject m_Arrow;
 
     [Header ("Movement Settings")]
     public float m_Acceleration = 15.0f;
     public float m_MaxSpeed = 8.0f;
     public float m_Friction = 3.0f;
+
+    [Header("Orientations")]
+    public float m_DelayFlipTime = 0.5f;
+    public float velocidadRotacion = 5f;
+
+    [Header("Others")]
     public int m_PlayerIndex = 0;
 
+    private PlayerAttack m_Attack;
     private SpriteRenderer m_SpriteRender;
     private Vector2 m_Movement;
     private Vector2 m_Velocity;
+    private float currentFlipTime = 0;
 
     private void Awake()
     {
+        m_Attack = m_Rival.GetComponent<PlayerAttack>();
         m_SpriteRender = GetComponent<SpriteRenderer>();
     }
 
@@ -32,8 +42,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        bool teleport = m_Attack.GetTeleportBool();
+
+        if (teleport)
+            currentFlipTime += Time.deltaTime;
+
         Movement();
-        FlipSprite();
+        FlipSprite(teleport);
     }
 
     private void Movement()
@@ -45,11 +60,38 @@ public class PlayerMovement : MonoBehaviour
         transform.position += (Vector3)(m_Velocity * Time.deltaTime);
     }
 
-    private void FlipSprite()
+    private void TargetOrientation(GameObject target)
     {
-        if (m_Rival.transform.position.x < transform.position.x)
-            m_SpriteRender.flipX = true;
-        else if (m_Rival.transform.position.x > transform.position.x)
-            m_SpriteRender.flipX = false;
+        if (target == null) return;
+
+        Vector3 l_Direction = target.transform.position - m_Arrow.transform.position;
+        float l_Angle = Mathf.Atan2(l_Direction.y, l_Direction.x) * Mathf.Rad2Deg;
+        Quaternion l_Rotation = Quaternion.AngleAxis(l_Angle, Vector3.forward);
+
+        m_Arrow.transform.rotation = Quaternion.Slerp(m_Arrow.transform.rotation, l_Rotation, velocidadRotacion * Time.deltaTime);
+    }
+
+    private void FlipSprite(bool teleport)
+    {
+        if (!teleport)
+        {
+            if (m_Rival.transform.position.x < transform.position.x)
+                m_SpriteRender.flipX = true;
+            else if (m_Rival.transform.position.x > transform.position.x)
+                m_SpriteRender.flipX = false;
+
+            TargetOrientation(m_Rival);
+        }
+        else if(currentFlipTime >= m_DelayFlipTime)
+        {
+            if (m_Rival.transform.position.x < transform.position.x)
+                m_SpriteRender.flipX = true;
+            else if (m_Rival.transform.position.x > transform.position.x)
+                m_SpriteRender.flipX = false;
+
+            TargetOrientation(m_Rival);
+            currentFlipTime = 0;
+            m_Attack.SetTeleportBool(false);
+        }
     }
 }

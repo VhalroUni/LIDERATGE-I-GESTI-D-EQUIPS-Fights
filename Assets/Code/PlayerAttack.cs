@@ -5,16 +5,15 @@ public class PlayerAttack : MonoBehaviour
 {
     [Header("References")]
     public GameObject m_Target;
-    public GameObject m_Arrow;
     public GameObject m_Ball;
     public Slider PowerBar;
 
     [Header("Attack Settings")]
     public int m_PlayerIndex;
-    public float velocidadRotacion = 5f;
     public float attackDamage = 10f;
     public float m_AttackDistance = 5.0f;
 
+    public bool teleport = false;
     private bool m_CanAttack = false;
     private bool m_IsAttacking = false;
     private float m_AttackCooldown = 0.5f;
@@ -30,22 +29,8 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        TargetOrientation(m_Target);
-
         float l_DistanceToRival = Vector3.Distance(transform.position, m_Target.transform.position);
         m_CanAttack = l_DistanceToRival < m_AttackDistance;
-
-    }
-
-    private void TargetOrientation(GameObject _Target)
-    {
-        if (_Target == null) return;
-
-        Vector3 l_Direction = _Target.transform.position - m_Arrow.transform.position;
-        float l_Angle = Mathf.Atan2(l_Direction.y, l_Direction.x) * Mathf.Rad2Deg;
-        Quaternion l_Rotation = Quaternion.AngleAxis(l_Angle, Vector3.forward);
-
-        m_Arrow.transform.rotation = Quaternion.Slerp(m_Arrow.transform.rotation, l_Rotation, velocidadRotacion * Time.deltaTime);
     }
 
     public void MeleeAttack()
@@ -79,7 +64,6 @@ public class PlayerAttack : MonoBehaviour
         {
             life.LoseHealth(attackDamage);
             PowerBar.value -= m_PowerNeed; 
-
         }
         else
         {
@@ -106,11 +90,16 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log("Ataque a distancia");
         if (m_Target == null) return;
 
+        m_IsAttacking = true;
+        m_LastAttackTime = Time.time;
+
         GameObject projectile = Instantiate(m_Ball, transform.position, Quaternion.identity);
 
         Vector3 direction = (m_Target.transform.position - transform.position).normalized;
 
         projectile.GetComponent<Projectile>().SetDirection(direction);
+
+        Destroy(projectile, 3);
     }
 
     public void Teleport()
@@ -119,10 +108,13 @@ public class PlayerAttack : MonoBehaviour
         float distanceBehind = 1.0f;
         if (m_Target == null) return;
 
+        PowerBar.value -= 0.2f;
         Vector3 directionToTarget = (m_Target.transform.position - transform.position).normalized;
         Vector3 behindDirection = directionToTarget;
         Vector3 newPosition = m_Target.transform.position + behindDirection * distanceBehind;
         transform.position = newPosition;
+
+        teleport = true;
     }
 
     public void Block()
@@ -140,8 +132,14 @@ public class PlayerAttack : MonoBehaviour
     {
         return m_PlayerIndex;
     }
-    public void SetTarget(GameObject target)
+
+    public bool GetTeleportBool()
     {
-        m_Target = target;
+        return teleport;
+    }
+
+    public void SetTeleportBool(bool value)
+    {
+        teleport = value;
     }
 }

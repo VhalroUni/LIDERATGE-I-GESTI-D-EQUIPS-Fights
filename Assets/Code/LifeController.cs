@@ -7,13 +7,13 @@ public class LifeController : MonoBehaviour
     float MaxHP = 100;
     float CurrentHP;
     public Slider Life;
+
     void Start()
     {
         CurrentHP = MaxHP;
         Life.minValue = 0;
         Life.maxValue = MaxHP;
         Life.maxValue = MaxHP;
-
     }
 
     // Update is called once per frame
@@ -40,6 +40,7 @@ public class LifeController : MonoBehaviour
         Life.value = CurrentHP;
         CheckDeath();
     }
+
     private void CheckDeath()
     {
         if (CurrentHP <= 0f)
@@ -47,5 +48,4 @@ public class LifeController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 }
