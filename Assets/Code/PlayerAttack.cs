@@ -99,11 +99,18 @@ public class PlayerAttack : MonoBehaviour
         m_IsAttacking = true;
         m_LastAttackTime = Time.time;
 
-        GameObject projectile = Instantiate(m_Ball, transform.position, Quaternion.identity);
+        GameObject projectileGO = Instantiate(m_Ball, transform.position, Quaternion.identity);
 
         Vector3 direction = (m_Target.transform.position - transform.position).normalized;
 
-        projectile.GetComponent<Projectile>().SetDirection(direction);
+        var projectile = projectileGO.GetComponent<Projectile>();
+
+        if (projectile != null)
+        {
+            projectile.SetDirection(direction);
+            projectile.damage = attackDamage;
+            projectile.ownerPlayerIndex = m_PlayerIndex;
+        }
 
         Destroy(projectile, 3);
 

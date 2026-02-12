@@ -218,7 +218,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -252,8 +252,8 @@ MonoBehaviour:
   m_MaxSpeed: 8
   m_Friction: 3
   m_DelayFlipTime: 3
-  m_PlayerIndex: 1
   velocidadRotacion: 5
+  m_PlayerIndex: 1
 --- !u!114 &3006818053113029580
 MonoBehaviour:
   m_ObjectHideFlags: 0
