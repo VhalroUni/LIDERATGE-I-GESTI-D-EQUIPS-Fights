@@ -90,6 +90,12 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log("Ataque a distancia");
         if (m_Target == null) return;
 
+        if (Time.time - m_LastAttackTime < m_AttackCooldown)
+            return;
+
+        if (m_IsAttacking)
+            return;
+
         m_IsAttacking = true;
         m_LastAttackTime = Time.time;
 
@@ -100,6 +106,8 @@ public class PlayerAttack : MonoBehaviour
         projectile.GetComponent<Projectile>().SetDirection(direction);
 
         Destroy(projectile, 3);
+
+        StartCoroutine(ResetAttack());
     }
 
     public void Teleport()
