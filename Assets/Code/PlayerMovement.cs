@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Orientations")]
     public float m_DelayFlipTime = 0.5f;
-    public float velocidadRotacion = 5f;
+    public float velocidadRotacion = 5;
 
     [Header("Others")]
     public int m_PlayerIndex = 0;

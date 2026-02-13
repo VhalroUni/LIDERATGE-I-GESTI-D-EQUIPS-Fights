@@ -8,6 +8,10 @@ public class PlayerAttack : MonoBehaviour
     public GameObject m_Ball;
     public Slider PowerBar;
 
+    [Header("PowerBar Settings")]
+    public float TeleportPower = 0.4f;
+    public float DistancePower = 0.2f;
+    public float PowerRegeneration = 0.1f;
     [Header("Attack Settings")]
     public int m_PlayerIndex;
     public float attackDamage = 10f;
@@ -31,6 +35,12 @@ public class PlayerAttack : MonoBehaviour
 
         float l_DistanceToRival = Vector3.Distance(transform.position, m_Target.transform.position);
         m_CanAttack = l_DistanceToRival < m_AttackDistance;
+
+        if (PowerBar.value < 1)
+        {
+            PowerBar.value += PowerRegeneration * Time.deltaTime;
+        }
+            
     }
 
     public void MeleeAttack()
@@ -95,7 +105,9 @@ public class PlayerAttack : MonoBehaviour
 
         if (m_IsAttacking)
             return;
-
+        if (PowerBar.value < DistancePower)
+            return;
+        PowerBar.value -= DistancePower;
         m_IsAttacking = true;
         m_LastAttackTime = Time.time;
 
@@ -122,8 +134,9 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log("Teletransporte");
         float distanceBehind = 1.0f;
         if (m_Target == null) return;
-
-        PowerBar.value -= 0.2f;
+        if (PowerBar.value < TeleportPower)
+            return;
+        PowerBar.value -= TeleportPower;
         Vector3 directionToTarget = (m_Target.transform.position - transform.position).normalized;
         Vector3 behindDirection = directionToTarget;
         Vector3 newPosition = m_Target.transform.position + behindDirection * distanceBehind;
