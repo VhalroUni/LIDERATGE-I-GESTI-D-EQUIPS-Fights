@@ -628,6 +628,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -753,6 +754,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1a9d20bc308c0d4ebe9d36ff8ad8122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.Camara.GameCamera
+  target1: {fileID: 750748061476694239}
+  target2: {fileID: 773333449963010845}
+  offset: {x: 0, y: 0, z: -10}
+  smoothSpeed: 5
+  screenEdgeBuffer: 2
+  minZoom: 5
 --- !u!1 &573396190
 GameObject:
   m_ObjectHideFlags: 0
@@ -1930,6 +1949,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+--- !u!4 &750748061476694239 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5713479440495836456, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+  m_PrefabInstance: {fileID: 750748061476694238}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &773333449963010844
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2003,6 +2027,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+--- !u!4 &773333449963010845 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7179316818315323880, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+  m_PrefabInstance: {fileID: 773333449963010844}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7286670831248186084 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5845784114803349899, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
