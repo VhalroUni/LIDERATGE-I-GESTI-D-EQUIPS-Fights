@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject m_Rival;
     public GameObject m_Arrow;
 
-    [Header ("Movement Settings")]
+    [Header("Movement Settings")]
     public float m_Acceleration = 15.0f;
     public float m_MaxSpeed = 8.0f;
     public float m_Friction = 3.0f;
@@ -26,7 +26,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        m_Attack = m_Rival.GetComponent<PlayerAttack>();
+        if (m_Rival != null)
+            m_Attack = m_Rival.GetComponent<PlayerAttack>();
+        else
+            m_Attack = null;
+
         m_SpriteRender = GetComponent<SpriteRenderer>();
     }
 
@@ -42,6 +46,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0f) return;
+
+        if (m_Rival == null || m_Attack == null) return;
+
         bool teleport = m_Attack.GetTeleportBool();
 
         if (teleport)
@@ -62,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void TargetOrientation(GameObject target)
     {
-        if (target == null) return;
+        if (target == null || m_Arrow == null) return;
 
         Vector3 l_Direction = target.transform.position - m_Arrow.transform.position;
         float l_Angle = Mathf.Atan2(l_Direction.y, l_Direction.x) * Mathf.Rad2Deg;
@@ -73,6 +81,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FlipSprite(bool teleport)
     {
+        if (m_Rival == null) return;
+
         if (!teleport)
         {
             if (m_Rival.transform.position.x < transform.position.x)
@@ -82,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
 
             TargetOrientation(m_Rival);
         }
-        else if(currentFlipTime >= m_DelayFlipTime)
+        else if (currentFlipTime >= m_DelayFlipTime)
         {
             if (m_Rival.transform.position.x < transform.position.x)
                 m_SpriteRender.flipX = true;
@@ -91,7 +101,12 @@ public class PlayerMovement : MonoBehaviour
 
             TargetOrientation(m_Rival);
             currentFlipTime = 0;
-            m_Attack.SetTeleportBool(false);
+            m_Attack?.SetTeleportBool(false);
         }
+    }
+
+    public void EndMatch()
+    {
+        enabled = false;
     }
 }
