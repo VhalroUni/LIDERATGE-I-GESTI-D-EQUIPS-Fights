@@ -12,10 +12,15 @@ public class PlayerAttack : MonoBehaviour
     [Header("PowerBar Settings")]
     public float teleportPowerCost = 0.25f;
     public float distancePowerCost = 0.1f;
-    //public float powerRegeneration = 0.1f;
     public float meleePowerGain = 0.1f;
     public float areaPowerGain = 0.5f;
     public float distancePowerGain = 0.5f;
+
+    [Header("Power Levels Colors")]
+    public Color level1Color = Color.white;
+    public Color level2Color = Color.yellow;
+    public Color level3Color = Color.red;
+    public Color level4Color = Color.magenta;
 
     [Header("Attack Settings")]
     public int playerIndex;
@@ -33,7 +38,21 @@ public class PlayerAttack : MonoBehaviour
     private float lastAttackTime = 0f;
     private float distanceToRival;
 
-    //private float powerNeed = 0.05f;
+    // =========================
+    // NUEVA LÓGICA DE PODER
+    // =========================
+
+    private float totalPower = 0f; // 0 → 400
+    private const float maxTotalPower = 4f; // equivalente a 400%
+    private Image powerFillImage;
+
+    void Start()
+    {
+        if (powerBar != null)
+        {
+            powerFillImage = powerBar.fillRect.GetComponent<Image>();
+        }
+    }
 
     void Update()
     {
@@ -43,18 +62,59 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        distanceToRival = Vector2.Distance(gameObject.transform.position, target.transform.position);
+        distanceToRival = Vector2.Distance(transform.position, target.transform.position);
 
         float l_DistanceToRival = Vector3.Distance(transform.position, target.transform.position);
         canMeleeAttack = l_DistanceToRival < meleeAttackDistance;
-
-        /*if (powerBar.value < 1)
-        {
-            powerBar.value += powerRegeneration * Time.deltaTime;
-        }*/
-        //Debug.Log(powerBar.value);
-
     }
+
+    // =========================
+    // CONTROL CENTRALIZADO POWER BAR
+    // =========================
+    void ModifyPower(float amount)
+    {
+        totalPower += amount;
+
+        // Clamp 0 → 400%
+        totalPower = Mathf.Clamp(totalPower, 0f, maxTotalPower);
+
+        UpdatePowerVisual();
+    }
+
+    void UpdatePowerVisual()
+    {
+        if (powerBar == null) return;
+
+        // Nivel actual (0,1,2,3)
+        int level = Mathf.FloorToInt(totalPower);
+
+        // Parte decimal dentro del nivel (0→1)
+        float localValue = totalPower - level;
+
+        powerBar.value = localValue;
+
+        if (powerFillImage == null) return;
+
+        switch (level)
+        {
+            case 0:
+                powerFillImage.color = level1Color;
+                break;
+            case 1:
+                powerFillImage.color = level2Color;
+                break;
+            case 2:
+                powerFillImage.color = level3Color;
+                break;
+            default:
+                powerFillImage.color = level4Color;
+                break;
+        }
+    }
+
+    // =========================
+    // ATAQUES (solo cambiado el manejo de power)
+    // =========================
 
     public void MeleeAttack()
     {
@@ -69,14 +129,12 @@ public class PlayerAttack : MonoBehaviour
 
         if (!canMeleeAttack)
         {
-            Debug.LogWarning($"{gameObject.name} intento atacar pero está fuera de rango (m_AttackDistance={meleeAttackDistance})");
+            Debug.LogWarning($"{gameObject.name} intento atacar pero está fuera de rango");
             return;
         }
 
-        if(isAttacking)
-        {
+        if (isAttacking)
             return;
-        }
 
         isAttacking = true;
         lastAttackTime = Time.time;
@@ -86,23 +144,15 @@ public class PlayerAttack : MonoBehaviour
         if (life != null)
         {
             life.LoseHealth(attackDamage);
-            powerBar.value += meleePowerGain;
+            ModifyPower(meleePowerGain);
         }
-        else
-        {
-            Debug.LogWarning($"{gameObject.name} ataca a {target.name} pero el objetivo no tiene LifeController");
-        }
-
-        Debug.Log($"{gameObject.name} ataca a {target.name} con {attackDamage} de daño");
 
         StartCoroutine(ResetAttack());
     }
 
     public void AreaAtack()
     {
-        Debug.Log("Ataque area");
         if (target == null) return;
-
         if (isAttacking) return;
 
         isAttacking = true;
@@ -112,7 +162,7 @@ public class PlayerAttack : MonoBehaviour
         if (life != null && distanceToRival < areaAttackDistance)
         {
             life.LoseHealth(areaDamage);
-            powerBar.value += areaPowerGain;
+            ModifyPower(areaPowerGain);
         }
 
         StartCoroutine(ResetAttack());
@@ -125,7 +175,6 @@ public class PlayerAttack : MonoBehaviour
 
     public void DistanceAttack()
     {
-        Debug.Log("Ataque a distancia");
         if (target == null) return;
 
         if (Time.time - lastAttackTime < attackCooldown)
@@ -133,9 +182,12 @@ public class PlayerAttack : MonoBehaviour
 
         if (isAttacking)
             return;
-        if (powerBar.value < distancePowerCost)
+
+        if (totalPower < distancePowerCost)
             return;
-        powerBar.value -= distancePowerCost;
+
+        ModifyPower(-distancePowerCost);
+
         isAttacking = true;
         lastAttackTime = Time.time;
 
@@ -152,24 +204,25 @@ public class PlayerAttack : MonoBehaviour
             projectile.ownerPlayerIndex = playerIndex;
         }
 
-        Destroy(projectile, 3);
+        Destroy(projectileGO, 3);
 
         StartCoroutine(ResetAttack());
     }
 
     public void Teleport()
     {
-        Debug.Log("Teletransporte");
         float distanceBehind = 1.0f;
         if (target == null) return;
-        if (powerBar.value < teleportPowerCost)
-            return;
-        powerBar.value -= teleportPowerCost;
-        Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
-        Vector3 behindDirection = directionToTarget;
-        Vector3 newPosition = target.transform.position + behindDirection * distanceBehind;
-        transform.position = newPosition;
 
+        if (totalPower < teleportPowerCost)
+            return;
+
+        ModifyPower(-teleportPowerCost);
+
+        Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
+        Vector3 newPosition = target.transform.position + directionToTarget * distanceBehind;
+
+        transform.position = newPosition;
         teleport = true;
     }
 
@@ -202,21 +255,22 @@ public class PlayerAttack : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(gameObject.transform.position, areaAttackDistance);
+        Gizmos.DrawWireSphere(transform.position, areaAttackDistance);
 
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(gameObject.transform.position, meleeAttackDistance);
+        Gizmos.DrawWireSphere(transform.position, meleeAttackDistance);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var projectileId = collision.gameObject.GetComponent<Projectile>();
-        if(collision.CompareTag("Projectile") && projectileId.GetOwnerPlayerID() != playerIndex)
+
+        if (collision.CompareTag("Projectile") && projectileId.GetOwnerPlayerID() != playerIndex)
         {
             var targetMana = target.GetComponent<PlayerAttack>();
 
-            powerBar.value += distancePowerGain;
-            targetMana.powerBar.value += distancePowerGain;
+            ModifyPower(distancePowerGain);
+            targetMana.ModifyPower(distancePowerGain);
         }
     }
 }
