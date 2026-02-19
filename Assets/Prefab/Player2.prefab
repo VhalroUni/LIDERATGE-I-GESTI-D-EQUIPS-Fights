@@ -178,7 +178,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 2634816806227739618, guid: d5b271f2ba08fe34aae87258592b1f28, type: 3}
+  m_Sprite: {fileID: 6982454406443099936, guid: 493c64ce63b709440a6628bf17164a1e, type: 3}
   m_Color: {r: 1, g: 0.26845258, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -226,7 +226,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.167, y: 1.28}
+    oldSize: {x: 1.7066665, y: 2.3999999}
     newSize: {x: 2.88, y: 2.69}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -333,15 +333,6 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  m_UltimateKeyInput:
-    m_Name: Ultimate Key Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: fb0de3d8-977b-4e1e-9ec4-60f0780cfc28
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
   m_DistanceAttackKeyInput:
     m_Name: Distance Attack Key Input
     m_Type: 0
@@ -349,22 +340,21 @@ MonoBehaviour:
     m_Id: 6473ae57-fb12-4966-8205-1fc563033ddf
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 2a200844-40e9-44b0-94fe-613d54770d3c
+      m_Path: <Keyboard>/numpad1
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Distance Attack Key Input
+      m_Flags: 0
     m_Flags: 0
   m_TeleportKeyInput:
     m_Name: Teleport Key Input
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 21642704-6bab-4751-955e-9698173b9b1e
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  m_BlockKeyInput:
-    m_Name: Block Key Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: cd116079-4190-49b8-894a-b737ff8f1b94
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -381,6 +371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b618dfd1de572845856cada106aeb4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LifeController
+  MaxHP: 100
   Life: {fileID: 0}
 --- !u!114 &7934288526305630636
 MonoBehaviour:
@@ -394,10 +385,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e16df1c122cc74bba43d96f8177ddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  m_Target: {fileID: 0}
-  m_Ball: {fileID: 393724084761438969, guid: 12091e02d13804440a15a67048bc8f93, type: 3}
-  PowerBar: {fileID: 0}
-  m_PlayerIndex: 1
-  attackDamage: 10
-  m_AttackDistance: 5
+  target: {fileID: 0}
+  ball: {fileID: 393724084761438969, guid: 12091e02d13804440a15a67048bc8f93, type: 3}
+  powerBar: {fileID: 0}
+  teleportPowerCost: 0.25
+  distancePowerCost: 0.1
+  meleePowerGain: 0.1
+  areaPowerGain: 0.05
+  distancePowerGain: 0.05
+  playerIndex: 1
+  attackDamage: 4
+  areaDamage: 19
+  distanceDamage: 8
+  areaAttackDistance: 6
+  meleeAttackDistance: 3
   teleport: 0

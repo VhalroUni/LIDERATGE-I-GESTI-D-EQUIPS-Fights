@@ -3,13 +3,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    //ESTO SOLO ES PARA HACER PRUEBAS DEL JUEGO CON EL TECLADO, EL JUEGO SERÁ PURO MANDO
     [SerializeField] private InputAction m_MoveInput;
     [SerializeField] private InputAction m_MeleeAttackKeyInput;
     [SerializeField] private InputAction m_AreaAttackKeyInput;
-    [SerializeField] private InputAction m_UltimateKeyInput;
+    //[SerializeField] private InputAction m_UltimateKeyInput;
     [SerializeField] private InputAction m_DistanceAttackKeyInput;
     [SerializeField] private InputAction m_TeleportKeyInput;
-    [SerializeField] private InputAction m_BlockKeyInput;
+    //[SerializeField] private InputAction m_BlockKeyInput;
 
     private PlayerMovement m_Movement;
     private PlayerAttack m_Attack;
@@ -27,6 +28,8 @@ public class PlayerController : MonoBehaviour
 
         m_MeleeAttackKeyInput.performed += MeleeAttackInput;
         m_MeleeAttackKeyInput.canceled += MeleeAttackInput;
+        m_AreaAttackKeyInput.performed += AreaAttackInput;
+        m_AreaAttackKeyInput.canceled += AreaAttackInput;
         m_DistanceAttackKeyInput.performed += DistanceAttackInput;
         m_DistanceAttackKeyInput.canceled += DistanceAttackInput;
         m_TeleportKeyInput.performed += TeleportAttackInput;
@@ -38,6 +41,7 @@ public class PlayerController : MonoBehaviour
         m_MoveInput.Enable();
 
         m_MeleeAttackKeyInput.Enable();
+        m_AreaAttackKeyInput.Enable();
         m_DistanceAttackKeyInput.Enable();
         m_TeleportKeyInput.Enable();
     }
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
         m_MoveInput.Disable();
 
         m_MeleeAttackKeyInput.Disable();
+        m_AreaAttackKeyInput.Disable();
         m_DistanceAttackKeyInput.Disable();
         m_TeleportKeyInput.Disable();
     }

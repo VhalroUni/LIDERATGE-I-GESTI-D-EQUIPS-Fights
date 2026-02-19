@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7323786964845671864}
   - component: {fileID: 4556758417245150453}
   - component: {fileID: 4394639367890135530}
+  - component: {fileID: 7215942747997247062}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Player
@@ -87,8 +88,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 2634816806227739618, guid: d5b271f2ba08fe34aae87258592b1f28, type: 3}
-  m_Color: {r: 0.08276451, g: 1, b: 0, a: 1}
+  m_Sprite: {fileID: 6982454406443099936, guid: 493c64ce63b709440a6628bf17164a1e, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -110,7 +111,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -135,7 +136,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.167, y: 1.28}
+    oldSize: {x: 1.7066665, y: 2.3999999}
     newSize: {x: 2.88, y: 2.69}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -248,16 +249,15 @@ MonoBehaviour:
     m_Id: 58229f99-64ea-40e5-801c-07a017862f6c
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  m_UltimateKeyInput:
-    m_Name: Ultimate Key Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: b482f75e-fd31-4abc-9b95-c1a7265f02c1
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 7f76c027-12d7-4666-a8bb-efb1bff3e013
+      m_Path: <Keyboard>/e
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Area Attack Key Input
+      m_Flags: 0
     m_Flags: 0
   m_DistanceAttackKeyInput:
     m_Name: Distance Attack Key Input
@@ -293,15 +293,6 @@ MonoBehaviour:
       m_Action: Teleport Key Input
       m_Flags: 0
     m_Flags: 0
-  m_BlockKeyInput:
-    m_Name: Block Key Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 1ff8eeca-5c58-4625-99bd-c654b1b18240
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!114 &4556758417245150453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b618dfd1de572845856cada106aeb4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LifeController
+  MaxHP: 100
   Life: {fileID: 0}
 --- !u!114 &4394639367890135530
 MonoBehaviour:
@@ -327,13 +319,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e16df1c122cc74bba43d96f8177ddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  m_Target: {fileID: 0}
-  m_Ball: {fileID: 393724084761438969, guid: 12091e02d13804440a15a67048bc8f93, type: 3}
-  PowerBar: {fileID: 0}
-  m_PlayerIndex: 0
-  attackDamage: 10
-  m_AttackDistance: 5
+  target: {fileID: 0}
+  ball: {fileID: 393724084761438969, guid: 12091e02d13804440a15a67048bc8f93, type: 3}
+  powerBar: {fileID: 0}
+  teleportPowerCost: 0.25
+  distancePowerCost: 0.1
+  meleePowerGain: 0.1
+  areaPowerGain: 0.05
+  distancePowerGain: 0.05
+  playerIndex: 0
+  attackDamage: 4
+  areaDamage: 19
+  distanceDamage: 8
+  areaAttackDistance: 6
+  meleeAttackDistance: 3
   teleport: 0
+--- !u!50 &7215942747997247062
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5845784114803349899}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &9093294775001852140
 GameObject:
   m_ObjectHideFlags: 0

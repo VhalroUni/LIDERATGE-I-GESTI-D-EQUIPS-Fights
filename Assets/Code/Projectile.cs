@@ -18,6 +18,11 @@ public class Projectile : MonoBehaviour
         transform.position += (Vector3)(direction * speed * Time.deltaTime);
     }
 
+    public int GetOwnerPlayerID()
+    {
+        return ownerPlayerIndex;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         var targetAttack = other.GetComponent<PlayerAttack>();

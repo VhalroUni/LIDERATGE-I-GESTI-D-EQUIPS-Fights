@@ -5790,25 +5790,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 740334115}
     - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: PowerBar
-      value: 
-      objectReference: {fileID: 197587247}
-    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: m_Target
+      propertyPath: target
       value: 
       objectReference: {fileID: 740334115}
-    - target: {fileID: 4429269038333390594, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: m_IncludeLayers.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 4429269038333390594, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1.7066665
-      objectReference: {fileID: 0}
-    - target: {fileID: 4429269038333390594, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 2.3999999
-      objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: powerBar
+      value: 
+      objectReference: {fileID: 197587247}
     - target: {fileID: 4556758417245150453, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: Life
       value: 
@@ -5857,29 +5845,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
-    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 6982454406443099936, guid: 493c64ce63b709440a6628bf17164a1e, type: 3}
-    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5845784114803349899, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7286670831248186091}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
 --- !u!4 &750748061476694239 stripped
 Transform:
@@ -5894,14 +5863,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 472340543}
     m_Modifications:
-    - target: {fileID: 1907689489413107893, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 1.7066665
-      objectReference: {fileID: 0}
-    - target: {fileID: 1907689489413107893, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 2.3999999
-      objectReference: {fileID: 0}
     - target: {fileID: 2832982938721057853, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: Life
       value: 
@@ -5910,10 +5871,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player2
       objectReference: {fileID: 0}
-    - target: {fileID: 3854558346906199069, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 6982454406443099936, guid: 493c64ce63b709440a6628bf17164a1e, type: 3}
     - target: {fileID: 7179316818315323880, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_LocalPosition.x
       value: -713.5466
@@ -5955,13 +5912,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
-      propertyPath: PowerBar
-      value: 
-      objectReference: {fileID: 811053269}
-    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
-      propertyPath: m_Target
+      propertyPath: target
       value: 
       objectReference: {fileID: 7286670831248186084}
+    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: powerBar
+      value: 
+      objectReference: {fileID: 811053269}
     - target: {fileID: 8264033931600937431, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_Rival
       value: 
@@ -5992,33 +5949,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5845784114803349899, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
   m_PrefabInstance: {fileID: 750748061476694238}
   m_PrefabAsset: {fileID: 0}
---- !u!50 &7286670831248186091
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7286670831248186084}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!114 &7286670831248186093 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4556758417245150453, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}

@@ -1,86 +1,99 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
     [Header("References")]
-    public GameObject m_Target;
-    public GameObject m_Ball;
-    public Slider PowerBar;
+    public GameObject target;
+    public GameObject ball;
+    public Slider powerBar;
 
     [Header("PowerBar Settings")]
-    public float TeleportPower = 0.4f;
-    public float DistancePower = 0.2f;
-    public float PowerRegeneration = 0.1f;
+    public float teleportPowerCost = 0.25f;
+    public float distancePowerCost = 0.1f;
+    //public float powerRegeneration = 0.1f;
+    public float meleePowerGain = 0.1f;
+    public float areaPowerGain = 0.5f;
+    public float distancePowerGain = 0.5f;
+
     [Header("Attack Settings")]
-    public int m_PlayerIndex;
-    public float attackDamage = 10f;
-    public float m_AttackDistance = 5.0f;
+    public int playerIndex;
+    public float attackDamage = 4.0f;
+    public float areaDamage = 19.0f;
+    public float distanceDamage = 8.0f;
+    public float areaAttackDistance = 6.0f;
+    public float meleeAttackDistance = 3.0f;
 
     public bool teleport = false;
-    private bool m_CanAttack = false;
-    private bool m_IsAttacking = false;
-    private float m_AttackCooldown = 0.5f;
-    private float m_LastAttackTime = 0f;
 
-    private float m_PowerNeed = 0.05f;
+    private bool canMeleeAttack = false;
+    private bool isAttacking = false;
+    private float attackCooldown = 0.5f;
+    private float lastAttackTime = 0f;
+    private float distanceToRival;
+
+    //private float powerNeed = 0.05f;
 
     void Update()
     {
-        if (m_Target == null)
+        if (target == null)
         {
-            m_CanAttack = false;
+            canMeleeAttack = false;
             return;
         }
 
-        float l_DistanceToRival = Vector3.Distance(transform.position, m_Target.transform.position);
-        m_CanAttack = l_DistanceToRival < m_AttackDistance;
+        distanceToRival = Vector2.Distance(gameObject.transform.position, target.transform.position);
 
-        if (PowerBar.value < 1)
+        float l_DistanceToRival = Vector3.Distance(transform.position, target.transform.position);
+        canMeleeAttack = l_DistanceToRival < meleeAttackDistance;
+
+        /*if (powerBar.value < 1)
         {
-            PowerBar.value += PowerRegeneration * Time.deltaTime;
-        }
-            
+            powerBar.value += powerRegeneration * Time.deltaTime;
+        }*/
+        //Debug.Log(powerBar.value);
+
     }
 
     public void MeleeAttack()
     {
-        if (m_Target == null)
+        if (target == null)
         {
             Debug.LogWarning($"{gameObject.name} intento atacar pero m_Target es null");
             return;
         }
 
-        if (Time.time - m_LastAttackTime < m_AttackCooldown)
+        if (Time.time - lastAttackTime < attackCooldown)
             return;
 
-        if (!m_CanAttack)
+        if (!canMeleeAttack)
         {
-            Debug.LogWarning($"{gameObject.name} intento atacar pero está fuera de rango (m_AttackDistance={m_AttackDistance})");
+            Debug.LogWarning($"{gameObject.name} intento atacar pero está fuera de rango (m_AttackDistance={meleeAttackDistance})");
             return;
         }
 
-        if(m_IsAttacking)
+        if(isAttacking)
         {
             return;
         }
 
-        m_IsAttacking = true;
-        m_LastAttackTime = Time.time;
+        isAttacking = true;
+        lastAttackTime = Time.time;
 
-        var life = m_Target.GetComponent<LifeController>();
+        var life = target.GetComponent<LifeController>();
 
         if (life != null)
         {
             life.LoseHealth(attackDamage);
-            PowerBar.value -= m_PowerNeed; 
+            powerBar.value += meleePowerGain;
         }
         else
         {
-            Debug.LogWarning($"{gameObject.name} ataca a {m_Target.name} pero el objetivo no tiene LifeController");
+            Debug.LogWarning($"{gameObject.name} ataca a {target.name} pero el objetivo no tiene LifeController");
         }
 
-        Debug.Log($"{gameObject.name} ataca a {m_Target.name} con {attackDamage} de daño");
+        Debug.Log($"{gameObject.name} ataca a {target.name} con {attackDamage} de daño");
 
         StartCoroutine(ResetAttack());
     }
@@ -88,6 +101,21 @@ public class PlayerAttack : MonoBehaviour
     public void AreaAtack()
     {
         Debug.Log("Ataque area");
+        if (target == null) return;
+
+        if (isAttacking) return;
+
+        isAttacking = true;
+
+        var life = target.GetComponent<LifeController>();
+
+        if (life != null && distanceToRival < areaAttackDistance)
+        {
+            life.LoseHealth(areaDamage);
+            powerBar.value += areaPowerGain;
+        }
+
+        StartCoroutine(ResetAttack());
     }
 
     public void Ultimate()
@@ -98,30 +126,30 @@ public class PlayerAttack : MonoBehaviour
     public void DistanceAttack()
     {
         Debug.Log("Ataque a distancia");
-        if (m_Target == null) return;
+        if (target == null) return;
 
-        if (Time.time - m_LastAttackTime < m_AttackCooldown)
+        if (Time.time - lastAttackTime < attackCooldown)
             return;
 
-        if (m_IsAttacking)
+        if (isAttacking)
             return;
-        if (PowerBar.value < DistancePower)
+        if (powerBar.value < distancePowerCost)
             return;
-        PowerBar.value -= DistancePower;
-        m_IsAttacking = true;
-        m_LastAttackTime = Time.time;
+        powerBar.value -= distancePowerCost;
+        isAttacking = true;
+        lastAttackTime = Time.time;
 
-        GameObject projectileGO = Instantiate(m_Ball, transform.position, Quaternion.identity);
+        GameObject projectileGO = Instantiate(ball, transform.position, Quaternion.identity);
 
-        Vector3 direction = (m_Target.transform.position - transform.position).normalized;
+        Vector3 direction = (target.transform.position - transform.position).normalized;
 
         var projectile = projectileGO.GetComponent<Projectile>();
 
         if (projectile != null)
         {
             projectile.SetDirection(direction);
-            projectile.damage = attackDamage;
-            projectile.ownerPlayerIndex = m_PlayerIndex;
+            projectile.damage = distanceDamage;
+            projectile.ownerPlayerIndex = playerIndex;
         }
 
         Destroy(projectile, 3);
@@ -133,13 +161,13 @@ public class PlayerAttack : MonoBehaviour
     {
         Debug.Log("Teletransporte");
         float distanceBehind = 1.0f;
-        if (m_Target == null) return;
-        if (PowerBar.value < TeleportPower)
+        if (target == null) return;
+        if (powerBar.value < teleportPowerCost)
             return;
-        PowerBar.value -= TeleportPower;
-        Vector3 directionToTarget = (m_Target.transform.position - transform.position).normalized;
+        powerBar.value -= teleportPowerCost;
+        Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
         Vector3 behindDirection = directionToTarget;
-        Vector3 newPosition = m_Target.transform.position + behindDirection * distanceBehind;
+        Vector3 newPosition = target.transform.position + behindDirection * distanceBehind;
         transform.position = newPosition;
 
         teleport = true;
@@ -153,12 +181,12 @@ public class PlayerAttack : MonoBehaviour
     private System.Collections.IEnumerator ResetAttack()
     {
         yield return new WaitForSeconds(0.1f);
-        m_IsAttacking = false;
+        isAttacking = false;
     }
 
     public int GetPlayerIndex()
     {
-        return m_PlayerIndex;
+        return playerIndex;
     }
 
     public bool GetTeleportBool()
@@ -169,5 +197,26 @@ public class PlayerAttack : MonoBehaviour
     public void SetTeleportBool(bool value)
     {
         teleport = value;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(gameObject.transform.position, areaAttackDistance);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(gameObject.transform.position, meleeAttackDistance);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var projectileId = collision.gameObject.GetComponent<Projectile>();
+        if(collision.CompareTag("Projectile") && projectileId.GetOwnerPlayerID() != playerIndex)
+        {
+            var targetMana = target.GetComponent<PlayerAttack>();
+
+            powerBar.value += distancePowerGain;
+            targetMana.powerBar.value += distancePowerGain;
+        }
     }
 }
