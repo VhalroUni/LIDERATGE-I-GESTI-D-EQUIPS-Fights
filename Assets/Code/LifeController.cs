@@ -10,10 +10,13 @@ public class LifeController : MonoBehaviour
     [SerializeField] private float MaxHP = 100f;
     [SerializeField] public Slider Life;
 
+    private Animator animator;
     private float CurrentHP;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
+
         CurrentHP = MaxHP;
         if (Life != null)
         {
@@ -45,6 +48,7 @@ public class LifeController : MonoBehaviour
     private void ApplyDamage(float damage)
     {
         CurrentHP -= damage;
+        animator.Play("Zhurong_Hit");
         if (CurrentHP < 0f) CurrentHP = 0f;
         if (Life != null)
             Life.value = CurrentHP;
