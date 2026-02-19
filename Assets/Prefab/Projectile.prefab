@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -3967428441245608973}
   m_Layer: 0
   m_Name: Projectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   speed: 10
-  damage: 10
+  damage: 8
   ownerPlayerIndex: -1
 --- !u!58 &3624628067161928359
 CircleCollider2D:

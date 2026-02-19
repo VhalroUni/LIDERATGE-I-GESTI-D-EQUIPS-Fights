@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour
 {
-    //ESTO SOLO ES PARA HACER PRUEBAS DEL JUEGO CON EL TECLADO, EL JUEGO SERÁ PURO MANDO
     private PlayerInput m_PlayerInput;
     private PlayerMovement m_PlayerMovement;
     private PlayerAttack m_PlayerAttack;
