@@ -5837,6 +5837,10 @@ PrefabInstance:
       propertyPath: level4Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: areaAttackDistance
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4556758417245150453, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: Life
       value: 

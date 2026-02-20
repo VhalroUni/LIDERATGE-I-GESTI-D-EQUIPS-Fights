@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerAttack : MonoBehaviour
+public class OldScript : MonoBehaviour
 {
     [Header("References")]
     public GameObject target;
@@ -27,7 +27,6 @@ public class PlayerAttack : MonoBehaviour
     public float attackDamage = 4.0f;
     public float areaDamage = 19.0f;
     public float distanceDamage = 8.0f;
-    public float areaAttackDistance = 2.0f;
     public float meleeAttackDistance = 3.0f;
 
     public bool teleport = false;
@@ -40,7 +39,7 @@ public class PlayerAttack : MonoBehaviour
     private int comboStep = 0;
     private bool attackActive = false;
 
-    [Header("Melee Hitbox Settings")]
+    [Header("Hitbox Settings")]
     public Vector2 hitboxSize = new Vector2(1.5f, 1f);
     public Vector2 hitboxOffset = new Vector2(1f, 0f);
 
@@ -50,17 +49,17 @@ public class PlayerAttack : MonoBehaviour
     private readonly int[] recovery = { 10, 12, 16 };
     private readonly int[] powerGain = { 10, 10, 10 };
 
+    // Power System
     private float totalPower = 0f;
     private const float maxTotalPower = 4f;
     private Image powerFillImage;
 
-    // Nueva variable para almacenar dirección del melee actual
-    private Vector3 meleeDirection = Vector3.right;
-
     void Start()
     {
         if (powerBar != null)
+        {
             powerFillImage = powerBar.fillRect.GetComponent<Image>();
+        }
     }
 
     void Update()
@@ -71,11 +70,15 @@ public class PlayerAttack : MonoBehaviour
             return;
         }
 
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        canMeleeAttack = distance < meleeAttackDistance;
+        // Aproximación para permitir ataque melee
+        float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+        canMeleeAttack = distanceToTarget < meleeAttackDistance;
     }
 
-    public void ModifyPower(float amount)
+    // =========================
+    // PowerBar
+    // =========================
+    void ModifyPower(float amount)
     {
         totalPower += amount;
         totalPower = Mathf.Clamp(totalPower, 0f, maxTotalPower);
@@ -103,56 +106,50 @@ public class PlayerAttack : MonoBehaviour
     }
 
     // =========================
-    // MELEE (RECUADRO DIRECCIONAL)
+    // Melee Attack con Hitbox
     // =========================
-
     public void MeleeAttack()
     {
-        if (isAttacking) return;               // Ya no chequeamos canMeleeAttack
-        if (Time.time - lastAttackTime < attackCooldown) return;
+        if (!canMeleeAttack || isAttacking) return;
 
         isAttacking = true;
         lastAttackTime = Time.time;
 
         int currentStep = comboStep;
+        int currentDamage = damage[currentStep];
+        int currentStartup = startup[currentStep];
+        int currentActive = active[currentStep];
+        int currentRecovery = recovery[currentStep];
+        int currentPowerGain = powerGain[currentStep];
 
-        // Calculamos la dirección hacia el target, si hay target, si no pegamos hacia la derecha por defecto
-        meleeDirection = target != null ?
-                         (target.transform.position - transform.position).normalized :
-                         Vector3.right;
-
-        StartCoroutine(MeleeAttackRoutine(
-            damage[currentStep],
-            startup[currentStep],
-            active[currentStep],
-            recovery[currentStep],
-            powerGain[currentStep]
-        ));
+        StartCoroutine(MeleeAttackRoutine(currentDamage, currentStartup, currentActive, currentRecovery, currentPowerGain));
 
         comboStep++;
         if (comboStep >= damage.Length)
             comboStep = 0;
 
+        // 🔹 reiniciar combo tras inactividad
         CancelInvoke(nameof(ResetComboStep));
         Invoke(nameof(ResetComboStep), 2f);
+
+
+
+    }
+    private void ResetComboStep()
+    {
+        comboStep = 0;
     }
 
-    private System.Collections.IEnumerator MeleeAttackRoutine(
-        int attackDamage,
-        int startupFrames,
-        int activeFrames,
-        int recoveryFrames,
-        int powerGainValue)
+    private System.Collections.IEnumerator MeleeAttackRoutine(int attackDamage, int startupFrames, int activeFrames, int recoveryFrames, int powerGainValue)
     {
         yield return new WaitForSeconds(startupFrames / 60f);
 
         attackActive = true;
 
-        Vector3 hitboxCenter =
-            transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
+        Vector3 direction = transform.localScale.x > 0 ? Vector3.right : Vector3.left;
+        Vector3 hitboxCenter = transform.position + Vector3.Scale(direction, hitboxOffset) + Vector3.up * hitboxOffset.y;
 
         Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f);
-
         foreach (var hit in hits)
         {
             if (hit.gameObject == gameObject) continue;
@@ -162,6 +159,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 life.LoseHealth(attackDamage);
                 ModifyPower(powerGainValue / 10f);
+                Debug.Log($"{gameObject.name} ataca a {hit.name} con {attackDamage} de daño");
             }
         }
 
@@ -172,26 +170,18 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(recoveryFrames / 60f);
 
         isAttacking = false;
-    }
 
-    private void ResetComboStep()
-    {
-        comboStep = 0;
     }
-
-    // =========================
-    // AREA (CÍRCULO ORIGINAL)
-    // =========================
 
     public void AreaAtack()
     {
         if (isAttacking) return;
-
         isAttacking = true;
 
-        Collider2D[] hits =
-            Physics2D.OverlapCircleAll(transform.position, areaAttackDistance);
+        Vector3 direction = transform.localScale.x > 0 ? Vector3.right : Vector3.left;
+        Vector3 hitboxCenter = transform.position + Vector3.Scale(direction, hitboxOffset) + Vector3.up * hitboxOffset.y;
 
+        Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f);
         foreach (var hit in hits)
         {
             if (hit.gameObject == gameObject) continue;
@@ -207,9 +197,10 @@ public class PlayerAttack : MonoBehaviour
         StartCoroutine(ResetAttack());
     }
 
-    // =========================
-    // DISTANCE
-    // =========================
+    public void Ultimate()
+    {
+        Debug.Log("Ultimate");
+    }
 
     public void DistanceAttack()
     {
@@ -218,18 +209,13 @@ public class PlayerAttack : MonoBehaviour
         if (totalPower < distancePowerCost) return;
 
         ModifyPower(-distancePowerCost);
-
         isAttacking = true;
         lastAttackTime = Time.time;
 
-        GameObject projectileGO =
-            Instantiate(ball, transform.position, Quaternion.identity);
-
-        Vector3 direction =
-            (target.transform.position - transform.position).normalized;
+        GameObject projectileGO = Instantiate(ball, transform.position, Quaternion.identity);
+        Vector3 direction = (target.transform.position - transform.position).normalized;
 
         var projectile = projectileGO.GetComponent<Projectile>();
-
         if (projectile != null)
         {
             projectile.SetDirection(direction);
@@ -237,14 +223,9 @@ public class PlayerAttack : MonoBehaviour
             projectile.ownerPlayerIndex = playerIndex;
         }
 
-        Destroy(projectileGO, 3f);
-
+        Destroy(projectileGO, 3);
         StartCoroutine(ResetAttack());
     }
-
-    // =========================
-    // TELEPORT
-    // =========================
 
     public void Teleport()
     {
@@ -253,38 +234,14 @@ public class PlayerAttack : MonoBehaviour
 
         ModifyPower(-teleportPowerCost);
 
-        Vector3 direction =
-            (target.transform.position - transform.position).normalized;
-
-        transform.position =
-            target.transform.position + direction * 1f;
-
+        Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
+        transform.position = target.transform.position + directionToTarget * 1f;
         teleport = true;
-    }
-
-    public void Ultimate()
-    {
-        Debug.Log("Ultimate");
     }
 
     public void Block()
     {
-        Debug.Log("Block");
-    }
-
-    public bool GetTeleportBool()
-    {
-        return teleport;
-    }
-
-    public void SetTeleportBool(bool value)
-    {
-        teleport = value;
-    }
-
-    public int GetPlayerIndex()
-    {
-        return playerIndex;
+        Debug.Log("Cubrir");
     }
 
     private System.Collections.IEnumerator ResetAttack()
@@ -293,44 +250,29 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = false;
     }
 
-    // =========================
-    // GIZMOS DIRECCIONALES MELEE
-    // =========================
+    public int GetPlayerIndex() => playerIndex;
+    public bool GetTeleportBool() => teleport;
+    public void SetTeleportBool(bool value) => teleport = value;
 
     private void OnDrawGizmos()
     {
-        // Área del ataque circular
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, areaAttackDistance);
-
-        // Hitbox melee direccional
         if (attackActive)
         {
             Gizmos.color = Color.red;
-
-            Vector3 hitboxCenter =
-                transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
-
+            Vector3 direction = transform.localScale.x > 0 ? Vector3.right : Vector3.left;
+            Vector3 hitboxCenter = transform.position + Vector3.Scale(direction, hitboxOffset) + Vector3.up * hitboxOffset.y;
             Gizmos.DrawWireCube(hitboxCenter, hitboxSize);
         }
     }
 
-    // =========================
-    // PROYECTILE MANA GAIN
-    // =========================
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var projectileId =
-            collision.gameObject.GetComponent<Projectile>();
-
-        if (collision.CompareTag("Projectile") &&
-            projectileId.GetOwnerPlayerID() != playerIndex)
+        var projectileId = collision.gameObject.GetComponent<Projectile>();
+        if (collision.CompareTag("Projectile") && projectileId.GetOwnerPlayerID() != playerIndex)
         {
-            var enemy = target.GetComponent<PlayerAttack>();
-
+            var targetMana = target.GetComponent<PlayerAttack>();
             ModifyPower(distancePowerGain);
-            enemy.ModifyPower(distancePowerGain);
+            targetMana.ModifyPower(distancePowerGain);
         }
     }
 }
