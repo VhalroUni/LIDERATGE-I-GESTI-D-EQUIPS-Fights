@@ -83,7 +83,7 @@ public class LifeController : MonoBehaviour
 
         if (percent > 0.4f)
             fillImage.color = color100;
-        else if (percent > 0.10f)
+        else if (percent > 0.15f)
             fillImage.color = color50;
         else
             fillImage.color = color25;
