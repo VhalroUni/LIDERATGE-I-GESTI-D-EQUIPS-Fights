@@ -48,7 +48,7 @@ public class PlayerAttack : MonoBehaviour
     private readonly int[] startup = { 5, 6, 8 };
     private readonly int[] active = { 3, 3, 4 };
     private readonly int[] recovery = { 10, 12, 16 };
-    private readonly int[] powerGain = { 10, 10, 10 };
+    private readonly int[] powerGain = { 1, 1, 1 };
 
     private float totalPower = 0f;
     private const float maxTotalPower = 4f;
