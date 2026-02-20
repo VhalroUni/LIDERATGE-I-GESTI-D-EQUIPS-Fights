@@ -9,6 +9,7 @@ public class GameCamera : MonoBehaviour
     public float smoothSpeed = 5f;
     public float screenEdgeBuffer = 2f;
     public float minZoom = 5f;
+    public float maxZoom = 15f; // NUEVA VARIABLE
 
     private Camera cam;
 
@@ -46,7 +47,10 @@ public class GameCamera : MonoBehaviour
 
         float requiredSize = Mathf.Max(requiredSizeX, requiredSizeY);
 
-        float newZoom = Mathf.Max(requiredSize + screenEdgeBuffer, minZoom);
+        float newZoom = requiredSize + screenEdgeBuffer;
+
+        // 🔥 Limitamos entre min y max
+        newZoom = Mathf.Clamp(newZoom, minZoom, maxZoom);
 
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, newZoom, Time.deltaTime * smoothSpeed);
     }
