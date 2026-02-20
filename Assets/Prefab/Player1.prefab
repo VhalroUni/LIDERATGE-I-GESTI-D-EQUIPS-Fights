@@ -308,6 +308,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LifeController
   MaxHP: 100
   Life: {fileID: 0}
+  color100: {r: 0.4039216, g: 0.61960787, b: 0.27450982, a: 1}
+  color50: {r: 0.9339623, g: 0.91746575, b: 0.18062477, a: 1}
+  color25: {r: 0.745283, g: 0.21444462, b: 0.21444462, a: 1}
 --- !u!114 &4394639367890135530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,13 +331,19 @@ MonoBehaviour:
   meleePowerGain: 0.1
   areaPowerGain: 0.05
   distancePowerGain: 0.05
+  level1Color: {r: 1, g: 0.6, b: 0, a: 1}
+  level2Color: {r: 1, g: 1, b: 0, a: 1}
+  level3Color: {r: 1, g: 1, b: 1, a: 1}
+  level4Color: {r: 0, g: 0.85213137, b: 1, a: 1}
   playerIndex: 0
   attackDamage: 4
   areaDamage: 19
   distanceDamage: 8
-  areaAttackDistance: 6
+  areaAttackDistance: 2
   meleeAttackDistance: 3
   teleport: 0
+  hitboxSize: {x: 1.5, y: 1}
+  hitboxOffset: {x: 1, y: 0}
 --- !u!50 &7215942747997247062
 Rigidbody2D:
   serializedVersion: 5
