@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 110060464}
   - component: {fileID: 110060463}
   m_Layer: 0
-  m_Name: Audio Charge Dash
+  m_Name: Audio Source Charge Dash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -913,7 +913,7 @@ GameObject:
   - component: {fileID: 142593442}
   - component: {fileID: 142593441}
   m_Layer: 0
-  m_Name: Audio Dash
+  m_Name: Audio Source Dash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
