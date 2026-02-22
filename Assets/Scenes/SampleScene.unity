@@ -6331,7 +6331,7 @@ GameObject:
   - component: {fileID: 1683593506}
   - component: {fileID: 1683593505}
   m_Layer: 0
-  m_Name: Bloom Pulse BG
+  m_Name: Bloom Pulse BG (Efecto luces)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
