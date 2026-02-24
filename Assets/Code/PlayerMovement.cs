@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -24,6 +25,13 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip m_DashSound;
     public AudioClip m_DashRechargeSound;
 
+    // ===================== NUEVO =====================
+    [Header("Dash Particles Spawn")]
+    public GameObject m_DashParticlesPrefab;
+    public int m_DashParticlesFrames = 10;
+    public Vector3 m_DashFeetOffset = new Vector3(-0.165f, -0.165f, 0f);
+    // =================================================
+
     [Header("Orientations")]
     public float m_DelayFlipTime = 0.5f;
     public float velocidadRotacion = 5;
@@ -39,11 +47,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 m_Velocity;
     private float currentFlipTime = 0;
 
-    // DASH CHARGES
     private float chargeLeft = 1f;
     private float chargeRight = 1f;
 
-    // detectar cuando termina de cargar
     private bool leftWasFull = true;
     private bool rightWasFull = true;
 
@@ -99,7 +105,10 @@ public class PlayerMovement : MonoBehaviour
 
         m_Velocity += m_Movement * m_DashForce;
 
-        // SONIDO DASH
+        // ===== NUEVO: SPAWN PARTÍCULAS =====
+        SpawnDashParticles();
+        // ====================================
+
         if (m_DashSound != null && m_AudioSource != null)
             m_AudioSource.PlayOneShot(m_DashSound);
 
@@ -124,7 +133,6 @@ public class PlayerMovement : MonoBehaviour
             chargeRight = Mathf.Clamp01(chargeRight);
         }
 
-        // Detectar final de carga (SONIDO)
         if (!leftWasFull && chargeLeft >= 1f)
             PlayRechargeSound();
 
@@ -144,7 +152,51 @@ public class PlayerMovement : MonoBehaviour
     }
     // ========================================
 
-    // ✅ ESTE MÉTODO FALTABA (lo usa PlayerInputHandler)
+    // ===================== NUEVO =====================
+    private void SpawnDashParticles()
+    {
+        if (m_DashParticlesPrefab == null)
+            return;
+
+        Vector2 dashDir = m_Movement.normalized;
+
+        // Convertimos el offset local de los pies a world space
+        Vector3 worldFeetPos = transform.TransformPoint(m_DashFeetOffset);
+
+        Quaternion rot = Quaternion.identity;
+
+        if (dashDir.x > 0)
+            rot = Quaternion.Euler(0, -90, 0);
+        else if (dashDir.x < 0)
+            rot = Quaternion.Euler(0, 90, 0);
+        else if (dashDir.y > 0)
+            rot = Quaternion.Euler(90, 0, 0);
+        else if (dashDir.y < 0)
+            rot = Quaternion.Euler(-90, 0, 0);
+
+        GameObject particles = Instantiate(
+            m_DashParticlesPrefab,
+            worldFeetPos,
+            rot
+        );
+
+        StartCoroutine(DestroyDashParticlesAfterFrames(particles));
+    }
+
+    private IEnumerator DestroyDashParticlesAfterFrames(GameObject obj)
+    {
+        for (int i = 0; i < m_DashParticlesFrames; i++)
+            yield return null;
+
+        ParticleSystem ps = obj.GetComponent<ParticleSystem>();
+
+        if (ps != null)
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
+        Destroy(obj);
+    }
+    // =================================================
+
     public int GetPlayerIndex()
     {
         return m_PlayerIndex;
