@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour
     public GameObject target;
     public GameObject ball;
     public Slider powerBar;
+    private Vector3 lastPosition;
 
     [Header("PowerBar Settings")]
     public float teleportPowerCost = 0.25f;
@@ -54,6 +55,10 @@ public class PlayerAttack : MonoBehaviour
     private const float maxTotalPower = 4f;
     private Image powerFillImage;
 
+    [Header("Block")]
+    public Sprite m_blockSprite;
+    LifeController m_lifeController;
+
     // Nueva variable para almacenar dirección del melee actual
     private Vector3 meleeDirection = Vector3.right;
 
@@ -61,6 +66,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if (powerBar != null)
             powerFillImage = powerBar.fillRect.GetComponent<Image>();
+        m_lifeController = GetComponent<LifeController>();
     }
 
     void Update()
@@ -73,6 +79,23 @@ public class PlayerAttack : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, target.transform.position);
         canMeleeAttack = distance < meleeAttackDistance;
+
+        if (target != null)
+        {
+
+            Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
+            Vector3 movementDirection = (transform.position - lastPosition).normalized;
+            if (movementDirection.sqrMagnitude > 0.0001f)
+            {
+                float angle = Vector3.Angle(movementDirection, directionToTarget);
+
+                if (angle >= 155f)
+                {
+                    Block();
+                }
+            }
+        }
+        lastPosition = transform.position;
     }
 
     public void ModifyPower(float amount)
@@ -270,6 +293,9 @@ public class PlayerAttack : MonoBehaviour
     public void Block()
     {
         Debug.Log("Block");
+        GetComponent<LifeController>().IsBlocking = true;
+        GetComponent<SpriteRenderer>().sprite = m_blockSprite;
+
     }
 
     public bool GetTeleportBool()

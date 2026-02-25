@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     //[SerializeField] private InputAction m_UltimateKeyInput;
     [SerializeField] private InputAction m_DistanceAttackKeyInput;
     [SerializeField] private InputAction m_TeleportKeyInput;
-    //[SerializeField] private InputAction m_BlockKeyInput;
+    [SerializeField] private InputAction m_BlockKeyInput;
 
     private PlayerMovement m_Movement;
     private PlayerAttack m_Attack;
@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
         m_DistanceAttackKeyInput.canceled += DistanceAttackInput;
         m_TeleportKeyInput.performed += TeleportAttackInput;
         m_TeleportKeyInput.canceled += TeleportAttackInput;
+        m_BlockKeyInput.performed += BlockInput;
+        m_BlockKeyInput.canceled += BlockInput;
     }
 
     private void OnEnable()
@@ -44,6 +46,7 @@ public class PlayerController : MonoBehaviour
         m_AreaAttackKeyInput.Enable();
         m_DistanceAttackKeyInput.Enable();
         m_TeleportKeyInput.Enable();
+        m_BlockKeyInput.Enable() ;
     }
 
     private void OnDisable()
@@ -54,6 +57,7 @@ public class PlayerController : MonoBehaviour
         m_AreaAttackKeyInput.Disable();
         m_DistanceAttackKeyInput.Disable();
         m_TeleportKeyInput.Disable();
+        m_BlockKeyInput.Disable();
     }
 
     private void ReadInput(InputAction.CallbackContext _Context)

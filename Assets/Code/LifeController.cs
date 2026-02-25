@@ -9,6 +9,7 @@ public class LifeController : MonoBehaviour
 
     [SerializeField] private float MaxHP = 100f;
     [SerializeField] public Slider Life;
+    [SerializeField] public bool IsBlocking = false;
 
     // NUEVO — colores por porcentaje
     public Color color100 = Color.green;
@@ -62,6 +63,10 @@ public class LifeController : MonoBehaviour
 
     private void ApplyDamage(float damage)
     {
+        if (IsBlocking)
+        {
+            damage = damage * 0.1f;
+        }
         CurrentHP -= damage;
         animator.Play("Zhurong_Hit");
         if (CurrentHP < 0f) CurrentHP = 0f;
