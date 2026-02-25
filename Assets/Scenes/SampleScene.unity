@@ -12365,6 +12365,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 197587247}
     - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: fillSpeedUp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: fillSpeedDown
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: level1Color.b
       value: 0
       objectReference: {fileID: 0}
@@ -12408,6 +12416,10 @@ PrefabInstance:
       propertyPath: m_blockSprite
       value: 
       objectReference: {fileID: 4401728397689083744, guid: eaa403e88f8e46a4ba8334c40b68897b, type: 3}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: distancePowerGain
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: areaAttackDistance
       value: 2
@@ -12500,6 +12512,18 @@ PrefabInstance:
       propertyPath: m_BlockKeyInput.m_Name
       value: Block Key Input
       objectReference: {fileID: 0}
+    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_Color.b
+      value: 0.8962264
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8962264
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -12565,17 +12589,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player2
       objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_BlockKeyInput.m_Name
+      value: Block Key Input
+      objectReference: {fileID: 0}
     - target: {fileID: 3854558346906199069, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_Color.b
-      value: 0.21698113
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3854558346906199069, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_Color.g
-      value: 0.8679245
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3854558346906199069, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_Color.r
-      value: 0.22501661
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7179316818315323880, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_LocalPosition.x

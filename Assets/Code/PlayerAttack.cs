@@ -23,6 +23,10 @@ public class PlayerAttack : MonoBehaviour
     public Color level3Color = Color.red;
     public Color level4Color = Color.magenta;
 
+    [Header("Bar Smooth Settings")]
+    public float fillSpeedUp = 5f;
+    public float fillSpeedDown = 9f;
+
     [Header("Attack Settings")]
     public int playerIndex;
     public float attackDamage = 4.0f;
@@ -52,14 +56,16 @@ public class PlayerAttack : MonoBehaviour
     private readonly int[] powerGain = { 1, 1, 1 };
 
     private float totalPower = 0f;
+    private float displayedPower = 0f;
     private const float maxTotalPower = 4f;
     private Image powerFillImage;
+
+    private bool rainbowActive = false;
 
     [Header("Block")]
     public Sprite m_blockSprite;
     LifeController m_lifeController;
 
-    // Nueva variable para almacenar dirección del melee actual
     private Vector3 meleeDirection = Vector3.right;
 
     void Start()
@@ -71,6 +77,23 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
+        if (powerBar != null)
+        {
+            float speed = (displayedPower < totalPower) ? fillSpeedUp : fillSpeedDown;
+            displayedPower = Mathf.MoveTowards(displayedPower, totalPower, speed * Time.deltaTime);
+
+            int visualLevel = Mathf.FloorToInt(displayedPower);
+            float visualLocal = displayedPower - visualLevel;
+
+            powerBar.value = visualLocal;
+        }
+
+        if (rainbowActive && powerFillImage != null)
+        {
+            float hue = Mathf.Repeat(Time.time * 0.5f, 1f);
+            powerFillImage.color = Color.HSVToRGB(hue, 1f, 1f);
+        }
+
         if (target == null)
         {
             canMeleeAttack = false;
@@ -82,7 +105,6 @@ public class PlayerAttack : MonoBehaviour
 
         if (target != null)
         {
-
             Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
             Vector3 movementDirection = (transform.position - lastPosition).normalized;
             if (movementDirection.sqrMagnitude > 0.0001f)
@@ -110,28 +132,32 @@ public class PlayerAttack : MonoBehaviour
         if (powerBar == null) return;
 
         int level = Mathf.FloorToInt(totalPower);
-        float localValue = totalPower - level;
-
-        powerBar.value = localValue;
 
         if (powerFillImage == null) return;
 
         switch (level)
         {
-            case 0: powerFillImage.color = level1Color; break;
-            case 1: powerFillImage.color = level2Color; break;
-            case 2: powerFillImage.color = level3Color; break;
-            default: powerFillImage.color = level4Color; break;
+            case 0:
+                rainbowActive = false;
+                powerFillImage.color = level1Color;
+                break;
+            case 1:
+                rainbowActive = false;
+                powerFillImage.color = level2Color;
+                break;
+            case 2:
+                rainbowActive = false;
+                powerFillImage.color = level3Color;
+                break;
+            default:
+                rainbowActive = true;
+                break;
         }
     }
 
-    // =========================
-    // MELEE (RECUADRO DIRECCIONAL)
-    // =========================
-
     public void MeleeAttack()
     {
-        if (isAttacking) return;               // Ya no chequeamos canMeleeAttack
+        if (isAttacking) return;
         if (Time.time - lastAttackTime < attackCooldown) return;
 
         isAttacking = true;
@@ -139,7 +165,6 @@ public class PlayerAttack : MonoBehaviour
 
         int currentStep = comboStep;
 
-        // Calculamos la dirección hacia el target, si hay target, si no pegamos hacia la derecha por defecto
         meleeDirection = target != null ?
                          (target.transform.position - transform.position).normalized :
                          Vector3.right;
@@ -202,10 +227,6 @@ public class PlayerAttack : MonoBehaviour
         comboStep = 0;
     }
 
-    // =========================
-    // AREA (CÍRCULO ORIGINAL)
-    // =========================
-
     public void AreaAtack()
     {
         if (isAttacking) return;
@@ -227,12 +248,8 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        StartCoroutine(ResetAttack());
+        //StartCoroutine(ResetAttack());
     }
-
-    // =========================
-    // DISTANCE
-    // =========================
 
     public void DistanceAttack()
     {
@@ -265,10 +282,6 @@ public class PlayerAttack : MonoBehaviour
         StartCoroutine(ResetAttack());
     }
 
-    // =========================
-    // TELEPORT
-    // =========================
-
     public void Teleport()
     {
         if (target == null) return;
@@ -295,7 +308,6 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log("Block");
         GetComponent<LifeController>().IsBlocking = true;
         GetComponent<SpriteRenderer>().sprite = m_blockSprite;
-
     }
 
     public bool GetTeleportBool()
@@ -319,17 +331,11 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = false;
     }
 
-    // =========================
-    // GIZMOS DIRECCIONALES MELEE
-    // =========================
-
     private void OnDrawGizmos()
     {
-        // Área del ataque circular
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, areaAttackDistance);
 
-        // Hitbox melee direccional
         if (attackActive)
         {
             Gizmos.color = Color.red;
@@ -341,10 +347,6 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    // =========================
-    // PROYECTILE MANA GAIN
-    // =========================
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var projectileId =
@@ -353,10 +355,7 @@ public class PlayerAttack : MonoBehaviour
         if (collision.CompareTag("Projectile") &&
             projectileId.GetOwnerPlayerID() != playerIndex)
         {
-            var enemy = target.GetComponent<PlayerAttack>();
-
             ModifyPower(distancePowerGain);
-            enemy.ModifyPower(distancePowerGain);
         }
     }
 }

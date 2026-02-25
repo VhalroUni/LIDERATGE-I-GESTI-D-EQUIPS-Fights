@@ -16,6 +16,12 @@ public class LifeController : MonoBehaviour
     public Color color50 = Color.yellow;
     public Color color25 = Color.red;
 
+    // NUEVO — color al recibir impacto
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+    private Coroutine hitCoroutine;
+    private readonly Color hitColor = new Color(1f, 0.85f, 0.85f); // #FFA0A0
+
     private Animator animator;
     private float CurrentHP;
     private Image fillImage;
@@ -24,9 +30,13 @@ public class LifeController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
+        // NUEVO
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+            originalColor = spriteRenderer.color;
+
         CurrentHP = MaxHP;
 
-        // Obtener la imagen del fill del slider
         if (Life != null)
             fillImage = Life.fillRect.GetComponent<Image>();
 
@@ -67,8 +77,19 @@ public class LifeController : MonoBehaviour
         {
             damage = damage * 0.1f;
         }
+
         CurrentHP -= damage;
         animator.Play("Zhurong_Hit");
+
+        // NUEVO — activar flash de impacto
+        if (spriteRenderer != null)
+        {
+            if (hitCoroutine != null)
+                StopCoroutine(hitCoroutine);
+
+            hitCoroutine = StartCoroutine(HitFlash());
+        }
+
         if (CurrentHP < 0f) CurrentHP = 0f;
 
         if (Life != null)
@@ -79,7 +100,14 @@ public class LifeController : MonoBehaviour
         CheckDeath();
     }
 
-    // NUEVO — cambio de color por tramos
+    // NUEVO — duración del color de impacto
+    private IEnumerator HitFlash()
+    {
+        spriteRenderer.color = hitColor;
+        yield return new WaitForSeconds(0.1f); // duración del impacto
+        spriteRenderer.color = originalColor;
+    }
+
     private void UpdateBarColor()
     {
         if (fillImage == null || MaxHP <= 0f) return;
