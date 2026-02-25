@@ -12405,6 +12405,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_blockSprite
+      value: 
+      objectReference: {fileID: 4401728397689083744, guid: eaa403e88f8e46a4ba8334c40b68897b, type: 3}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: areaAttackDistance
       value: 2
       objectReference: {fileID: 0}
@@ -12491,6 +12495,10 @@ PrefabInstance:
     - target: {fileID: 5845784114803349899, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: m_Name
       value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_BlockKeyInput.m_Name
+      value: Block Key Input
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
