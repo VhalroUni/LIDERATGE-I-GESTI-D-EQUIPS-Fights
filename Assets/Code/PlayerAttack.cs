@@ -1,9 +1,15 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
+    public enum AttackType
+    {
+        Area,
+        Distance,
+        Ultimate
+    }
+
     [Header("References")]
     public GameObject target;
     public GameObject ball;
@@ -13,9 +19,8 @@ public class PlayerAttack : MonoBehaviour
     [Header("PowerBar Settings")]
     public float teleportPowerCost = 0.25f;
     public float distancePowerCost = 0.1f;
-    public float meleePowerGain = 0.1f;
-    public float areaPowerGain = 0.5f;
-    public float distancePowerGain = 0.5f;
+    public int areaPowerGain = 5;
+    public int distancePowerGain = 5;
 
     [Header("Power Levels Colors")]
     public Color level1Color = Color.white;
@@ -29,15 +34,17 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Attack Settings")]
     public int playerIndex;
-    public float attackDamage = 4.0f;
     public float areaDamage = 19.0f;
     public float distanceDamage = 8.0f;
     public float areaAttackDistance = 2.0f;
     public float meleeAttackDistance = 3.0f;
 
+    //Start-up, Active, Recovery
+    private readonly int[] areaInfo = { 14, 6, 22 };
+    private readonly int[] distanceInfo = { 10, 5, 18 };
+
     public bool teleport = false;
 
-    private bool canMeleeAttack = false;
     private bool isAttacking = false;
     private float attackCooldown = 0.5f;
     private float lastAttackTime = 0f;
@@ -68,11 +75,17 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector3 meleeDirection = Vector3.right;
 
+    //ANIMACIONES
+    private Animator animator;
+    private readonly int attackIdHash = Animator.StringToHash("AttackId");
+    private readonly int isAttackingHash = Animator.StringToHash("IsAttacking");
+
     void Start()
     {
         if (powerBar != null)
             powerFillImage = powerBar.fillRect.GetComponent<Image>();
         m_lifeController = GetComponent<LifeController>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -94,14 +107,7 @@ public class PlayerAttack : MonoBehaviour
             powerFillImage.color = Color.HSVToRGB(hue, 1f, 1f);
         }
 
-        if (target == null)
-        {
-            canMeleeAttack = false;
-            return;
-        }
-
         float distance = Vector3.Distance(transform.position, target.transform.position);
-        canMeleeAttack = distance < meleeAttackDistance;
 
         if (target != null)
         {
@@ -163,6 +169,9 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = true;
         lastAttackTime = Time.time;
 
+        animator.SetFloat(attackIdHash, 0);
+        animator.SetBool(isAttackingHash, true);
+
         int currentStep = comboStep;
 
         meleeDirection = target != null ?
@@ -182,9 +191,9 @@ public class PlayerAttack : MonoBehaviour
             comboStep = 0;
 
         CancelInvoke(nameof(ResetComboStep));
-        Invoke(nameof(ResetComboStep), 2f);
+        Invoke(nameof(ResetComboStep), 0.1f);
     }
-
+    
     private System.Collections.IEnumerator MeleeAttackRoutine(
         int attackDamage,
         int startupFrames,
@@ -220,6 +229,7 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(recoveryFrames / 60f);
 
         isAttacking = false;
+        animator.SetBool(isAttackingHash, false);
     }
 
     private void ResetComboStep()
@@ -233,22 +243,10 @@ public class PlayerAttack : MonoBehaviour
 
         isAttacking = true;
 
-        Collider2D[] hits =
-            Physics2D.OverlapCircleAll(transform.position, areaAttackDistance);
+        animator.SetFloat(attackIdHash, 1);
+        animator.SetBool(isAttackingHash, true);
 
-        foreach (var hit in hits)
-        {
-            if (hit.gameObject == gameObject) continue;
-
-            LifeController life = hit.GetComponent<LifeController>();
-            if (life != null)
-            {
-                life.LoseHealth(areaDamage);
-                ModifyPower(areaPowerGain);
-            }
-        }
-
-        //StartCoroutine(ResetAttack());
+        StartCoroutine(ResetAttack(areaDamage, areaInfo[0], areaInfo[1], areaInfo[2], areaPowerGain, AttackType.Area));
     }
 
     public void DistanceAttack()
@@ -257,29 +255,15 @@ public class PlayerAttack : MonoBehaviour
         if (Time.time - lastAttackTime < attackCooldown) return;
         if (totalPower < distancePowerCost) return;
 
+        animator.SetFloat(attackIdHash, 2);
+        animator.SetBool(isAttackingHash, true);
+
         ModifyPower(-distancePowerCost);
 
         isAttacking = true;
         lastAttackTime = Time.time;
 
-        GameObject projectileGO =
-            Instantiate(ball, transform.position, Quaternion.identity);
-
-        Vector3 direction =
-            (target.transform.position - transform.position).normalized;
-
-        var projectile = projectileGO.GetComponent<Projectile>();
-
-        if (projectile != null)
-        {
-            projectile.SetDirection(direction);
-            projectile.damage = distanceDamage;
-            projectile.ownerPlayerIndex = playerIndex;
-        }
-
-        Destroy(projectileGO, 3f);
-
-        StartCoroutine(ResetAttack());
+        StartCoroutine(ResetAttack(0, distanceInfo[0], distanceInfo[1], distanceInfo[2], 0, AttackType.Distance));
     }
 
     public void Teleport()
@@ -325,10 +309,60 @@ public class PlayerAttack : MonoBehaviour
         return playerIndex;
     }
 
-    private System.Collections.IEnumerator ResetAttack()
+    private System.Collections.IEnumerator ResetAttack(float attackDamage, int startupFrames, int activeFrames, int recoveryFrames, 
+        int powerGainValue, AttackType type)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(startupFrames / 60f);
+
+        attackActive = true;
+
+        Vector3 hitboxCenter =
+            transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
+
+        Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f);
+
+        if (type == AttackType.Distance)
+        {
+            GameObject projectileGO =
+            Instantiate(ball, transform.position, Quaternion.identity);
+
+            Vector3 direction =
+                (target.transform.position - transform.position).normalized;
+
+            var projectile = projectileGO.GetComponent<Projectile>();
+
+            if (projectile != null)
+            {
+                projectile.SetDirection(direction);
+                projectile.damage = distanceDamage;
+                projectile.ownerPlayerIndex = playerIndex;
+            }
+
+            Destroy(projectileGO, 3f);
+        }
+        else
+        {
+            foreach (var hit in hits)
+            {
+                if (hit.gameObject == gameObject) continue;
+
+                LifeController life = hit.GetComponent<LifeController>();
+                if (life != null)
+                {
+                    life.LoseHealth(attackDamage);
+                    ModifyPower(powerGainValue / 10f);
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(activeFrames / 60f);
+
+        attackActive = false;
+
+        yield return new WaitForSeconds(recoveryFrames / 60f);
+
         isAttacking = false;
+        animator.SetBool(isAttackingHash, false);
     }
 
     private void OnDrawGizmos()
