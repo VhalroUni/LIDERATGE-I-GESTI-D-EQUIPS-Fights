@@ -12,6 +12,9 @@ public class MainMenu : MonoBehaviour
     [Header("Canvas/Pantallas")]
     [SerializeField] private GameObject mainMenuCanvas;
     [SerializeField] private GameObject mapSelectorCanvas;
+    [SerializeField] private GameObject optionsCanvas;
+    [SerializeField] private GameObject controlsCanvas;
+    [SerializeField] private GameObject creditsCanvas;
     [SerializeField] private GameObject tscreen;
 
     [Header("Audio")]
@@ -73,6 +76,21 @@ public class MainMenu : MonoBehaviour
         if (mapSelectorCanvas != null)
         {
             mapSelectorCanvas.SetActive(false);
+        }
+
+        if (optionsCanvas != null)
+        {
+            optionsCanvas.SetActive(false);
+        }
+
+        if (controlsCanvas != null)
+        {
+            controlsCanvas.SetActive(false);
+        }
+
+        if (creditsCanvas != null)
+        {
+            creditsCanvas.SetActive(false);
         }
 
         if (mainMenuCanvas != null)
@@ -140,10 +158,73 @@ public class MainMenu : MonoBehaviour
             mapSelectorCanvas.SetActive(false);
         }
 
+        if (optionsCanvas != null)
+        {
+            optionsCanvas.SetActive(false);
+        }
+
+        if (controlsCanvas != null)
+        {
+            controlsCanvas.SetActive(false);
+        }
+
+        if (creditsCanvas != null)
+        {
+            creditsCanvas.SetActive(false);
+        }
+
         if (mainMenuCanvas != null)
         {
             mainMenuCanvas.SetActive(true);
         }
+    }
+
+    public void OnOptionsButton()
+    {
+        if (optionsCanvas == null)
+        {
+            Debug.LogError("[MainMenu] 'optionsCanvas' no está asignado.");
+            return;
+        }
+
+        if (mainMenuCanvas != null)
+        {
+            mainMenuCanvas.SetActive(false);
+        }
+
+        optionsCanvas.SetActive(true);
+    }
+
+    public void OnControlsButton()
+    {
+        if (controlsCanvas == null)
+        {
+            Debug.LogError("[MainMenu] 'controlsCanvas' no está asignado.");
+            return;
+        }
+
+        if (mainMenuCanvas != null)
+        {
+            mainMenuCanvas.SetActive(false);
+        }
+
+        controlsCanvas.SetActive(true);
+    }
+
+    public void OnCreditsButton()
+    {
+        if (creditsCanvas == null)
+        {
+            Debug.LogError("[MainMenu] 'creditsCanvas' no está asignado.");
+            return;
+        }
+
+        if (mainMenuCanvas != null)
+        {
+            mainMenuCanvas.SetActive(false);
+        }
+
+        creditsCanvas.SetActive(true);
     }
 
     #endregion
