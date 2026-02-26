@@ -2,31 +2,51 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
-    [Header("Configuración")]
-    [SerializeField] private string sceneToLoad;
+    [Header("Configuración de Escena")]
+    [SerializeField] private string sceneToLoad = "Game";
 
-    [Header("Pantallas/UI")]
-    [SerializeField] private GameObject Tscreen;
+    [Header("Canvas/Pantallas")]
+    [SerializeField] private GameObject mainMenuCanvas;
+    [SerializeField] private GameObject mapSelectorCanvas;
+    [SerializeField] private GameObject tscreen;
 
     [Header("Audio")]
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private Slider masterVolumeSlider;
     [SerializeField] private Slider musicVolumeSlider;
 
-    // Claves de PlayerPrefs
-    private const string PrefMaster = "pref_master_volume";
-    private const string PrefMusic = "pref_music_volume";
+    private const string PrefMaster = "MasterVolume";
+    private const string PrefMusic = "MusicVolume";
 
     private const float MinDb = -80f;
     private const float MaxDb = 0f;
 
     private void Awake()
     {
-        float master = PlayerPrefs.GetFloat(PrefMaster, 0.75f); // 0..1
-        float music = PlayerPrefs.GetFloat(PrefMusic, 0.75f);   // 0..1
+        InitializeAudioSettings();
+        InitializeUI();
+    }
+
+    private void Start()
+    {
+        _ = MapManager.Instance;
+    }
+
+    private void OnDestroy()
+    {
+        UnregisterAudioListeners();
+    }
+
+    #region Inicialización
+
+    private void InitializeAudioSettings()
+    {
+        float master = PlayerPrefs.GetFloat(PrefMaster, 0.75f);
+        float music = PlayerPrefs.GetFloat(PrefMusic, 0.75f);
 
         if (masterVolumeSlider != null)
         {
@@ -48,33 +68,154 @@ public class MainMenu : MonoBehaviour
         ApplyMusicVolume(music);
     }
 
-    private void OnDestroy()
+    private void InitializeUI()
+    {
+        if (mapSelectorCanvas != null)
+        {
+            mapSelectorCanvas.SetActive(false);
+        }
+
+        if (mainMenuCanvas != null)
+        {
+            mainMenuCanvas.SetActive(true);
+        }
+    }
+
+    private void UnregisterAudioListeners()
     {
         if (masterVolumeSlider != null)
+        {
             masterVolumeSlider.onValueChanged.RemoveListener(OnMasterVolumeChanged);
+        }
         if (musicVolumeSlider != null)
+        {
             musicVolumeSlider.onValueChanged.RemoveListener(OnMusicVolumeChanged);
+        }
     }
+
+    #endregion
+
+    #region Navegación del Menú
 
     public void OnPlayButton()
     {
         if (string.IsNullOrWhiteSpace(sceneToLoad))
         {
-            Debug.LogError("[MainMenu] 'sceneToLoad' no está configurado en el inspector.");
+            Debug.LogError("[MainMenu] 'sceneToLoad' no está configurado.");
             return;
         }
 
         if (!Application.CanStreamedLevelBeLoaded(sceneToLoad))
         {
-            Debug.LogError($"[MainMenu] La escena '{sceneToLoad}' no está incluida en Build Settings (File > Build Settings > Scenes In Build).");
+            Debug.LogError($"[MainMenu] La escena '{sceneToLoad}' no está en Build Settings.");
+            Debug.LogError("Añádela en: File > Build Settings > Scenes In Build");
             return;
         }
+
+        ShowMapSelector();
+    }
+
+    private void ShowMapSelector()
+    {
+        if (mapSelectorCanvas == null)
+        {
+            Debug.LogError("[MainMenu] 'mapSelectorCanvas' no está asignado.");
+            return;
+        }
+
+        Debug.Log("[MainMenu] Mostrando selector de mapas...");
+
+        if (mainMenuCanvas != null)
+        {
+            mainMenuCanvas.SetActive(false);
+        }
+
+        mapSelectorCanvas.SetActive(true);
+    }
+
+    public void OnBackToMainMenu()
+    {
+        if (mapSelectorCanvas != null)
+        {
+            mapSelectorCanvas.SetActive(false);
+        }
+
+        if (mainMenuCanvas != null)
+        {
+            mainMenuCanvas.SetActive(true);
+        }
+    }
+
+    #endregion
+
+    #region Selección de Mapa
+
+    public void OnMapSelected(string mapId)
+    {
+        if (string.IsNullOrEmpty(mapId))
+        {
+            Debug.LogError("[MainMenu] mapId vacío recibido.");
+            return;
+        }
+
+        Debug.Log($"[MainMenu] ✓ Mapa seleccionado: '{mapId}'");
+
+        MapManager.SelectedMap = mapId;
+
+        StartCoroutine(LoadGameSceneCoroutine());
+    }
+
+    private IEnumerator LoadGameSceneCoroutine()
+    {
+        yield return null;
+
+        Debug.Log($"[MainMenu] Cargando escena: '{sceneToLoad}'...");
 
         SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);
     }
 
-    public void OnExitButton()
+    #endregion
+
+    #region Gestión de Audio
+
+    private void OnMasterVolumeChanged(float value)
     {
+        PlayerPrefs.SetFloat(PrefMaster, value);
+        PlayerPrefs.Save();
+        ApplyMasterVolume(value);
+    }
+
+    private void OnMusicVolumeChanged(float value)
+    {
+        PlayerPrefs.SetFloat(PrefMusic, value);
+        PlayerPrefs.Save();
+        ApplyMusicVolume(value);
+    }
+
+    private void ApplyMasterVolume(float normalizedValue)
+    {
+        if (audioMixer == null) return;
+
+        float db = Mathf.Lerp(MinDb, MaxDb, Mathf.Clamp01(normalizedValue));
+        audioMixer.SetFloat("MasterVolume", db);
+    }
+
+    private void ApplyMusicVolume(float normalizedValue)
+    {
+        if (audioMixer == null) return;
+
+        float db = Mathf.Lerp(MinDb, MaxDb, Mathf.Clamp01(normalizedValue));
+        audioMixer.SetFloat("MusicVolume", db);
+    }
+
+    #endregion
+
+    #region Otros Botones
+
+    public void OnQuitButton()
+    {
+        Debug.Log("[MainMenu] Saliendo de la aplicación...");
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -82,59 +223,5 @@ public class MainMenu : MonoBehaviour
 #endif
     }
 
-    public void OnShowButton()
-    {
-        if (Tscreen == null)
-        {
-            Debug.LogError("[MainMenu] 'TScreen' no está asignado en el inspector.");
-            return;
-        }
-        Tscreen.SetActive(true);
-    }
-
-    public void OnHideButton()
-    {
-        if (Tscreen == null)
-        {
-            Debug.LogError("[MainMenu] 'TScreen' no está asignado en el inspector.");
-            return;
-        }
-        Tscreen.SetActive(false);
-    }
-
-    private void OnMasterVolumeChanged(float value01)
-    {
-        ApplyMasterVolume(value01);
-        PlayerPrefs.SetFloat(PrefMaster, value01);
-        PlayerPrefs.Save();
-    }
-
-    private void OnMusicVolumeChanged(float value01)
-    {
-        ApplyMusicVolume(value01);
-        PlayerPrefs.SetFloat(PrefMusic, value01);
-        PlayerPrefs.Save();
-    }
-
-    private void ApplyMasterVolume(float value01)
-    {
-        if (audioMixer == null) return;
-        float db = Linear01ToDb(value01);
-        audioMixer.SetFloat("MasterVolume", db);
-    }
-
-    private void ApplyMusicVolume(float value01)
-    {
-        if (audioMixer == null) return;
-        float db = Linear01ToDb(value01);
-        audioMixer.SetFloat("MusicVolume", db);
-    }
-
-    private float Linear01ToDb(float value01)
-    {
-        if (value01 <= 0.0001f) return MinDb;
-
-        float db = Mathf.Log10(value01) * 20f;
-        return Mathf.Clamp(db, MinDb, MaxDb);
-    }
+    #endregion
 }
