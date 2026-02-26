@@ -75,7 +75,8 @@ public class PlayerAttack : MonoBehaviour
 
     private Vector3 meleeDirection = Vector3.right;
 
-    //ANIMACIONES
+    [Header("Animations")]
+    public float samples = 30.0f;
     private Animator animator;
     private readonly int attackIdHash = Animator.StringToHash("AttackId");
     private readonly int isAttackingHash = Animator.StringToHash("IsAttacking");
@@ -201,7 +202,7 @@ public class PlayerAttack : MonoBehaviour
         int recoveryFrames,
         int powerGainValue)
     {
-        yield return new WaitForSeconds(startupFrames / 60f);
+        yield return new WaitForSeconds(startupFrames / samples);
 
         attackActive = true;
 
@@ -222,11 +223,11 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(activeFrames / 60f);
+        yield return new WaitForSeconds(activeFrames / samples);
 
         attackActive = false;
 
-        yield return new WaitForSeconds(recoveryFrames / 60f);
+        yield return new WaitForSeconds(recoveryFrames / samples);
 
         isAttacking = false;
         animator.SetBool(isAttackingHash, false);
@@ -309,15 +310,16 @@ public class PlayerAttack : MonoBehaviour
         return playerIndex;
     }
 
-    private System.Collections.IEnumerator ResetAttack(float attackDamage, int startupFrames, int activeFrames, int recoveryFrames, 
-        int powerGainValue, AttackType type)
+    private System.Collections.IEnumerator ResetAttack(float attackDamage, int startupFrames, int activeFrames, int recoveryFrames,
+    int powerGainValue, AttackType type)
     {
-        yield return new WaitForSeconds(startupFrames / 60f);
+        yield return new WaitForSeconds(startupFrames / samples);
 
         attackActive = true;
 
-        Vector3 hitboxCenter =
-            transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
+        yield return new WaitForSeconds(activeFrames / samples);
+
+        Vector3 hitboxCenter = transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
 
         Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f);
 
@@ -355,11 +357,9 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(activeFrames / 60f);
-
         attackActive = false;
 
-        yield return new WaitForSeconds(recoveryFrames / 60f);
+        yield return new WaitForSeconds(recoveryFrames / samples);
 
         isAttacking = false;
         animator.SetBool(isAttackingHash, false);
