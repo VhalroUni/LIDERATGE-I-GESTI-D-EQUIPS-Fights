@@ -14,7 +14,7 @@ public class PlayerAttack : MonoBehaviour
     public GameObject target;
     public GameObject ball;
     public Slider powerBar;
-    private Vector3 lastPosition;
+    public  Vector3 lastPosition;
 
     [Header("PowerBar Settings")]
     public float teleportPowerCost = 0.25f;
@@ -70,14 +70,14 @@ public class PlayerAttack : MonoBehaviour
     private bool rainbowActive = false;
 
     [Header("Block")]
-    public Sprite m_blockSprite;
+    public Sprite blockSprite;
     LifeController m_lifeController;
 
     private Vector3 meleeDirection = Vector3.right;
 
     [Header("Animations")]
     public float samples = 30.0f;
-    private Animator animator;
+    public Animator animator;
     private readonly int attackIdHash = Animator.StringToHash("AttackId");
     private readonly int isAttackingHash = Animator.StringToHash("IsAttacking");
 
@@ -109,20 +109,10 @@ public class PlayerAttack : MonoBehaviour
         }
 
         float distance = Vector3.Distance(transform.position, target.transform.position);
-
-        if (target != null)
+        
+        if (animator.GetBool("IsBlocking") == false)
         {
-            Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
-            Vector3 movementDirection = (transform.position - lastPosition).normalized;
-            if (movementDirection.sqrMagnitude > 0.0001f)
-            {
-                float angle = Vector3.Angle(movementDirection, directionToTarget);
-
-                if (angle >= 155f)
-                {
-                    Block();
-                }
-            }
+            GetComponent<LifeController>().IsBlocking = false;
         }
         lastPosition = transform.position;
     }
@@ -292,7 +282,8 @@ public class PlayerAttack : MonoBehaviour
     {
         Debug.Log("Block");
         GetComponent<LifeController>().IsBlocking = true;
-        GetComponent<SpriteRenderer>().sprite = m_blockSprite;
+        animator.SetBool("IsBlocking", true);
+        //GetComponent<SpriteRenderer>().sprite = blockSprite;
     }
 
     public bool GetTeleportBool()

@@ -12338,6 +12338,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 197587247}
     - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: blockSprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: fillSpeedUp
       value: 1
       objectReference: {fileID: 0}

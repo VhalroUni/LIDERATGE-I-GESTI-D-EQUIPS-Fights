@@ -1,6 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -223,6 +224,39 @@ public class PlayerMovement : MonoBehaviour
         m_Velocity = Vector2.Lerp(m_Velocity, Vector2.zero, m_Friction * Time.deltaTime);
 
         transform.position += (Vector3)(m_Velocity * Time.deltaTime);
+
+        //if (m_Rival != null)
+        //{
+        //    Vector3 directionToTarget =
+        //        (m_Rival.transform.position - transform.position).normalized;
+
+        //    Vector3 movement =
+        //        transform.position - m_Attack.lastPosition;
+
+        //    float movementThreshold = 0.01f; // umbral realista
+
+        //    // Si prácticamente no se mueve → NO bloquear
+        //    if (movement.magnitude < movementThreshold)
+        //    {
+        //        m_Attack.animator.SetBool("IsBlocking", false);
+        //        return;
+        //    }
+
+        //    movement.Normalize();
+
+        //    // Queremos que el movimiento sea casi opuesto al rival
+        //    float dot = Vector3.Dot(movement, -directionToTarget);
+
+        //    // cos(30°) ≈ 0.866
+        //    if (dot >= 0.866f)
+        //    {
+        //        m_Attack.Block();
+        //    }
+        //    else
+        //    {
+        //        m_Attack.animator.SetBool("IsBlocking", false);
+        //    }
+        //}
     }
 
     private void TargetOrientation(GameObject target)
