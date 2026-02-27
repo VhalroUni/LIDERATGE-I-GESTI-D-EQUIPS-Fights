@@ -1480,7 +1480,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.76
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -12488,6 +12488,26 @@ PrefabInstance:
     - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: m_BlockKeyInput.m_Name
       value: Block Key Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_UltimateKeyInput.m_Name
+      value: Ultimate Key Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 545cdc36-5d97-4145-ba7b-b4caf5b0252d
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/tab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Ultimate Key Input
       objectReference: {fileID: 0}
     - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: m_Color.b

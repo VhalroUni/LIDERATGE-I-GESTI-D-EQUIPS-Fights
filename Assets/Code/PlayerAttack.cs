@@ -14,7 +14,7 @@ public class PlayerAttack : MonoBehaviour
     public GameObject target;
     public GameObject ball;
     public Slider powerBar;
-    public  Vector3 lastPosition;
+    public Vector3 lastPosition;
 
     [Header("PowerBar Settings")]
     public float teleportPowerCost = 0.25f;
@@ -39,9 +39,24 @@ public class PlayerAttack : MonoBehaviour
     public float areaAttackDistance = 2.0f;
     public float meleeAttackDistance = 3.0f;
 
+    [Header("Ultimate Settings")]
+    public GameObject ultiLevel1Projectile;
+    public GameObject ultiLevel2Projectile;
+    public GameObject ultiLevel3Projectile;
+    public GameObject ultiLevel4Projectile;
+    public float ultiLevel1Damage = 15f;
+    public float ultiLevel2Damage = 25f;
+    public float ultiLevel3Damage = 40f;
+    public float ultiLevel4Damage = 60f;
+    public float ultiLevel1Speed = 8f;
+    public float ultiLevel2Speed = 10f;
+    public float ultiLevel3Speed = 12f;
+    public float ultiLevel4Speed = 15f;
+
     //Start-up, Active, Recovery
     private readonly int[] areaInfo = { 14, 6, 22 };
     private readonly int[] distanceInfo = { 10, 5, 18 };
+    private readonly int[] ultimateInfo = { 20, 8, 30 };
 
     public bool teleport = false;
 
@@ -109,7 +124,7 @@ public class PlayerAttack : MonoBehaviour
         }
 
         float distance = Vector3.Distance(transform.position, target.transform.position);
-        
+
         if (animator.GetBool("IsBlocking") == false)
         {
             GetComponent<LifeController>().IsBlocking = false;
@@ -184,7 +199,7 @@ public class PlayerAttack : MonoBehaviour
         CancelInvoke(nameof(ResetComboStep));
         Invoke(nameof(ResetComboStep), 0.1f);
     }
-    
+
     private System.Collections.IEnumerator MeleeAttackRoutine(
         int attackDamage,
         int startupFrames,
@@ -275,7 +290,83 @@ public class PlayerAttack : MonoBehaviour
 
     public void Ultimate()
     {
-        Debug.Log("Ultimate");
+        if (isAttacking || target == null) return;
+        if (Time.time - lastAttackTime < attackCooldown) return;
+
+        int ultiLevel = Mathf.FloorToInt(totalPower);
+
+        if (ultiLevel < 1) return;
+
+        animator.SetFloat(attackIdHash, 3);
+        animator.SetBool(isAttackingHash, true);
+
+        isAttacking = true;
+        lastAttackTime = Time.time;
+
+        StartCoroutine(UltimateAttackRoutine(ultiLevel));
+    }
+
+    private System.Collections.IEnumerator UltimateAttackRoutine(int level)
+    {
+        yield return new WaitForSeconds(ultimateInfo[0] / samples);
+
+        attackActive = true;
+
+        GameObject projectilePrefab = null;
+        float damage = 0f;
+        float speed = 1f;
+
+        switch (level)
+        {
+            case 1:
+                projectilePrefab = ultiLevel1Projectile ?? ball;
+                damage = ultiLevel1Damage;
+                speed = ultiLevel1Speed;
+                break;
+            case 2:
+                projectilePrefab = ultiLevel2Projectile ?? ball;
+                damage = ultiLevel2Damage;
+                speed = ultiLevel2Speed;
+                break;
+            case 3:
+                projectilePrefab = ultiLevel3Projectile ?? ball;
+                damage = ultiLevel3Damage;
+                speed = ultiLevel3Speed;
+                break;
+            case 4:
+                projectilePrefab = ultiLevel4Projectile ?? ball;
+                damage = ultiLevel4Damage;
+                speed = ultiLevel4Speed;
+                break;
+        }
+
+        if (projectilePrefab != null && target != null)
+        {
+            Vector3 direction = (target.transform.position - transform.position).normalized;
+            GameObject projectileGO = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+
+            var projectile = projectileGO.GetComponent<Projectile>();
+            if (projectile != null)
+            {
+                projectile.SetDirection(direction);
+                projectile.damage = damage;
+                projectile.speed = speed;
+                projectile.ownerPlayerIndex = playerIndex;
+            }
+
+            Destroy(projectileGO, 5f);
+        }
+
+        ModifyPower(-level);
+
+        yield return new WaitForSeconds(ultimateInfo[1] / samples);
+
+        attackActive = false;
+
+        yield return new WaitForSeconds(ultimateInfo[2] / samples);
+
+        isAttacking = false;
+        animator.SetBool(isAttackingHash, false);
     }
 
     public void Block()
@@ -299,6 +390,11 @@ public class PlayerAttack : MonoBehaviour
     public int GetPlayerIndex()
     {
         return playerIndex;
+    }
+
+    public int GetCurrentUltiLevel()
+    {
+        return Mathf.FloorToInt(totalPower);
     }
 
     private System.Collections.IEnumerator ResetAttack(float attackDamage, int startupFrames, int activeFrames, int recoveryFrames,

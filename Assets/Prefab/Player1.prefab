@@ -162,6 +162,15 @@ MonoBehaviour:
   m_Acceleration: 15
   m_MaxSpeed: 8
   m_Friction: 3
+  m_DashForce: 15
+  m_DashCooldown: 1
+  m_DashBarLeft: {fileID: 0}
+  m_DashBarRight: {fileID: 0}
+  m_DashSound: {fileID: 0}
+  m_DashRechargeSound: {fileID: 0}
+  m_DashParticlesPrefab: {fileID: 0}
+  m_DashParticlesFrames: 10
+  m_DashFeetOffset: {x: -0.165, y: -0.165, z: 0}
   m_DelayFlipTime: 3
   velocidadRotacion: 5
   m_PlayerIndex: 0
@@ -260,6 +269,15 @@ MonoBehaviour:
       m_Action: Area Attack Key Input
       m_Flags: 0
     m_Flags: 0
+  m_UltimateKeyInput:
+    m_Name: Ultimate Key Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e5c923ef-4e07-47ca-9838-f622ba8485f1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   m_DistanceAttackKeyInput:
     m_Name: Distance Attack Key Input
     m_Type: 0
@@ -294,6 +312,15 @@ MonoBehaviour:
       m_Action: Teleport Key Input
       m_Flags: 0
     m_Flags: 0
+  m_BlockKeyInput:
+    m_Name: Block Key Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: b90e0a8d-c355-4312-8d0c-ca0ee35f4dd5
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &4556758417245150453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,6 +335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LifeController
   MaxHP: 100
   Life: {fileID: 0}
+  IsBlocking: 0
   color100: {r: 0.4039216, g: 0.61960787, b: 0.27450982, a: 1}
   color50: {r: 0.9339623, g: 0.91746575, b: 0.18062477, a: 1}
   color25: {r: 0.745283, g: 0.21444462, b: 0.21444462, a: 1}
@@ -326,24 +354,40 @@ MonoBehaviour:
   target: {fileID: 0}
   ball: {fileID: 393724084761438969, guid: 12091e02d13804440a15a67048bc8f93, type: 3}
   powerBar: {fileID: 0}
+  lastPosition: {x: 0, y: 0, z: 0}
   teleportPowerCost: 0.25
   distancePowerCost: 0.1
-  meleePowerGain: 0.1
-  areaPowerGain: 0.05
-  distancePowerGain: 0.05
+  areaPowerGain: 0
+  distancePowerGain: 0
   level1Color: {r: 1, g: 0.6, b: 0, a: 1}
   level2Color: {r: 1, g: 1, b: 0, a: 1}
   level3Color: {r: 1, g: 1, b: 1, a: 1}
   level4Color: {r: 0, g: 0.85213137, b: 1, a: 1}
+  fillSpeedUp: 5
+  fillSpeedDown: 9
   playerIndex: 0
-  attackDamage: 4
   areaDamage: 19
   distanceDamage: 8
   areaAttackDistance: 2
   meleeAttackDistance: 3
+  ultiLevel1Projectile: {fileID: 312282904923128393, guid: 47ba7f33e86231044b89fb3778cda457, type: 3}
+  ultiLevel2Projectile: {fileID: 312282904923128393, guid: 35db04adafa61bf4b9ef330966afd0ad, type: 3}
+  ultiLevel3Projectile: {fileID: 312282904923128393, guid: 73e37f2d928e5a04cbc2d920e43af4ce, type: 3}
+  ultiLevel4Projectile: {fileID: 312282904923128393, guid: e442df616e3ec834d951ab1911699e60, type: 3}
+  ultiLevel1Damage: 15
+  ultiLevel2Damage: 25
+  ultiLevel3Damage: 40
+  ultiLevel4Damage: 60
+  ultiLevel1Speed: 8
+  ultiLevel2Speed: 10
+  ultiLevel3Speed: 12
+  ultiLevel4Speed: 15
   teleport: 0
   hitboxSize: {x: 1.5, y: 1}
   hitboxOffset: {x: 1, y: 0}
+  blockSprite: {fileID: 0}
+  samples: 30
+  animator: {fileID: 0}
 --- !u!50 &7215942747997247062
 Rigidbody2D:
   serializedVersion: 5

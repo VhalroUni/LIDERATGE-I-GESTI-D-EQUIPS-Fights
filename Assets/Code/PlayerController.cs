@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputAction m_MoveInput;
     [SerializeField] private InputAction m_MeleeAttackKeyInput;
     [SerializeField] private InputAction m_AreaAttackKeyInput;
-    //[SerializeField] private InputAction m_UltimateKeyInput;
+    [SerializeField] private InputAction m_UltimateKeyInput;
     [SerializeField] private InputAction m_DistanceAttackKeyInput;
     [SerializeField] private InputAction m_TeleportKeyInput;
     [SerializeField] private InputAction m_BlockKeyInput;
@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
         m_MeleeAttackKeyInput.canceled += MeleeAttackInput;
         m_AreaAttackKeyInput.performed += AreaAttackInput;
         m_AreaAttackKeyInput.canceled += AreaAttackInput;
+        m_UltimateKeyInput.performed += UltimateInput;
+        m_UltimateKeyInput.canceled += UltimateInput;
         m_DistanceAttackKeyInput.performed += DistanceAttackInput;
         m_DistanceAttackKeyInput.canceled += DistanceAttackInput;
         m_TeleportKeyInput.performed += TeleportAttackInput;
@@ -44,9 +46,10 @@ public class PlayerController : MonoBehaviour
 
         m_MeleeAttackKeyInput.Enable();
         m_AreaAttackKeyInput.Enable();
+        m_UltimateKeyInput.Enable();
         m_DistanceAttackKeyInput.Enable();
         m_TeleportKeyInput.Enable();
-        m_BlockKeyInput.Enable() ;
+        m_BlockKeyInput.Enable();
     }
 
     private void OnDisable()
@@ -55,6 +58,7 @@ public class PlayerController : MonoBehaviour
 
         m_MeleeAttackKeyInput.Disable();
         m_AreaAttackKeyInput.Disable();
+        m_UltimateKeyInput.Disable();
         m_DistanceAttackKeyInput.Disable();
         m_TeleportKeyInput.Disable();
         m_BlockKeyInput.Disable();
