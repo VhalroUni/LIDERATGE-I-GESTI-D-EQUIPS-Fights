@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class PlayerAttack : MonoBehaviour
     public float ultiLevel4Damage = 60f;
     public float ultiLevel1Speed = 8f;
     public float ultiLevel2Speed = 10f;
-    public float ultiLevel3Speed = 12f;
+    public float ultiLevel3Speed = 12f; //no teneos una ulti de 300% para fomentar el
     public float ultiLevel4Speed = 15f;
 
     //Start-up, Active, Recovery
@@ -95,6 +96,11 @@ public class PlayerAttack : MonoBehaviour
     public Animator animator;
     private readonly int attackIdHash = Animator.StringToHash("AttackId");
     private readonly int isAttackingHash = Animator.StringToHash("IsAttacking");
+
+    [Header("Teleport Particles")]
+    public GameObject particlesPrefab;
+    public int framesAntesDeSpawn = 10;
+    public int framesActivos = 10;
 
     void Start()
     {
@@ -277,6 +283,9 @@ public class PlayerAttack : MonoBehaviour
         if (target == null) return;
         if (totalPower < teleportPowerCost) return;
 
+        // Guardar posición antes del teleport
+        Vector3 posicionAntesTeleport = transform.position;
+
         ModifyPower(-teleportPowerCost);
 
         Vector3 direction =
@@ -286,7 +295,36 @@ public class PlayerAttack : MonoBehaviour
             target.transform.position + direction * 1f;
 
         teleport = true;
+
+        // Spawn partículas SOLO si se teletransporta
+        if (particlesPrefab != null)
+            StartCoroutine(SpawnTeleportParticlesRoutine(posicionAntesTeleport));
     }
+
+    private IEnumerator SpawnTeleportParticlesRoutine(Vector3 posicionFija)
+    {
+        for (int i = 0; i < framesAntesDeSpawn; i++)
+            yield return null;
+
+        GameObject particles =
+            Instantiate(particlesPrefab, posicionFija, Quaternion.identity);
+
+        StartCoroutine(DestroyParticlesAfterFrames(particles));
+    }
+
+    private IEnumerator DestroyParticlesAfterFrames(GameObject obj)
+    {
+        for (int i = 0; i < framesActivos; i++)
+            yield return null;
+
+        ParticleSystem ps = obj.GetComponent<ParticleSystem>();
+
+        if (ps != null)
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
+        Destroy(obj);
+    }
+
 
     public void Ultimate()
     {

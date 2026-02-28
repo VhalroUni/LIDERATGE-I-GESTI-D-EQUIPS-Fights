@@ -9,13 +9,30 @@ public class GameCamera : MonoBehaviour
     public float smoothSpeed = 5f;
     public float screenEdgeBuffer = 2f;
     public float minZoom = 5f;
-    public float maxZoom = 15f; // NUEVA VARIABLE
+    public float maxZoom = 15f;
+
+    // 🔥 NUEVAS VARIABLES PARA EL FONDO
+    public Transform backgroundTransform;
+    public SpriteRenderer backgroundRenderer;
+
+    [Header("Fondo cuando están cerca")]
+    public Vector3 closeScaleMultiplier = new Vector3(0.9f, 0.9f, 1f);
+    public Color closeColor = new Color(0.7f, 0.7f, 0.7f, 1f);
+
+    private Vector3 originalScale;
+    private Color originalColor;
 
     private Camera cam;
 
     void Start()
     {
         cam = GetComponent<Camera>();
+
+        if (backgroundTransform != null)
+            originalScale = backgroundTransform.localScale;
+
+        if (backgroundRenderer != null)
+            originalColor = backgroundRenderer.color;
     }
 
     void LateUpdate()
@@ -49,9 +66,22 @@ public class GameCamera : MonoBehaviour
 
         float newZoom = requiredSize + screenEdgeBuffer;
 
-        // 🔥 Limitamos entre min y max
         newZoom = Mathf.Clamp(newZoom, minZoom, maxZoom);
 
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, newZoom, Time.deltaTime * smoothSpeed);
+
+        // 🔥 EFECTO FONDO BASADO EN ZOOM
+        float zoom01 = Mathf.InverseLerp(maxZoom, minZoom, cam.orthographicSize);
+
+        if (backgroundTransform != null)
+        {
+            Vector3 targetScale = Vector3.Scale(originalScale, closeScaleMultiplier);
+            backgroundTransform.localScale = Vector3.Lerp(originalScale, targetScale, zoom01);
+        }
+
+        if (backgroundRenderer != null)
+        {
+            backgroundRenderer.color = Color.Lerp(originalColor, closeColor, zoom01);
+        }
     }
 }
