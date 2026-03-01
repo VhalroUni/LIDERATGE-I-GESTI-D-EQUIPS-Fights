@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1464902853071052989}
   - component: {fileID: 490009704542520413}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Flecha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,8 +106,11 @@ GameObject:
   - component: {fileID: 3006818053113029580}
   - component: {fileID: 2832982938721057853}
   - component: {fileID: 7934288526305630636}
+  - component: {fileID: 1354029203643747087}
+  - component: {fileID: 5306589224780263949}
+  - component: {fileID: 563196290616686108}
   - component: {fileID: 33988736767235845}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player2
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -180,7 +183,7 @@ SpriteRenderer:
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6982454406443099936, guid: 493c64ce63b709440a6628bf17164a1e, type: 3}
-  m_Color: {r: 1, g: 0.26845258, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -233,7 +236,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.167, y: 1.28}
+  m_Size: {x: 1.02, y: 1.69}
   m_EdgeRadius: 0
 --- !u!114 &8264033931600937431
 MonoBehaviour:
@@ -249,18 +252,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   m_Rival: {fileID: 0}
   m_Arrow: {fileID: 2495522127064544346}
-  m_Acceleration: 15
-  m_MaxSpeed: 8
+  m_Acceleration: 25
+  m_MaxSpeed: 20
   m_Friction: 3
-  m_DashForce: 15
-  m_DashCooldown: 1
+  m_DashForce: 9
+  m_DashCooldown: 0.5
   m_DashBarLeft: {fileID: 0}
   m_DashBarRight: {fileID: 0}
   m_DashSound: {fileID: 0}
   m_DashRechargeSound: {fileID: 0}
   m_DashParticlesPrefab: {fileID: 0}
-  m_DashParticlesFrames: 10
-  m_DashFeetOffset: {x: -0.165, y: -0.165, z: 0}
+  m_DashParticlesFrames: 200
+  m_DashFeetOffset: {x: -0.165, y: -1.11, z: 0}
   m_DelayFlipTime: 3
   velocidadRotacion: 5
   m_PlayerIndex: 1
@@ -399,12 +402,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b618dfd1de572845856cada106aeb4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LifeController
-  MaxHP: 100
+  MaxHP: 250
   Life: {fileID: 0}
   IsBlocking: 0
-  color100: {r: 0, g: 1, b: 0, a: 1}
-  color50: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  color25: {r: 1, g: 0, b: 0, a: 1}
+  color100: {r: 0.4039216, g: 0.6156863, b: 0.27058825, a: 1}
+  color50: {r: 0.9339623, g: 0.91746575, b: 0.18062477, a: 1}
+  color25: {r: 0.745283, g: 0.21444462, b: 0.21444462, a: 1}
 --- !u!114 &7934288526305630636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,39 +424,104 @@ MonoBehaviour:
   ball: {fileID: 393724084761438969, guid: 12091e02d13804440a15a67048bc8f93, type: 3}
   powerBar: {fileID: 0}
   lastPosition: {x: 0, y: 0, z: 0}
-  teleportPowerCost: 0.25
-  distancePowerCost: 0.1
-  areaPowerGain: 0
-  distancePowerGain: 0
+  level1Color: {r: 1, g: 0.6, b: 0, a: 1}
+  level2Color: {r: 1, g: 1, b: 0, a: 1}
+  level3Color: {r: 1, g: 1, b: 1, a: 1}
+  level4Color: {r: 0, g: 0.85213137, b: 1, a: 1}
+  fillSpeedUp: 1
+  fillSpeedDown: 2.5
+  playerIndex: 1
+  areaDamage: 19
+  distanceDamage: 8
+  areaAttackDistance: 2
+  meleeAttackDistance: 3
+  ultiLevel1Projectile: {fileID: 312282904923128393, guid: 47ba7f33e86231044b89fb3778cda457, type: 3}
+  ultiLevel2Projectile: {fileID: 312282904923128393, guid: 35db04adafa61bf4b9ef330966afd0ad, type: 3}
+  ultiLevel4Projectile: {fileID: 312282904923128393, guid: e442df616e3ec834d951ab1911699e60, type: 3}
+  ultiLevel1Damage: 50
+  ultiLevel2Damage: 90
+  ultiLevel4Damage: 160
+  ultiLevel1Speed: 8
+  ultiLevel2Speed: 10
+  ultiLevel4Speed: 15
+  teleport: 0
+  hitboxSize: {x: 1.2, y: 1.2}
+  hitboxOffset: {x: 1, y: 0}
+  blockSprite: {fileID: 0}
+  samples: 30
+  animator: {fileID: 0}
+--- !u!114 &1354029203643747087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2889628738897430638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d13426390a8731458f0ceb5b6d883ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerGains
+  basic1Cost: 0
+  basic2Cost: 0
+  basic3Cost: 0
+  strongCost: 0
+  projectileCost: 10
+  teleportCost: 25
+  ultimate100Cost: 0.7
+  ultimate200Cost: 1.6
+  ultimate400Cost: 3.5
+  basic1GainOnHit: 20
+  basic2GainOnHit: 20
+  basic3GainOnHit: 20
+  areaGainOnHit: 10
+  projectileGainOnReceive: 0
+--- !u!114 &5306589224780263949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2889628738897430638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb53699ec538f0e4899ae2afbae8fae9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerBar
+  powerBar: {fileID: 0}
   level1Color: {r: 1, g: 1, b: 1, a: 1}
   level2Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   level3Color: {r: 1, g: 0, b: 0, a: 1}
   level4Color: {r: 1, g: 0, b: 1, a: 1}
   fillSpeedUp: 5
   fillSpeedDown: 9
-  playerIndex: 1
-  areaDamage: 19
-  distanceDamage: 8
-  areaAttackDistance: 6
-  meleeAttackDistance: 3
-  ultiLevel1Projectile: {fileID: 312282904923128393, guid: 47ba7f33e86231044b89fb3778cda457, type: 3}
-  ultiLevel2Projectile: {fileID: 312282904923128393, guid: 35db04adafa61bf4b9ef330966afd0ad, type: 3}
-  ultiLevel3Projectile: {fileID: 312282904923128393, guid: 73e37f2d928e5a04cbc2d920e43af4ce, type: 3}
-  ultiLevel4Projectile: {fileID: 312282904923128393, guid: e442df616e3ec834d951ab1911699e60, type: 3}
-  ultiLevel1Damage: 15
-  ultiLevel2Damage: 25
-  ultiLevel3Damage: 40
-  ultiLevel4Damage: 60
-  ultiLevel1Speed: 8
-  ultiLevel2Speed: 10
-  ultiLevel3Speed: 12
-  ultiLevel4Speed: 15
-  teleport: 0
-  hitboxSize: {x: 1.5, y: 1}
-  hitboxOffset: {x: 1, y: 0}
-  blockSprite: {fileID: 0}
-  samples: 30
-  animator: {fileID: 0}
+--- !u!50 &563196290616686108
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2889628738897430638}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!95 &33988736767235845
 Animator:
   serializedVersion: 7

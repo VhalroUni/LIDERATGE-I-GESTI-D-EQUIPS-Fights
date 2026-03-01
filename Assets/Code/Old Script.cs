@@ -1,4 +1,4 @@
-using UnityEditor;
+/*using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -275,4 +275,4 @@ public class OldScript : MonoBehaviour
             targetMana.ModifyPower(distancePowerGain);
         }
     }
-}
+}*/

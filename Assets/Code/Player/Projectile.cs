@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed = 10f;
-    public float damage = 10f;
+    public float speed;
+    public float damage;
+    public float gainOnReceive;
     public int ownerPlayerIndex = -1;
 
     private Vector2 direction;
@@ -30,10 +31,14 @@ public class Projectile : MonoBehaviour
             return;
 
         var life = other.GetComponent<LifeController>();
+        var power = other.GetComponent<PowerBar>();
         if (life != null)
         {
             life.LoseHealth(damage);
+            power.ModifyPower(gainOnReceive);
             Destroy(gameObject);
         }
+
+        Destroy(gameObject, 3f);
     }
 }
