@@ -110,6 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   speed: 10
   damage: 8
+  gainOnReceive: 0
   ownerPlayerIndex: -1
 --- !u!58 &6527038151210787317
 CircleCollider2D:

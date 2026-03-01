@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 5779063562981995158}
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000014603138}
-  m_LocalPosition: {x: -3.275, y: -0.393, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.79494, y: 0.79494, z: 0.79494}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4861,7 +4861,7 @@ ParticleSystemRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0

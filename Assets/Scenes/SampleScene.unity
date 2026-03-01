@@ -7668,10 +7668,6 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 740334115}
-    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
-      propertyPath: powerBar
-      value: 
-      objectReference: {fileID: 197587247}
     - target: {fileID: 4556758417245150453, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: Life
       value: 
@@ -7798,10 +7794,6 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 7286670831248186084}
-    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
-      propertyPath: powerBar
-      value: 
-      objectReference: {fileID: 811053269}
     - target: {fileID: 8264033931600937431, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_Rival
       value: 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Rendering;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -68,6 +69,12 @@ public class PlayerAttack : MonoBehaviour
     private readonly int[] areaInfo = { 14, 6, 22 };
     private readonly int[] distanceInfo = { 10, 5, 18 };
     private readonly int[] ultimateInfo = { 20, 8, 30 };
+
+    [Header("Particles")]
+    public GameObject meleeParticle;
+    public GameObject areaParticle;
+    public GameObject teleportParticle;
+    public GameObject dashParticle;
 
     void Start()
     {
@@ -142,6 +149,9 @@ public class PlayerAttack : MonoBehaviour
 
             LifeController life = hit.GetComponent<LifeController>();
             PowerBar targetPowerBar = hit.GetComponent<PowerBar>();
+            GameObject particle = Instantiate(meleeParticle, hit.transform);
+            float duration = particle.GetComponent<ParticleSystem>().main.duration;
+            Destroy(particle, duration);
             if (life != null)
             {
                 life.LoseHealth(damage[step]);
@@ -216,6 +226,10 @@ public class PlayerAttack : MonoBehaviour
         if (powerBar.totalPower < playerGains.teleportCost / 100.0f) return;
 
         powerBar.ModifyPower(-playerGains.teleportCost);
+
+        GameObject particle = Instantiate(teleportParticle, gameObject.transform.position, Quaternion.identity);
+        float duration = particle.GetComponent<ParticleSystem>().main.duration;
+        Destroy(particle, duration);
 
         Vector3 direction =
             (target.transform.position - transform.position).normalized;
@@ -339,7 +353,7 @@ public class PlayerAttack : MonoBehaviour
                 projectile.ownerPlayerIndex = playerIndex;
             }
         }
-        else
+        else //AREA
         {
             Vector3 hitboxCenter =
                 transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
@@ -352,6 +366,9 @@ public class PlayerAttack : MonoBehaviour
 
                 LifeController life = hit.GetComponent<LifeController>();
                 PowerBar targetPowerBar = hit.GetComponent<PowerBar>();
+                GameObject particle = Instantiate(areaParticle, hit.transform);
+                float duration = particle.GetComponent<ParticleSystem>().main.duration;
+                Destroy(particle, duration);
                 if (life != null)
                 {
                     life.LoseHealth(attackDamage);
