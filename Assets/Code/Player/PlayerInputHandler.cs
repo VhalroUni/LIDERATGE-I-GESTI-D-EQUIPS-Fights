@@ -29,42 +29,42 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnMeleeAttack(InputAction.CallbackContext _Context)
     {
         if (m_PlayerAttack != null && _Context.started)
-            if (_Context.ReadValue<float>() > 0.5f)
+            if (_Context.ReadValue<float>() > 0.1f)
                 m_PlayerAttack.MeleeAttack();
     }
 
     public void OnAreaAttack(InputAction.CallbackContext _Context)
     {
         if (m_PlayerAttack != null && _Context.started)
-            if (_Context.ReadValue<float>() > 0.5f)
+            if (_Context.ReadValue<float>() > 0.1f)
                 m_PlayerAttack.AreaAtack();
     }
 
     public void OnUltimate(InputAction.CallbackContext _Context)
     {
         if (m_PlayerAttack != null && _Context.started)
-            if (_Context.ReadValue<float>() > 0.5f)
+            if (_Context.ReadValue<float>() > 0.1f)
                 m_PlayerAttack.Ultimate();
     }
 
     public void OnDistanceAttack(InputAction.CallbackContext _Context)
     {
         if (m_PlayerAttack != null && _Context.started)
-            if (_Context.ReadValue<float>() > 0.5f)
+            if (_Context.ReadValue<float>() > 0.1f)
                 m_PlayerAttack.DistanceAttack();
     }
 
     public void OnTeleport(InputAction.CallbackContext _Context)
     {
         if (m_PlayerAttack != null && _Context.started)
-            if (_Context.ReadValue<float>() > 0.5f)
+            if (_Context.ReadValue<float>() > 0.1f)
                 m_PlayerAttack.Teleport();
     }
 
     public void OnBlock(InputAction.CallbackContext _Context)
     {
         if (m_PlayerAttack != null && _Context.started)
-            if (_Context.ReadValue<float>() > 0.5f)
+            if (_Context.ReadValue<float>() > 0.1f)
                 m_PlayerAttack.Block();
     }
 }

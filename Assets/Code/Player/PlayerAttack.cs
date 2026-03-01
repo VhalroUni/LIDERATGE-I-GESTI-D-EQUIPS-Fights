@@ -91,7 +91,7 @@ public class PlayerAttack : MonoBehaviour
     public void MeleeAttack()
     {
         if (isAttacking) return;
-        if (Time.time - lastAttackTime < attackCooldown) return;
+        //if (Time.time - lastAttackTime < attackCooldown) return;
 
         float cost = comboStep == 0 ? playerGains.basic1Cost :
                      comboStep == 1 ? playerGains.basic2Cost :
@@ -213,6 +213,7 @@ public class PlayerAttack : MonoBehaviour
     public void Teleport()
     {
         if (target == null) return;
+        if (powerBar.totalPower < playerGains.teleportCost / 100.0f) return;
 
         powerBar.ModifyPower(-playerGains.teleportCost);
 
