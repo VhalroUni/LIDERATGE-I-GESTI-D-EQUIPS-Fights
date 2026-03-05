@@ -7720,6 +7720,22 @@ PrefabInstance:
       propertyPath: powerBar
       value: 
       objectReference: {fileID: 197587247}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_TeleportKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/t
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/r
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_AreaAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/g
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_DistanceAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/h
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7745,6 +7761,74 @@ PrefabInstance:
     - target: {fileID: 2889628738897430638, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_Name
       value: Player2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_TeleportKeyInput.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_AreaAttackKeyInput.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_MeleeAttackKeyInput.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_TeleportKeyInput.m_SingletonActionBindings.Array.data[0].m_Id
+      value: afd4ae7d-8222-439e-b5a7-75ec573c6500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 7986dbef-0d1d-4cbf-a084-e95629f32e58
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_AreaAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Id
+      value: bb577935-6a0d-44e6-bbb4-56747f28b30d
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_TeleportKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/numpad5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/numpad4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_MeleeAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 2925cf2f-4674-4213-a627-e03f491c7876
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_AreaAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/numpad2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_TeleportKeyInput.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Teleport Key Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_UltimateKeyInput.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Ultimate Key Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_MeleeAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/numpad1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_AreaAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Area Attack Key Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_MeleeAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Melee Attack Key Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006818053113029580, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: m_DistanceAttackKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/numpad3
       objectReference: {fileID: 0}
     - target: {fileID: 5306589224780263949, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: powerBar
@@ -7987,6 +8071,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b618dfd1de572845856cada106aeb4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LifeController
+--- !u!1001 &8526916368679836477
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6695755119259364697, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_Name
+      value: DashParticles
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.401687
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.0149757
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136031327443980222, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dfa92e35d390e87449d10a20bf8d1ce7, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -8003,3 +8144,4 @@ SceneRoots:
   - {fileID: 110060464}
   - {fileID: 6850162945363563211}
   - {fileID: 782349541}
+  - {fileID: 8526916368679836477}
