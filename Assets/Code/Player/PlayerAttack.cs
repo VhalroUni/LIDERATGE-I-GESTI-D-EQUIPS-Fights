@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -57,6 +58,16 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Block")]
     public Sprite blockSprite;
+    public float maxBlockDuration = 2f;
+    public float blockCooldown = 1.5f;
+    public Slider blockBar;
+
+    private float currentBlockTime = 0f;
+    private float blockCooldownTimer = 0f;
+    private bool isBlockOnCooldown = false;
+    private bool isPressingBlock = false;
+    private Image blockBarFillImage;
+
     LifeController lifeController;
 
     private Vector3 meleeDirection = Vector3.right;
@@ -82,6 +93,15 @@ public class PlayerAttack : MonoBehaviour
         animator = GetComponent<Animator>();
         playerGains = GetComponent<PlayerGains>();
         powerBar = GetComponent<PowerBar>();
+
+        currentBlockTime = maxBlockDuration;
+
+        if (blockBar != null)
+        {
+            blockBar.maxValue = maxBlockDuration;
+            blockBar.value = currentBlockTime;
+            blockBarFillImage = blockBar.fillRect.GetComponent<Image>();
+        }
     }
 
     void Update()
@@ -92,6 +112,68 @@ public class PlayerAttack : MonoBehaviour
         }
 
         lastPosition = transform.position;
+
+        UpdateBlockSystem();
+    }
+
+    private void UpdateBlockSystem()
+    {
+        if (isBlockOnCooldown)
+        {
+            blockCooldownTimer += Time.deltaTime;
+
+            if (blockCooldownTimer >= blockCooldown)
+            {
+                isBlockOnCooldown = false;
+                blockCooldownTimer = 0f;
+                currentBlockTime = maxBlockDuration;
+            }
+
+            UpdateBlockUI();
+            return;
+        }
+
+        if (isPressingBlock && currentBlockTime > 0f)
+        {
+            currentBlockTime -= Time.deltaTime;
+
+            if (currentBlockTime <= 0f)
+            {
+                currentBlockTime = 0f;
+                StopBlock();
+                isBlockOnCooldown = true;
+            }
+        }
+        else if (!isPressingBlock && currentBlockTime < maxBlockDuration)
+        {
+            currentBlockTime += Time.deltaTime * 0.5f; 
+            currentBlockTime = Mathf.Min(currentBlockTime, maxBlockDuration);
+        }
+
+        UpdateBlockUI();
+    }
+
+    private void UpdateBlockUI()
+    {
+        if (blockBar == null || blockBarFillImage == null) return;
+
+        if (isBlockOnCooldown)
+        {
+            blockBar.value = (blockCooldownTimer / blockCooldown) * maxBlockDuration;
+            blockBarFillImage.color = Color.red;
+        }
+        else
+        {
+            blockBar.value = currentBlockTime;
+
+            float percent = currentBlockTime / maxBlockDuration;
+            if (percent > 0.5f)
+                blockBarFillImage.color = Color.cyan;
+            else if (percent > 0.25f)
+                blockBarFillImage.color = Color.yellow;
+            else
+                blockBarFillImage.color = Color.red;
+        }
     }
 
     // ================= BASIC =================
@@ -154,7 +236,7 @@ public class PlayerAttack : MonoBehaviour
             Destroy(particle, duration);
             if (life != null)
             {
-                life.LoseHealth(damage[step]);
+                life.LoseHealth(damage[step], transform.position);
 
                 float gainOnHit = step == 0 ? playerGains.basic1GainOnHit :
                              step == 1 ? playerGains.basic2GainOnHit :
@@ -163,6 +245,11 @@ public class PlayerAttack : MonoBehaviour
                 float gainOnReceive = step == 0 ? playerGains.basic1GainOnReceive :
                              step == 1 ? playerGains.basic2GainOnReceive :
                                          playerGains.basic3GainOnReceive;
+
+                if (life.IsBlocking)
+                {
+                    gainOnHit *= 0.1f;
+                }
 
                 powerBar.ModifyPower(gainOnHit);
                 targetPowerBar.ModifyPower(gainOnReceive);
@@ -179,7 +266,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void ResetComboStep()
     {
-        if(!isAttacking)
+        if (!isAttacking)
             comboStep = 0;
     }
 
@@ -206,7 +293,7 @@ public class PlayerAttack : MonoBehaviour
         if (isAttacking || target == null) return;
         if (Time.time - lastAttackTime < attackCooldown) return;
         if (powerBar.totalPower < playerGains.projectileCost / 100.0f) return;
-        
+
         powerBar.ModifyPower(-playerGains.projectileCost);
 
         animator.SetFloat(attackIdHash, 2);
@@ -246,10 +333,20 @@ public class PlayerAttack : MonoBehaviour
 
     // ================= BLOCK =================
 
-    public void Block()
+    public void StartBlock()
     {
+        if (isBlockOnCooldown || currentBlockTime <= 0f) return;
+
+        isPressingBlock = true;
         GetComponent<LifeController>().IsBlocking = true;
         animator.SetBool("IsBlocking", true);
+    }
+
+    public void StopBlock()
+    {
+        isPressingBlock = false;
+        GetComponent<LifeController>().IsBlocking = false;
+        animator.SetBool("IsBlocking", false);
     }
 
     // ================= ULTIMATE =================
@@ -319,6 +416,12 @@ public class PlayerAttack : MonoBehaviour
                 projectile.damage = damage;
                 projectile.speed = speed;
                 projectile.ownerPlayerIndex = playerIndex;
+                projectile.attackerPosition = transform.position;
+
+                if (level == 4)
+                {
+                    projectile.ignoreBlock = true;
+                }
             }
         }
 
@@ -351,6 +454,7 @@ public class PlayerAttack : MonoBehaviour
                 projectile.damage = distanceDamage;
                 projectile.gainOnReceive = playerGains.projectileGainOnReceive;
                 projectile.ownerPlayerIndex = playerIndex;
+                projectile.attackerPosition = transform.position;
             }
         }
         else //AREA
@@ -371,7 +475,7 @@ public class PlayerAttack : MonoBehaviour
                 Destroy(particle, duration);
                 if (life != null)
                 {
-                    life.LoseHealth(attackDamage);
+                    life.LoseHealth(attackDamage, transform.position);
                     powerBar.ModifyPower(playerGains.areaGainOnHit);
                     targetPowerBar.ModifyPower(playerGains.areaGainOnReceive);
                 }

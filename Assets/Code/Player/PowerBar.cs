@@ -39,7 +39,14 @@ public class PowerBar : MonoBehaviour
             int visualLevel = Mathf.FloorToInt(displayedPower);
             float visualLocal = displayedPower - visualLevel;
 
-            powerBar.value = visualLocal;
+            if (displayedPower >= maxTotalPower)
+            {
+                powerBar.value = 1f;
+            }
+            else
+            {
+                powerBar.value = visualLocal;
+            }
         }
 
         if (rainbowActive && powerFillImage != null)
@@ -71,3 +78,4 @@ public class PowerBar : MonoBehaviour
         }
     }
 }
+

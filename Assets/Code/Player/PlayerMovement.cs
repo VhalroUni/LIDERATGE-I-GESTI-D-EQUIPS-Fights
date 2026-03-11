@@ -42,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerAttack m_Attack;
     private SpriteRenderer m_SpriteRender;
     private AudioSource m_AudioSource;
+    private LifeController m_LifeController;
 
     private Vector2 m_Movement;
     private Vector2 m_Velocity;
@@ -62,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
         m_SpriteRender = GetComponent<SpriteRenderer>();
         m_AudioSource = GetComponent<AudioSource>();
+        m_LifeController = GetComponent<LifeController>();
     }
 
     private void Start()
@@ -244,6 +246,9 @@ public class PlayerMovement : MonoBehaviour
     private void FlipSprite(bool teleport)
     {
         if (m_Rival == null) return;
+
+        if (m_LifeController != null && m_LifeController.IsBlocking)
+            return;
 
         if (!teleport)
         {

@@ -6,6 +6,8 @@ public class Projectile : MonoBehaviour
     public float damage;
     public float gainOnReceive;
     public int ownerPlayerIndex = -1;
+    public Vector3 attackerPosition;
+    public bool ignoreBlock = false;
 
     private Vector2 direction;
 
@@ -34,7 +36,7 @@ public class Projectile : MonoBehaviour
         var power = other.GetComponent<PowerBar>();
         if (life != null)
         {
-            life.LoseHealth(damage);
+            life.LoseHealth(damage, attackerPosition, ignoreBlock);
             power.ModifyPower(gainOnReceive);
             Destroy(gameObject);
         }

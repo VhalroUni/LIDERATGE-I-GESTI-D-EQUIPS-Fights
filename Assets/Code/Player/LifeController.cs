@@ -62,20 +62,47 @@ public class LifeController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        ApplyDamage(1f);
+        ApplyDamage(1f, collision.transform.position, false);
     }
 
-    public float LoseHealth(float damage)
+    public float LoseHealth(float damage, Vector3 attackerPosition = default, bool ignoreBlock = false)
     {
-        ApplyDamage(damage);
+        ApplyDamage(damage, attackerPosition, ignoreBlock);
         return CurrentHP;
     }
 
-    private void ApplyDamage(float damage)
+    private void ApplyDamage(float damage, Vector3 attackerPosition = default, bool ignoreBlock = false)
     {
-        if (IsBlocking)
+        bool canBlock = IsBlocking && !ignoreBlock;
+
+        if (canBlock && attackerPosition != default && spriteRenderer != null)
         {
-            damage = damage * 0.1f;
+            Vector2 attackDirection = (attackerPosition - transform.position).normalized;
+
+            Vector2 facingDirection = spriteRenderer.flipX ? Vector2.left : Vector2.right;
+
+            float dotProduct = Vector2.Dot(facingDirection, attackDirection);
+
+            if (dotProduct < 0)
+            {
+                canBlock = false;
+                Debug.Log($"[LifeController] ¡Ataque por la espalda! El bloqueo es inefectivo. flipX={spriteRenderer.flipX}, dotProduct={dotProduct}");
+            }
+            else
+            {
+                Debug.Log($"[LifeController] Bloqueo exitoso. flipX={spriteRenderer.flipX}, dotProduct={dotProduct}");
+            }
+        }
+
+        if (ignoreBlock && IsBlocking)
+        {
+            Debug.Log($"[LifeController] ¡Ataque que ignora bloqueo! Daño recibido a pesar de bloquear.");
+        }
+
+        if (canBlock)
+        {
+            damage = 0f;
+            return;
         }
 
         CurrentHP -= damage;

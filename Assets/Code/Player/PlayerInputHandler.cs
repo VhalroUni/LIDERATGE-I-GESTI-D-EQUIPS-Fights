@@ -65,7 +65,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (m_PlayerAttack != null && _Context.started)
             if (_Context.ReadValue<float>() > 0.1f)
-                m_PlayerAttack.Block();
+                m_PlayerAttack.StartBlock();
             else
                 m_PlayerAttack.animator.SetBool("IsBlocking", false);
     }

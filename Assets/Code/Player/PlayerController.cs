@@ -108,9 +108,11 @@ public class PlayerController : MonoBehaviour
     private void BlockInput(InputAction.CallbackContext _Context)
     {
         float l_Value = _Context.ReadValue<float>();
-        if (l_Value > 0.5f && m_Attack != null)
-            m_Attack.Block();
-        else 
-            m_Attack.animator.SetBool("IsBlocking", false);
+        if (m_Attack == null) return;
+
+        if (l_Value > 0.5f)
+            m_Attack.StartBlock();
+        else
+            m_Attack.StopBlock();
     }
 }
