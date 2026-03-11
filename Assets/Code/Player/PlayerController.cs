@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InputAction m_DistanceAttackKeyInput;
     [SerializeField] private InputAction m_TeleportKeyInput;
     [SerializeField] private InputAction m_BlockKeyInput;
+    [SerializeField] private InputAction m_DashKeyInput;
 
     private PlayerMovement m_Movement;
     private PlayerAttack m_Attack;
@@ -38,6 +40,8 @@ public class PlayerController : MonoBehaviour
         m_TeleportKeyInput.canceled += TeleportAttackInput;
         m_BlockKeyInput.performed += BlockInput;
         m_BlockKeyInput.canceled += BlockInput;
+        m_DashKeyInput.performed += DashInput;
+        m_DashKeyInput.canceled += DashInput;
     }
 
     private void OnEnable()
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour
         m_DistanceAttackKeyInput.Enable();
         m_TeleportKeyInput.Enable();
         m_BlockKeyInput.Enable();
+        m_DashKeyInput.Enable();
     }
 
     private void OnDisable()
@@ -62,6 +67,7 @@ public class PlayerController : MonoBehaviour
         m_DistanceAttackKeyInput.Disable();
         m_TeleportKeyInput.Disable();
         m_BlockKeyInput.Disable();
+        m_DashKeyInput.Disable();
     }
 
     private void ReadInput(InputAction.CallbackContext _Context)
@@ -114,5 +120,12 @@ public class PlayerController : MonoBehaviour
             m_Attack.StartBlock();
         else
             m_Attack.StopBlock();
+    }
+
+    private void DashInput(InputAction.CallbackContext _Context)
+    {
+        float l_Value = _Context.ReadValue<float>();
+        if (l_Value > 0.5f && m_Movement != null)
+            m_Movement.HandleDash();
     }
 }

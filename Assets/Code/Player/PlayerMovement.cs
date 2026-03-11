@@ -81,7 +81,6 @@ public class PlayerMovement : MonoBehaviour
         if (teleport)
             currentFlipTime += Time.deltaTime;
 
-        HandleDash();
         UpdateDashRecharge();
 
         Movement();
@@ -89,11 +88,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // ================= DASH =================
-    private void HandleDash()
+    public void HandleDash()
     {
-        if (!Input.GetKeyDown(KeyCode.LeftShift))
-            return;
-
         if (m_Movement == Vector2.zero)
             return;
 
@@ -225,8 +221,6 @@ public class PlayerMovement : MonoBehaviour
         m_Velocity = Vector2.Lerp(m_Velocity, Vector2.zero, m_Friction * Time.deltaTime);
 
         transform.position += (Vector3)(m_Velocity * Time.deltaTime);
-
-    
     }
 
     private void TargetOrientation(GameObject target)

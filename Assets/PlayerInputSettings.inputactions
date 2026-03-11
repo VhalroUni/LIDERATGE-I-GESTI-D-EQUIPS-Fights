@@ -68,6 +68,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "832c1f0b-5a15-46b4-a666-34eac78c394e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "IA_Activate",
+                    "type": "Button",
+                    "id": "08fd3756-cf95-4948-b290-408352535b90",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -140,7 +158,7 @@
                 {
                     "name": "",
                     "id": "84589965-8c68-4156-a0ce-ad13a5473ec3",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -162,7 +180,7 @@
                 {
                     "name": "",
                     "id": "164f4806-83bc-46a5-9499-af44fe4cba73",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -172,12 +190,23 @@
                 },
                 {
                     "name": "",
-                    "id": "3e2d9946-3a80-48c2-be28-ac85f87d3c34",
-                    "path": "<Gamepad>/leftShoulder",
+                    "id": "3bab08b3-9b9d-42a0-bda3-a0b3364b68e1",
+                    "path": "<Keyboard>/p",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Cubrir",
+                    "action": "IA_Activate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0ea3c2aa-aa4f-4d74-ac94-d8daf272eda8",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

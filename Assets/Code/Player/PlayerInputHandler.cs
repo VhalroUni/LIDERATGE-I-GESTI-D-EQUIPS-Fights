@@ -7,6 +7,7 @@ public class PlayerInputHandler : MonoBehaviour
     private PlayerInput m_PlayerInput;
     private PlayerMovement m_PlayerMovement;
     private PlayerAttack m_PlayerAttack;
+    private IA m_Ia;
 
     private void Awake()
     {
@@ -18,6 +19,8 @@ public class PlayerInputHandler : MonoBehaviour
 
         PlayerAttack[] l_Attackers = FindObjectsByType<PlayerAttack>(FindObjectsSortMode.None);
         m_PlayerAttack = l_Attackers.FirstOrDefault(a => a.GetPlayerIndex() == l_Index);
+
+        m_Ia = FindAnyObjectByType<IA>();
     }
 
     public void OnMove(InputAction.CallbackContext _Context)
@@ -68,5 +71,18 @@ public class PlayerInputHandler : MonoBehaviour
                 m_PlayerAttack.StartBlock();
             else
                 m_PlayerAttack.animator.SetBool("IsBlocking", false);
+    }
+
+    public void OnDash(InputAction.CallbackContext _Context)
+    {
+        if (m_PlayerAttack != null && _Context.started)
+            if (_Context.ReadValue<float>() > 0.1f)
+                m_PlayerMovement.HandleDash();
+    }
+
+    public void IAActive(InputAction.CallbackContext _Context)
+    {
+        if (m_Ia != null && _Context.started)
+            m_Ia.ChangeBehaviour();
     }
 }

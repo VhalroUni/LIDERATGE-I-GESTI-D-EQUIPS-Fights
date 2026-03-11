@@ -1,6 +1,5 @@
-using UnityEngine;
 using System.Collections;
-using UnityEngine.Rendering;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
@@ -87,12 +86,21 @@ public class PlayerAttack : MonoBehaviour
     public GameObject teleportParticle;
     public GameObject dashParticle;
 
+    [Header("Effects")]
+    public AudioSource sounds;
+    public AudioClip melee1;
+    public AudioClip melee2;
+    public AudioClip area;
+    public AudioClip distance;
+    private bool useMelee1 = true;
+
     void Start()
     {
         lifeController = GetComponent<LifeController>();
         animator = GetComponent<Animator>();
         playerGains = GetComponent<PlayerGains>();
         powerBar = GetComponent<PowerBar>();
+        sounds = GetComponent<AudioSource>();
 
         currentBlockTime = maxBlockDuration;
 
@@ -236,6 +244,16 @@ public class PlayerAttack : MonoBehaviour
             Destroy(particle, duration);
             if (life != null)
             {
+                if (useMelee1 && melee1 != null)
+                {
+                    sounds.PlayOneShot(melee1);
+                    useMelee1 = false;  // Cambiar para el próximo golpe
+                }
+                else if (!useMelee1 && melee2 != null)
+                {
+                    sounds.PlayOneShot(melee2);
+                    useMelee1 = true;   // Cambiar para el próximo golpe
+                }
                 life.LoseHealth(damage[step], transform.position);
 
                 float gainOnHit = step == 0 ? playerGains.basic1GainOnHit :
@@ -450,6 +468,7 @@ public class PlayerAttack : MonoBehaviour
 
             if (projectile != null)
             {
+                sounds.PlayOneShot(distance);
                 projectile.SetDirection(direction);
                 projectile.damage = distanceDamage;
                 projectile.gainOnReceive = playerGains.projectileGainOnReceive;
@@ -475,6 +494,7 @@ public class PlayerAttack : MonoBehaviour
                 Destroy(particle, duration);
                 if (life != null)
                 {
+                    sounds.PlayOneShot(area);
                     life.LoseHealth(attackDamage, transform.position);
                     powerBar.ModifyPower(playerGains.areaGainOnHit);
                     targetPowerBar.ModifyPower(playerGains.areaGainOnReceive);
