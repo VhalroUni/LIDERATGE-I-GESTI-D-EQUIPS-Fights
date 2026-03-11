@@ -3723,7 +3723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69deaa7cdcaa0e4c85113829dec7a08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Timer
-  MaxTime: 200
+  MaxTime: 99
 --- !u!114 &661842342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7833,6 +7833,18 @@ PrefabInstance:
       propertyPath: powerBar
       value: 
       objectReference: {fileID: 197587247}
+    - target: {fileID: 8075095954025669405, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: ultimate100Cost
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8075095954025669405, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: ultimate200Cost
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8075095954025669405, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: ultimate400Cost
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 9161579412029251144, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: m_Name
       value: PressX_P1
@@ -7855,6 +7867,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 472340543}
     m_Modifications:
+    - target: {fileID: 1354029203643747087, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: ultimate100Cost
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1354029203643747087, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: ultimate200Cost
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1354029203643747087, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: ultimate400Cost
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 2832982938721057853, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: Life
       value: 

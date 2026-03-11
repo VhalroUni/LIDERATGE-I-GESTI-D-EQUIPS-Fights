@@ -9,9 +9,9 @@ public class PlayerGains : MonoBehaviour
     public float strongCost;
     public float projectileCost = 10.0f;
     public float teleportCost = 25.0f;
-    public float ultimate100Cost = 0.7f;
-    public float ultimate200Cost = 1.6f;
-    public float ultimate400Cost = 3.5f;
+    public float ultimate100Cost = 100.0f;
+    public float ultimate200Cost = 200.0f;
+    public float ultimate400Cost = 400.0f;
 
     [Header("=== GAIN ON HIT ===")]
     public float basic1GainOnHit = 20.0f;
