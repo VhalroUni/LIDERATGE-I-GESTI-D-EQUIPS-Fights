@@ -26,6 +26,10 @@ public class LifeController : MonoBehaviour
     private float CurrentHP;
     private Image fillImage;
 
+    // NUEVO — flag para indicar si está en hit stun
+    private bool isInHitStun = false;
+    public bool IsInHitStun => isInHitStun;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -106,7 +110,8 @@ public class LifeController : MonoBehaviour
         }
 
         CurrentHP -= damage;
-        animator.Play("Zhurong_Hit");
+
+        CancelAllAnimations();
 
         // NUEVO — activar flash de impacto
         if (spriteRenderer != null)
@@ -127,12 +132,39 @@ public class LifeController : MonoBehaviour
         CheckDeath();
     }
 
-    // NUEVO — duración del color de impacto
+    // NUEVO — Cancelar todas las animaciones activas
+    private void CancelAllAnimations()
+    {
+        isInHitStun = true;
+
+        if (IsBlocking)
+        {
+            IsBlocking = false;
+            animator.SetBool("IsBlocking", false);
+        }
+
+        PlayerAttack attack = GetComponent<PlayerAttack>();
+        if (attack != null)
+        {
+            attack.CancelAllAttacks();
+        }
+
+        animator.SetBool("IsAttacking", false);
+        animator.SetFloat("AttackId", 0);
+    }
+
     private IEnumerator HitFlash()
     {
+
+        animator.Play("Zhurong_Hit", -1, 0f);
+
         spriteRenderer.color = hitColor;
-        yield return new WaitForSeconds(0.1f); // duración del impacto
+        yield return new WaitForSeconds(0.1f);
         spriteRenderer.color = originalColor;
+
+        yield return new WaitForSeconds(0.2f);
+
+        isInHitStun = false;
     }
 
     private void UpdateBarColor()

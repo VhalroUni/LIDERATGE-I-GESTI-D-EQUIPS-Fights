@@ -9051,6 +9051,14 @@ PrefabInstance:
       propertyPath: ultimate400Cost
       value: 400
       objectReference: {fileID: 0}
+    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_Size.x
+      value: 5.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079301442482609042, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_Size.y
+      value: 9.220605
+      objectReference: {fileID: 0}
     - target: {fileID: 9093294775001852140, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: m_IsActive
       value: 0

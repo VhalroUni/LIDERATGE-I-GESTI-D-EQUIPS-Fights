@@ -188,6 +188,8 @@ public class PlayerAttack : MonoBehaviour
     public void MeleeAttack()
     {
         if (isAttacking) return;
+        if (lifeController != null && lifeController.IsInHitStun) return;
+
         //if (Time.time - lastAttackTime < attackCooldown) return;
 
         float cost = comboStep == 0 ? playerGains.basic1Cost :
@@ -293,12 +295,13 @@ public class PlayerAttack : MonoBehaviour
     public void AreaAtack()
     {
         if (isAttacking) return;
+        if (lifeController != null && lifeController.IsInHitStun) return; 
 
         powerBar.ModifyPower(-playerGains.strongCost);
 
         isAttacking = true;
 
-        animator.SetFloat(attackIdHash, 1);
+        animator.SetFloat(attackIdHash, 0.5f);
         animator.SetBool(isAttackingHash, true);
 
         StartCoroutine(ResetAttack(areaDamage, areaInfo[0], areaInfo[1], areaInfo[2], AttackType.Area));
@@ -309,12 +312,13 @@ public class PlayerAttack : MonoBehaviour
     public void DistanceAttack()
     {
         if (isAttacking || target == null) return;
+        if (lifeController != null && lifeController.IsInHitStun) return; 
         if (Time.time - lastAttackTime < attackCooldown) return;
         if (powerBar.totalPower < playerGains.projectileCost / 100.0f) return;
 
         powerBar.ModifyPower(-playerGains.projectileCost);
 
-        animator.SetFloat(attackIdHash, 2);
+        animator.SetFloat(attackIdHash, 1);
         animator.SetBool(isAttackingHash, true);
 
         isAttacking = true;
@@ -328,6 +332,7 @@ public class PlayerAttack : MonoBehaviour
     public void Teleport()
     {
         if (target == null) return;
+        if (lifeController != null && lifeController.IsInHitStun) return; 
         if (powerBar.totalPower < playerGains.teleportCost / 100.0f) return;
 
         powerBar.ModifyPower(-playerGains.teleportCost);
@@ -354,6 +359,7 @@ public class PlayerAttack : MonoBehaviour
     public void StartBlock()
     {
         if (isBlockOnCooldown || currentBlockTime <= 0f) return;
+        if (lifeController != null && lifeController.IsInHitStun) return; 
 
         isPressingBlock = true;
         GetComponent<LifeController>().IsBlocking = true;
@@ -372,6 +378,7 @@ public class PlayerAttack : MonoBehaviour
     public void Ultimate()
     {
         if (isAttacking || target == null) return;
+        if (lifeController != null && lifeController.IsInHitStun) return; 
 
         int level = Mathf.FloorToInt(powerBar.totalPower);
 
@@ -507,5 +514,23 @@ public class PlayerAttack : MonoBehaviour
 
         isAttacking = false;
         animator.SetBool(isAttackingHash, false);
+    }
+
+    public void CancelAllAttacks()
+    {
+        StopAllCoroutines();
+
+        isAttacking = false;
+        attackActive = false;
+        comboStep = 0;
+
+        isPressingBlock = false;
+        GetComponent<LifeController>().IsBlocking = false;
+
+        animator.SetBool(isAttackingHash, false);
+        animator.SetBool("IsBlocking", false);
+        animator.SetFloat(attackIdHash, 0);
+
+        CancelInvoke(nameof(ResetComboStep));
     }
 }
