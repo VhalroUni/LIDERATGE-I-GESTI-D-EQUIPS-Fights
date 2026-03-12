@@ -10,13 +10,16 @@ public class PressX : MonoBehaviour
     public GameObject PressX_P1;
     public GameObject PressX_P2;
 
-    public GameObject[] Counter;
+    public GameObject[] Counter; // 3,2,1,GO
+    public AudioClip[] CounterSounds; // sonido para 3,2,1,GO
+
+    public GameObject[] ObjectsToActivate; // objetos que se activan en GO
+
+    public AudioSource audioSource;
 
     bool P1Ready = false;
     bool P2Ready = false;
     bool counterStarted = false;
-
-    SpriteRenderer SR;
 
     void Start()
     {
@@ -24,7 +27,8 @@ public class PressX : MonoBehaviour
         P2.enabled = false;
         P2IA.enabled = false;
 
-        SR = GetComponent<SpriteRenderer>();
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -32,13 +36,15 @@ public class PressX : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             P1Ready = true;
-            PressX_P1.GetComponent<SpriteRenderer>().enabled = false;
+            if (PressX_P1 != null)
+                PressX_P1.GetComponent<SpriteRenderer>().enabled = false;
         }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
             P2Ready = true;
-            PressX_P2.GetComponent<SpriteRenderer>().enabled = false;
+            if (PressX_P2 != null)
+                PressX_P2.GetComponent<SpriteRenderer>().enabled = false;
         }
 
         if (P1Ready && P2Ready && !counterStarted)
@@ -48,23 +54,38 @@ public class PressX : MonoBehaviour
         }
     }
 
-    public IEnumerator PlayCounter()
+    IEnumerator PlayCounter()
     {
-        Counter[0].SetActive(true);
-        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < Counter.Length; i++)
+        {
+            if (Counter[i] != null)
+                Counter[i].SetActive(true);
 
-        Counter[0].SetActive(false);
-        Counter[1].SetActive(true);
-        yield return new WaitForSeconds(1f);
+            float waitTime = 1f;
 
-        Counter[1].SetActive(false);
-        Counter[2].SetActive(true);
-        yield return new WaitForSeconds(1f);
+            if (i < CounterSounds.Length && CounterSounds[i] != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(CounterSounds[i]);
+                waitTime = CounterSounds[i].length;
+            }
 
-        Counter[2].SetActive(false);
+            yield return new WaitForSeconds(waitTime);
 
-        P1.enabled = true;
-        P2.enabled = true;
-        P2IA.enabled = true;
+            if (i == Counter.Length - 1)
+            {
+                foreach (GameObject obj in ObjectsToActivate)
+                {
+                    if (obj != null)
+                        obj.SetActive(true);
+                }
+
+                P1.enabled = true;
+                P2.enabled = true;
+                P2IA.enabled = true;
+            }
+
+            if (Counter[i] != null)
+                Counter[i].SetActive(false);
+        }
     }
 }
