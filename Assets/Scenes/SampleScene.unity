@@ -8983,6 +8983,26 @@ PrefabInstance:
       propertyPath: blockBar
       value: 
       objectReference: {fileID: 511039175}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: areaHitDelay
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: blockCooldown
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: meleeHitDelay
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: distanceHitDelay
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: maxBlockDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4556758417245150453, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: Life
       value: 
@@ -9037,6 +9057,22 @@ PrefabInstance:
       objectReference: {fileID: 197587247}
     - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: m_DashKeyInput.m_Name
+      value: Dash Key Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_DashKeyInput.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_DashKeyInput.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 63d5ed5f-e135-4513-92a8-695797e74808
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_DashKeyInput.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/leftShift
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323786964845671864, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: m_DashKeyInput.m_SingletonActionBindings.Array.data[0].m_Action
       value: Dash Key Input
       objectReference: {fileID: 0}
     - target: {fileID: 8075095954025669405, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
@@ -9237,6 +9273,26 @@ PrefabInstance:
       propertyPath: blockBar
       value: 
       objectReference: {fileID: 1971477683}
+    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: areaHitDelay
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: blockCooldown
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: meleeHitDelay
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: distanceHitDelay
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: maxBlockDuration
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8264033931600937431, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_Rival
       value: 

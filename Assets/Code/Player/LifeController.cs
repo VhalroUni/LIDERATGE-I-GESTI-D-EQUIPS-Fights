@@ -113,7 +113,6 @@ public class LifeController : MonoBehaviour
 
         CancelAllAnimations();
 
-        // NUEVO — activar flash de impacto
         if (spriteRenderer != null)
         {
             if (hitCoroutine != null)
@@ -155,7 +154,6 @@ public class LifeController : MonoBehaviour
 
     private IEnumerator HitFlash()
     {
-
         animator.Play("Zhurong_Hit", -1, 0f);
 
         spriteRenderer.color = hitColor;

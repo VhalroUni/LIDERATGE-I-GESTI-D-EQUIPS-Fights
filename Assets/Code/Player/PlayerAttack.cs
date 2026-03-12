@@ -76,6 +76,7 @@ public class PlayerAttack : MonoBehaviour
     public Animator animator;
     private readonly int attackIdHash = Animator.StringToHash("AttackId");
     private readonly int isAttackingHash = Animator.StringToHash("IsAttacking");
+    private readonly int attackAngleHash = Animator.StringToHash("AttackAngle");
     private readonly int[] areaInfo = { 14, 6, 22 };
     private readonly int[] distanceInfo = { 10, 5, 18 };
     private readonly int[] ultimateInfo = { 20, 8, 30 };
@@ -93,6 +94,14 @@ public class PlayerAttack : MonoBehaviour
     public AudioClip area;
     public AudioClip distance;
     private bool useMelee1 = true;
+
+    [Header("Hit Animation Timing")]
+    public float meleeHitDelay = 0.13f;
+    public float areaHitDelay = 0.22f;
+    public float distanceHitDelay = 0.18f;
+
+    [Header("Debug")]
+    public bool showDebug = true;
 
     void Start()
     {
@@ -154,7 +163,7 @@ public class PlayerAttack : MonoBehaviour
         }
         else if (!isPressingBlock && currentBlockTime < maxBlockDuration)
         {
-            currentBlockTime += Time.deltaTime * 0.5f; 
+            currentBlockTime += Time.deltaTime * 0.5f;
             currentBlockTime = Mathf.Min(currentBlockTime, maxBlockDuration);
         }
 
@@ -184,13 +193,94 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
+    public void CancelAllAttacks()
+    {
+        StopAllCoroutines();
+
+        isAttacking = false;
+        attackActive = false;
+        comboStep = 0;
+
+        isPressingBlock = false;
+        GetComponent<LifeController>().IsBlocking = false;
+
+        animator.SetBool(isAttackingHash, false);
+        animator.SetBool("IsBlocking", false);
+        animator.SetFloat(attackIdHash, 0);
+
+        CancelInvoke(nameof(ResetComboStep));
+    }
+
+    private float CalculateAttackAngle()
+    {
+        if (target == null) return 90f; 
+
+        Vector3 direction = target.transform.position - transform.position;
+
+        float horizontalDistance = Mathf.Abs(direction.x);
+
+        if (horizontalDistance < 0.1f)
+        {
+            return direction.y > 0 ? 180f : 0f;
+        }
+
+        float angleRad = Mathf.Atan2(direction.y, horizontalDistance);
+        float angle = angleRad * Mathf.Rad2Deg;
+
+        angle = angle + 90f;
+
+        angle = Mathf.Clamp(angle, 0f, 180f);
+
+        if (showDebug)
+        {
+            Debug.Log($"Target Y difference: {direction.y:F2}, Horizontal Distance: {horizontalDistance:F2}, Angle: {angle:F1}°");
+        }
+
+        return angle;
+    }
+
+    private float GetBlendTreeValue(float angle)
+    {
+        float blendValue;
+
+        if (angle >= 0f && angle < 10f)
+        {
+            blendValue = -1.0f; // Ataque recto abajo
+        }
+        else if (angle >= 10f && angle < 70f)
+        {
+            blendValue = -0.5f; // Ataque hacia abajo
+        }
+        else if (angle >= 70f && angle < 110f)
+        {
+            blendValue = 0.0f; // Ataque horizontal
+        }
+        else if (angle >= 110f && angle < 170f)
+        {
+            blendValue = 0.5f; // Ataque hacia arriba
+        }
+        else 
+        {
+            blendValue = 1.0f; // Ataque recto arriba
+        }
+
+        if (showDebug)
+        {
+            string animationName = blendValue == -1.0f ? "Recto Abajo" :
+                                   blendValue == -0.5f ? "Hacia Abajo" :
+                                   blendValue == 0.0f ? "Horizontal" :
+                                   blendValue == 0.5f ? "Hacia Arriba" : "Recto Arriba";
+            Debug.Log($"Angle {angle:F1}° -> Blend Value: {blendValue} ({animationName})");
+        }
+
+        return blendValue;
+    }
+
     // ================= BASIC =================
     public void MeleeAttack()
     {
         if (isAttacking) return;
         if (lifeController != null && lifeController.IsInHitStun) return;
-
-        //if (Time.time - lastAttackTime < attackCooldown) return;
 
         float cost = comboStep == 0 ? playerGains.basic1Cost :
                      comboStep == 1 ? playerGains.basic2Cost :
@@ -201,7 +291,11 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = true;
         lastAttackTime = Time.time;
 
+        float attackAngle = CalculateAttackAngle();
+        float blendTreeValue = GetBlendTreeValue(attackAngle);
+
         animator.SetFloat(attackIdHash, 0);
+        animator.SetFloat(attackAngleHash, blendTreeValue);
         animator.SetBool(isAttackingHash, true);
 
         int step = comboStep;
@@ -226,7 +320,7 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator MeleeAttackRoutine(int step)
     {
-        yield return new WaitForSeconds(startup[step] / samples);
+        yield return new WaitForSeconds(meleeHitDelay);
 
         attackActive = true;
 
@@ -249,12 +343,12 @@ public class PlayerAttack : MonoBehaviour
                 if (useMelee1 && melee1 != null)
                 {
                     sounds.PlayOneShot(melee1);
-                    useMelee1 = false;  // Cambiar para el próximo golpe
+                    useMelee1 = false;
                 }
                 else if (!useMelee1 && melee2 != null)
                 {
                     sounds.PlayOneShot(melee2);
-                    useMelee1 = true;   // Cambiar para el próximo golpe
+                    useMelee1 = true;
                 }
                 life.LoseHealth(damage[step], transform.position);
 
@@ -276,7 +370,12 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(active[step] / samples);
+        float remainingTime = (startup[step] + active[step]) / samples - meleeHitDelay;
+        if (remainingTime > 0)
+        {
+            yield return new WaitForSeconds(remainingTime);
+        }
+
         attackActive = false;
         yield return new WaitForSeconds(recovery[step] / samples);
 
@@ -295,7 +394,7 @@ public class PlayerAttack : MonoBehaviour
     public void AreaAtack()
     {
         if (isAttacking) return;
-        if (lifeController != null && lifeController.IsInHitStun) return; 
+        if (lifeController != null && lifeController.IsInHitStun) return;
 
         powerBar.ModifyPower(-playerGains.strongCost);
 
@@ -312,7 +411,7 @@ public class PlayerAttack : MonoBehaviour
     public void DistanceAttack()
     {
         if (isAttacking || target == null) return;
-        if (lifeController != null && lifeController.IsInHitStun) return; 
+        if (lifeController != null && lifeController.IsInHitStun) return;
         if (Time.time - lastAttackTime < attackCooldown) return;
         if (powerBar.totalPower < playerGains.projectileCost / 100.0f) return;
 
@@ -332,7 +431,7 @@ public class PlayerAttack : MonoBehaviour
     public void Teleport()
     {
         if (target == null) return;
-        if (lifeController != null && lifeController.IsInHitStun) return; 
+        if (lifeController != null && lifeController.IsInHitStun) return;
         if (powerBar.totalPower < playerGains.teleportCost / 100.0f) return;
 
         powerBar.ModifyPower(-playerGains.teleportCost);
@@ -359,7 +458,7 @@ public class PlayerAttack : MonoBehaviour
     public void StartBlock()
     {
         if (isBlockOnCooldown || currentBlockTime <= 0f) return;
-        if (lifeController != null && lifeController.IsInHitStun) return; 
+        if (lifeController != null && lifeController.IsInHitStun) return;
 
         isPressingBlock = true;
         GetComponent<LifeController>().IsBlocking = true;
@@ -378,7 +477,7 @@ public class PlayerAttack : MonoBehaviour
     public void Ultimate()
     {
         if (isAttacking || target == null) return;
-        if (lifeController != null && lifeController.IsInHitStun) return; 
+        if (lifeController != null && lifeController.IsInHitStun) return;
 
         int level = Mathf.FloorToInt(powerBar.totalPower);
 
@@ -458,10 +557,24 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator ResetAttack(float attackDamage, int startupFrames, int activeFrames, int recoveryFrames, AttackType type)
     {
-        yield return new WaitForSeconds(startupFrames / samples);
+        float hitDelay;
+
+        if (type == AttackType.Area)
+        {
+            hitDelay = areaHitDelay;
+        }
+        else if (type == AttackType.Distance)
+        {
+            hitDelay = distanceHitDelay;
+        }
+        else
+        {
+            hitDelay = startupFrames / samples;
+        }
+
+        yield return new WaitForSeconds(hitDelay);
 
         attackActive = true;
-        yield return new WaitForSeconds(activeFrames / samples);
 
         if (type == AttackType.Distance)
         {
@@ -483,7 +596,7 @@ public class PlayerAttack : MonoBehaviour
                 projectile.attackerPosition = transform.position;
             }
         }
-        else //AREA
+        else
         {
             Vector3 hitboxCenter =
                 transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
@@ -509,28 +622,18 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
+        float totalStartupAndActive = (startupFrames + activeFrames) / samples;
+        float remainingTime = totalStartupAndActive - hitDelay;
+
+        if (remainingTime > 0)
+        {
+            yield return new WaitForSeconds(remainingTime);
+        }
+
         attackActive = false;
         yield return new WaitForSeconds(recoveryFrames / samples);
 
         isAttacking = false;
         animator.SetBool(isAttackingHash, false);
-    }
-
-    public void CancelAllAttacks()
-    {
-        StopAllCoroutines();
-
-        isAttacking = false;
-        attackActive = false;
-        comboStep = 0;
-
-        isPressingBlock = false;
-        GetComponent<LifeController>().IsBlocking = false;
-
-        animator.SetBool(isAttackingHash, false);
-        animator.SetBool("IsBlocking", false);
-        animator.SetFloat(attackIdHash, 0);
-
-        CancelInvoke(nameof(ResetComboStep));
     }
 }
