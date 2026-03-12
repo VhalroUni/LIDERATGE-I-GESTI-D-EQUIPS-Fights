@@ -566,6 +566,12 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator ResetAttack(float attackDamage, int startupFrames, int activeFrames, int recoveryFrames, AttackType type)
     {
+        yield return new WaitForSeconds(startupFrames / samples);
+
+        attackActive = true;
+
+        yield return new WaitForSeconds(activeFrames / samples);
+
         if (type == AttackType.Distance)
         {
             Vector3 spawnPosition = GetProjectileSpawnPosition();
@@ -586,13 +592,7 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(startupFrames / samples);
-
-        attackActive = true;
-
-        yield return new WaitForSeconds(activeFrames / samples);
-
-        if(type == AttackType.Area)
+        if (type == AttackType.Area)
         {
             Vector3 hitboxCenter = transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
             Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f);

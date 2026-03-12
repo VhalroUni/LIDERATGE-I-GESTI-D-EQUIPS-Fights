@@ -5,7 +5,7 @@ public class PressX : MonoBehaviour
 {
     public PlayerController P1;
     public PlayerController P2;
-    public IA P2IA;
+    //public IA P2IA;
 
     public GameObject PressX_P1;
     public GameObject PressX_P2;
@@ -25,7 +25,7 @@ public class PressX : MonoBehaviour
     {
         P1.enabled = false;
         P2.enabled = false;
-        P2IA.enabled = false;
+        //P2IA.enabled = false;
 
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
@@ -81,7 +81,7 @@ public class PressX : MonoBehaviour
 
                 P1.enabled = true;
                 P2.enabled = true;
-                P2IA.enabled = true;
+                //P2IA.enabled = true;
             }
 
             if (Counter[i] != null)

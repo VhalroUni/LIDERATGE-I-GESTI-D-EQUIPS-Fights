@@ -25,9 +25,7 @@ public class IA : MonoBehaviour
     //References
     private PlayerAttack attack;
     private PlayerMovement movement;
-    private PlayerController controller;
     private PowerBar powerBar;
-    private PlayerGains gains;
 
     private float distanceToRival;
     private float nextActionTime;
@@ -38,9 +36,7 @@ public class IA : MonoBehaviour
     {
         attack = GetComponent<PlayerAttack>();
         movement = GetComponent<PlayerMovement>();
-        controller = GetComponent<PlayerController>();
         powerBar = GetComponent<PowerBar>();
-        gains = GetComponent<PlayerGains>();
 
         nextDecisionTime = Time.time + Random.Range(0.1f, 0.3f);
     }
@@ -70,6 +66,8 @@ public class IA : MonoBehaviour
                 isBlocking = false;
             }
         }
+
+        movement.SetIAMove(iaControl);
     }
 
     private void MakeDecision()
@@ -107,12 +105,14 @@ public class IA : MonoBehaviour
     private void UpdateMovement()
     {
         Vector2 direction;
-        float stoppingDistance = meleeAttackDistance * 0.8f;
+        float stoppingDistance = meleeAttackDistance * 0.6f;
 
-        if (distanceToRival > stoppingDistance + 0.3f) //PERSEGUIR
+        if (distanceToRival > stoppingDistance) //PERSEGUIR
             direction = (rival.transform.position - transform.position).normalized;
-        else
+        else if (distanceToRival < stoppingDistance)
             direction = (transform.position - rival.transform.position).normalized;
+        else
+            direction = Vector2.zero;
 
         movement.SetInputVector(direction);
     }
@@ -204,6 +204,5 @@ public class IA : MonoBehaviour
     public void ChangeBehaviour()
     {
         iaControl = !iaControl;
-        controller.enabled = !iaControl;
     }
 }

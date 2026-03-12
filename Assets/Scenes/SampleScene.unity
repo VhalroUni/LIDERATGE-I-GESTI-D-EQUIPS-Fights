@@ -3174,7 +3174,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PressX
   P1: {fileID: 7286670831248186099}
   P2: {fileID: 773333449963010853}
-  P2IA: {fileID: 773333449963010857}
   PressX_P1: {fileID: 119023615}
   PressX_P2: {fileID: 1989529983}
   Counter:
@@ -9851,17 +9850,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b315170c3b9a779459eaf5eeaee63dd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
---- !u!114 &773333449963010857 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 569459155482178751, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
-  m_PrefabInstance: {fileID: 773333449963010844}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 740334115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b92a354e45f2ab44b9e169e1d8d39fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IA
 --- !u!1001 &1291293747492042613
 PrefabInstance:
   m_ObjectHideFlags: 0

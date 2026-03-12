@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool leftWasFull = true;
     private bool rightWasFull = true;
+    private bool iaMove = false;
 
     private void Awake()
     {
@@ -83,7 +84,9 @@ public class PlayerMovement : MonoBehaviour
 
         UpdateDashRecharge();
 
-        Movement();
+        if(!iaMove)
+            Movement();
+
         FlipSprite(teleport);
     }
 
@@ -269,5 +272,10 @@ public class PlayerMovement : MonoBehaviour
     public void EndMatch()
     {
         enabled = false;
+    }
+
+    public void SetIAMove(bool value)
+    {
+        iaMove = value;
     }
 }
