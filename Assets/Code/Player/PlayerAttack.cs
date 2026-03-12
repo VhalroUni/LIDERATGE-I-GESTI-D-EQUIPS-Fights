@@ -89,12 +89,13 @@ public class PlayerAttack : MonoBehaviour
     public GameObject teleportParticle;
     public GameObject dashParticle;
 
-    [Header("Effects")]
+    [Header("SFX")]
     public AudioSource sounds;
     public AudioClip melee1;
     public AudioClip melee2;
     public AudioClip area;
     public AudioClip distance;
+    public AudioClip block;
     private bool useMelee1 = true;
 
     [Header("Hit Animation Timing")]
@@ -235,7 +236,7 @@ public class PlayerAttack : MonoBehaviour
 
         if (showDebug)
         {
-            Debug.Log($"Target Y difference: {direction.y:F2}, Horizontal Distance: {horizontalDistance:F2}, Angle: {angle:F1}°");
+            Debug.Log($"Target Y difference: {direction.y:F2}, Horizontal Distance: {horizontalDistance:F2}, Angle: {angle:F1}ï¿½");
         }
 
         return angle;
@@ -272,7 +273,7 @@ public class PlayerAttack : MonoBehaviour
                                    blendValue == -0.5f ? "Hacia Abajo" :
                                    blendValue == 0.0f ? "Horizontal" :
                                    blendValue == 0.5f ? "Hacia Arriba" : "Recto Arriba";
-            Debug.Log($"Angle {angle:F1}° -> Blend Value: {blendValue} ({animationName})");
+            Debug.Log($"Angle {angle:F1}ï¿½ -> Blend Value: {blendValue} ({animationName})");
         }
 
         return blendValue;
@@ -467,6 +468,7 @@ public class PlayerAttack : MonoBehaviour
         if (lifeController != null && lifeController.IsInHitStun) return;
 
         isPressingBlock = true;
+        sounds.PlayOneShot(block);
         GetComponent<LifeController>().IsBlocking = true;
         animator.SetBool("IsBlocking", true);
     }
@@ -564,34 +566,12 @@ public class PlayerAttack : MonoBehaviour
 
     private IEnumerator ResetAttack(float attackDamage, int startupFrames, int activeFrames, int recoveryFrames, AttackType type)
     {
-        float hitDelay;
-
-        if (type == AttackType.Area)
-        {
-            hitDelay = areaHitDelay;
-        }
-        else if (type == AttackType.Distance)
-        {
-            hitDelay = distanceHitDelay;
-        }
-        else
-        {
-            hitDelay = startupFrames / samples;
-        }
-
-        yield return new WaitForSeconds(hitDelay);
-
-        attackActive = true;
-
         if (type == AttackType.Distance)
         {
             Vector3 spawnPosition = GetProjectileSpawnPosition();
 
-            GameObject projectileGO =
-                Instantiate(ball, spawnPosition, Quaternion.identity);
-
-            Vector3 direction =
-                (target.transform.position - spawnPosition).normalized;
+            GameObject projectileGO = Instantiate(ball, transform.position, Quaternion.identity);
+            Vector3 direction = (target.transform.position - transform.position).normalized;
 
             var projectile = projectileGO.GetComponent<Projectile>();
 
@@ -605,11 +585,16 @@ public class PlayerAttack : MonoBehaviour
                 projectile.attackerPosition = spawnPosition;
             }
         }
-        else
-        {
-            Vector3 hitboxCenter =
-                transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
 
+        yield return new WaitForSeconds(startupFrames / samples);
+
+        attackActive = true;
+
+        yield return new WaitForSeconds(activeFrames / samples);
+
+        if(type == AttackType.Area)
+        {
+            Vector3 hitboxCenter = transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
             Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f);
 
             foreach (var hit in hits)
@@ -618,28 +603,25 @@ public class PlayerAttack : MonoBehaviour
 
                 LifeController life = hit.GetComponent<LifeController>();
                 PowerBar targetPowerBar = hit.GetComponent<PowerBar>();
-                GameObject particle = Instantiate(areaParticle, hit.transform);
-                float duration = particle.GetComponent<ParticleSystem>().main.duration;
-                Destroy(particle, duration);
+
                 if (life != null)
                 {
-                    sounds.PlayOneShot(area);
                     life.LoseHealth(attackDamage, transform.position);
                     powerBar.ModifyPower(playerGains.areaGainOnHit);
-                    targetPowerBar.ModifyPower(playerGains.areaGainOnReceive);
+
+                    if (targetPowerBar != null)
+                        powerBar.ModifyPower(playerGains.areaGainOnReceive);
                 }
             }
-        }
 
-        float totalStartupAndActive = (startupFrames + activeFrames) / samples;
-        float remainingTime = totalStartupAndActive - hitDelay;
-
-        if (remainingTime > 0)
-        {
-            yield return new WaitForSeconds(remainingTime);
+            sounds.PlayOneShot(area);
+            GameObject particle = Instantiate(areaParticle, transform.position, Quaternion.identity);
+            float duration = particle.GetComponent<ParticleSystem>().main.duration;
+            Destroy(particle, duration);
         }
 
         attackActive = false;
+
         yield return new WaitForSeconds(recoveryFrames / samples);
 
         isAttacking = false;
