@@ -133,6 +133,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1464902853071052989}
+  - {fileID: 425171615298755148}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3854558346906199069
@@ -439,6 +440,7 @@ MonoBehaviour:
   distanceDamage: 8
   areaAttackDistance: 2
   meleeAttackDistance: 3
+  projectileSpawnPoint: {fileID: 0}
   ultiLevel1Projectile: {fileID: 312282904923128393, guid: 47ba7f33e86231044b89fb3778cda457, type: 3}
   ultiLevel2Projectile: {fileID: 312282904923128393, guid: 35db04adafa61bf4b9ef330966afd0ad, type: 3}
   ultiLevel4Projectile: {fileID: 312282904923128393, guid: e442df616e3ec834d951ab1911699e60, type: 3}
@@ -466,6 +468,10 @@ MonoBehaviour:
   melee2: {fileID: 8300000, guid: 9d2687b7df00de842af4148ef0a4664c, type: 3}
   area: {fileID: 8300000, guid: b5d153628768b9a448ba54cf62036df9, type: 3}
   distance: {fileID: 8300000, guid: 8dd188fe51e27534baba2880cb894d27, type: 3}
+  meleeHitDelay: 0.13
+  areaHitDelay: 0.22
+  distanceHitDelay: 0.18
+  showDebug: 1
 --- !u!114 &1354029203643747087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -687,3 +693,34 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &5312641084586735841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 425171615298755148}
+  m_Layer: 7
+  m_Name: ProjectileSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &425171615298755148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5312641084586735841}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.91, y: 0.61, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7179316818315323880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

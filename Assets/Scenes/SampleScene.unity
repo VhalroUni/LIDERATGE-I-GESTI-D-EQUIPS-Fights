@@ -2037,6 +2037,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
+--- !u!4 &274325170 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3743128177995172255, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+  m_PrefabInstance: {fileID: 750748061476694238}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &331098407
 GameObject:
   m_ObjectHideFlags: 0
@@ -8408,6 +8413,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1935003588}
   m_CullTransparentMesh: 1
+--- !u!4 &1940000020 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 425171615298755148, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+  m_PrefabInstance: {fileID: 773333449963010844}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1968449339
 GameObject:
   m_ObjectHideFlags: 0
@@ -9242,6 +9252,10 @@ PrefabInstance:
       propertyPath: maxBlockDuration
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4394639367890135530, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
+      propertyPath: projectileSpawnPoint
+      value: 
+      objectReference: {fileID: 274325170}
     - target: {fileID: 4556758417245150453, guid: 816b4ea383a210d4db721bca06d84ff6, type: 3}
       propertyPath: Life
       value: 
@@ -9580,6 +9594,10 @@ PrefabInstance:
       propertyPath: maxBlockDuration
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7934288526305630636, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
+      propertyPath: projectileSpawnPoint
+      value: 
+      objectReference: {fileID: 1940000020}
     - target: {fileID: 8264033931600937431, guid: 5947192ceb5f1614880a2b0ce665ab52, type: 3}
       propertyPath: m_Rival
       value: 

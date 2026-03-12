@@ -31,6 +31,8 @@ public class PlayerAttack : MonoBehaviour
     private int comboStep = 0;
     private bool attackActive = false;
 
+    public Transform projectileSpawnPoint;
+
     [Header("Ultimate Settings")]
     public GameObject ultiLevel1Projectile;
     public GameObject ultiLevel2Projectile;
@@ -274,6 +276,10 @@ public class PlayerAttack : MonoBehaviour
         }
 
         return blendValue;
+    }
+    private Vector3 GetProjectileSpawnPosition()
+    {
+        return projectileSpawnPoint != null ? projectileSpawnPoint.position : transform.position;
     }
 
     // ================= BASIC =================
@@ -528,10 +534,11 @@ public class PlayerAttack : MonoBehaviour
 
         if (prefab != null)
         {
+            Vector3 spawnPosition = GetProjectileSpawnPosition();
             Vector3 direction =
-                (target.transform.position - transform.position).normalized;
+                (target.transform.position - spawnPosition).normalized;
 
-            GameObject go = Instantiate(prefab, transform.position, Quaternion.identity);
+            GameObject go = Instantiate(prefab, spawnPosition, Quaternion.identity);
             var projectile = go.GetComponent<Projectile>();
 
             if (projectile != null)
@@ -540,7 +547,7 @@ public class PlayerAttack : MonoBehaviour
                 projectile.damage = damage;
                 projectile.speed = speed;
                 projectile.ownerPlayerIndex = playerIndex;
-                projectile.attackerPosition = transform.position;
+                projectile.attackerPosition = spawnPosition;
 
                 if (level == 4)
                 {
@@ -578,11 +585,13 @@ public class PlayerAttack : MonoBehaviour
 
         if (type == AttackType.Distance)
         {
+            Vector3 spawnPosition = GetProjectileSpawnPosition();
+
             GameObject projectileGO =
-                Instantiate(ball, transform.position, Quaternion.identity);
+                Instantiate(ball, spawnPosition, Quaternion.identity);
 
             Vector3 direction =
-                (target.transform.position - transform.position).normalized;
+                (target.transform.position - spawnPosition).normalized;
 
             var projectile = projectileGO.GetComponent<Projectile>();
 
@@ -593,7 +602,7 @@ public class PlayerAttack : MonoBehaviour
                 projectile.damage = distanceDamage;
                 projectile.gainOnReceive = playerGains.projectileGainOnReceive;
                 projectile.ownerPlayerIndex = playerIndex;
-                projectile.attackerPosition = transform.position;
+                projectile.attackerPosition = spawnPosition;
             }
         }
         else
