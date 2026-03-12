@@ -66,8 +66,6 @@ public class IA : MonoBehaviour
                 isBlocking = false;
             }
         }
-
-        movement.SetIAMove(iaControl);
     }
 
     private void MakeDecision()
@@ -105,12 +103,10 @@ public class IA : MonoBehaviour
     private void UpdateMovement()
     {
         Vector2 direction;
-        float stoppingDistance = meleeAttackDistance * 0.6f;
+        float stoppingDistance = meleeAttackDistance * 0.8f;
 
-        if (distanceToRival > stoppingDistance) //PERSEGUIR
+        if (distanceToRival > stoppingDistance)
             direction = (rival.transform.position - transform.position).normalized;
-        else if (distanceToRival < stoppingDistance)
-            direction = (transform.position - rival.transform.position).normalized;
         else
             direction = Vector2.zero;
 
