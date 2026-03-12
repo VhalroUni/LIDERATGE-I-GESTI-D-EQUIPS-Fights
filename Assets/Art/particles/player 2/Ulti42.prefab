@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6527038151210787317}
   - component: {fileID: 2582789062040624389}
   m_Layer: 0
-  m_Name: Ulti1
+  m_Name: Ulti42
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,9 +204,9 @@ Transform:
   m_GameObject: {fileID: 6102887915752283861}
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.000001505017}
-  m_LocalPosition: {x: 0, y: 0, z: -0.20874}
-  m_LocalScale: {x: 1.5256852, y: 1.5256852, z: 1.5256852}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: -4.6614}
+  m_LocalScale: {x: 21.310001, y: 21.310001, z: 21.310001}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3195443177362235228}
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
@@ -1485,9 +1485,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.8854541, b: 0.57169807, a: 0}
-        key1: {r: 1, g: 0.62151116, b: 0, a: 1}
-        key2: {r: 1, g: 0, b: 0, a: 1}
+        key0: {r: 0.73015237, g: 1, b: 0.57254905, a: 0}
+        key1: {r: 0.2020216, g: 1, b: 0, a: 1}
+        key2: {r: 0.0038095713, g: 1, b: 0, a: 1}
         key3: {r: 1, g: 1, b: 1, a: 0.23137255}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -5040,9 +5040,9 @@ Transform:
   m_GameObject: {fileID: 6929395904361180220}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.68874}
-  m_LocalScale: {x: 0.9970657, y: 0.9970657, z: 0.9970657}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 5.1414}
+  m_LocalScale: {x: 11.380001, y: 11.380001, z: 11.380001}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3195443177362235228}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6321,9 +6321,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.90943396, g: 0.24608214, b: 0, a: 0}
-        key1: {r: 0.7207546, g: 0.028264888, b: 0, a: 1}
-        key2: {r: 0.5169811, g: 0.16679956, b: 0.16679956, a: 1}
+        key0: {r: 0, g: 0.9098039, b: 0.063749984, a: 0}
+        key1: {r: 0.08761744, g: 0.72156864, b: 0, a: 1}
+        key2: {r: 0.20971717, g: 0.5176471, b: 0.16862746, a: 1}
         key3: {r: 0.554717, g: 0.41342115, b: 0.41342115, a: 0.23137255}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}

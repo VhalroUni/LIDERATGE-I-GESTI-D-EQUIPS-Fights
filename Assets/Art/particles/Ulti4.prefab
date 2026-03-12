@@ -110,7 +110,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   speed: 10
   damage: 8
+  gainOnReceive: 0
   ownerPlayerIndex: -1
+  attackerPosition: {x: 0, y: 0, z: 0}
+  ignoreBlock: 0
 --- !u!58 &6527038151210787317
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -202,8 +205,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.000001505017}
   m_LocalPosition: {x: 0, y: 0, z: -4.6614}
-  m_LocalScale: {x: 16.665215, y: 16.665215, z: 16.665215}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 21.310001, y: 21.310001, z: 21.310001}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3195443177362235228}
   m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
@@ -1482,9 +1485,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.8854541, b: 0.57169807, a: 0}
-        key1: {r: 1, g: 0.62151116, b: 0, a: 1}
-        key2: {r: 1, g: 0, b: 0, a: 1}
+        key0: {r: 0.96680516, g: 0.57254905, b: 1, a: 0}
+        key1: {r: 0.90154934, g: 0, b: 1, a: 1}
+        key2: {r: 0.6080961, g: 0, b: 1, a: 1}
         key3: {r: 1, g: 1, b: 1, a: 0.23137255}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -4956,7 +4959,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 96f0857dabf768f4b87ddf8a9bd04d31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5038,8 +5041,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 5.1414}
-  m_LocalScale: {x: 10.89105, y: 10.89105, z: 10.89105}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 11.380001, y: 11.380001, z: 11.380001}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3195443177362235228}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6318,9 +6321,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.90943396, g: 0.24608214, b: 0, a: 0}
-        key1: {r: 0.7207546, g: 0.028264888, b: 0, a: 1}
-        key2: {r: 0.5169811, g: 0.16679956, b: 0.16679956, a: 1}
+        key0: {r: 0.66644704, g: 0, b: 0.9098039, a: 0}
+        key1: {r: 0.5820149, g: 0, b: 0.72156864, a: 1}
+        key2: {r: 0.43890002, g: 0.16862746, b: 0.5176471, a: 1}
         key3: {r: 0.554717, g: 0.41342115, b: 0.41342115, a: 0.23137255}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -9792,7 +9795,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 00ae3454c92c5374c9c1e6b390378ac3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

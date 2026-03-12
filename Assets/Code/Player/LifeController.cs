@@ -16,11 +16,13 @@ public class LifeController : MonoBehaviour
     public Color color50 = Color.yellow;
     public Color color25 = Color.red;
 
+    public Color colorHIT = Color.white;
+
     // NUEVO — color al recibir impacto
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private Coroutine hitCoroutine;
-    private readonly Color hitColor = new Color(1f, 0.85f, 0.85f); // #FFA0A0
+    public readonly Color hitColor = new Color(1f, 0.85f, 0.85f); // #FFA0A0
 
     private Animator animator;
     private float CurrentHP;
@@ -156,7 +158,7 @@ public class LifeController : MonoBehaviour
     {
         animator.Play("Zhurong_Hit", -1, 0f);
 
-        spriteRenderer.color = hitColor;
+        spriteRenderer.color = colorHIT;
         yield return new WaitForSeconds(0.1f);
         spriteRenderer.color = originalColor;
 

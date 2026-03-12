@@ -110,7 +110,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   speed: 10
   damage: 8
+  gainOnReceive: 0
   ownerPlayerIndex: -1
+  attackerPosition: {x: 0, y: 0, z: 0}
+  ignoreBlock: 0
 --- !u!58 &6527038151210787317
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1483,7 +1486,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 0.8854541, b: 0.57169807, a: 0}
-        key1: {r: 1, g: 0.62151116, b: 0, a: 1}
+        key1: {r: 0.72461414, g: 0, b: 1, a: 1}
         key2: {r: 1, g: 0, b: 0, a: 1}
         key3: {r: 1, g: 1, b: 1, a: 0.23137255}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -4956,7 +4959,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 96f0857dabf768f4b87ddf8a9bd04d31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6318,7 +6321,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.90943396, g: 0.24608214, b: 0, a: 0}
+        key0: {r: 0.9098039, g: 0, b: 0.7721775, a: 0}
         key1: {r: 0.7207546, g: 0.028264888, b: 0, a: 1}
         key2: {r: 0.5169811, g: 0.16679956, b: 0.16679956, a: 1}
         key3: {r: 0.554717, g: 0.41342115, b: 0.41342115, a: 0.23137255}
@@ -9792,7 +9795,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 00ae3454c92c5374c9c1e6b390378ac3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
