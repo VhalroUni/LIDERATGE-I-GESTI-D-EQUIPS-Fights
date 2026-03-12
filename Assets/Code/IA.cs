@@ -11,67 +11,86 @@ public class IA : MonoBehaviour
     public float meleeAttackDistance = 2f;
     public float areaAttackDistance = 1.5f;
     public float projectileDistance = 5f;
-    public float decisionTime = 0.5f;
-    public float reactionTime = 0.2f;
 
-    [Header("Probabilidades de ataque")]
-    [Range(0, 100)] public int simpleAttackChance = 60;
-    [Range(0, 100)] public int areaAttackChance = 40;
-    [Range(0, 100)] public int projectileChance = 25;
+    public float decisionTime = 0.4f;
+    public float reactionDelay = 0.15f;
+
+    public float chaseSpeedMultiplier = 1.4f;
+
+    [Header("Probabilidades")]
+    [Range(0, 100)] public int simpleAttackChance = 50;
+    [Range(0, 100)] public int areaAttackChance = 25;
+    [Range(0, 100)] public int projectileChance = 20;
     [Range(0, 100)] public int ultimateChance = 10;
-    [Range(0, 100)] public int teleportChance = 45;
-    [Range(0, 100)] public int blockChance = 50;
+    [Range(0, 100)] public int teleportChance = 20;
+    [Range(0, 100)] public int blockChance = 30;
 
-    //References
     private PlayerAttack attack;
     private PlayerMovement movement;
+    private PlayerController controller;
     private PowerBar powerBar;
 
-    private float distanceToRival;
-    private float nextActionTime;
-    private float nextDecisionTime;
-    private bool isBlocking = false;
+    float distanceToRival;
+    float nextDecisionTime;
+    float nextActionTime;
+    float nextMoveTime;
 
-    private void Start()
+    bool isBlocking = false;
+
+    void Start()
     {
         attack = GetComponent<PlayerAttack>();
         movement = GetComponent<PlayerMovement>();
+        controller = GetComponent<PlayerController>();
         powerBar = GetComponent<PowerBar>();
 
         nextDecisionTime = Time.time + Random.Range(0.1f, 0.3f);
     }
 
-    private void Update()
+    void Update()
     {
-        if (rival == null) return;
+        if (!iaControl || rival == null) return;
 
         distanceToRival = Vector2.Distance(transform.position, rival.transform.position);
 
-        if (iaControl)
+        if (Time.time >= nextDecisionTime)
         {
-            if (Time.time >= nextDecisionTime)
-            {
-                MakeDecision();
-                nextDecisionTime = Time.time + decisionTime;
-            }
+            MakeDecision();
+            nextDecisionTime = Time.time + decisionTime;
+        }
 
-            UpdateMovement();
+        UpdateMovement();
+    }
+
+    void UpdateMovement()
+    {
+        if (Time.time < nextMoveTime) return;
+
+        if (attack != null && attack.animator.GetBool("IsAttacking"))
+        {
+            movement.SetInputVector(Vector2.zero);
+            return;
+        }
+
+        if (distanceToRival > meleeAttackDistance)
+        {
+            Vector2 dir = (rival.transform.position - transform.position).normalized;
+
+            if (distanceToRival > projectileDistance)
+                dir *= chaseSpeedMultiplier;
+
+            movement.SetInputVector(dir);
         }
         else
         {
             movement.SetInputVector(Vector2.zero);
-            if (attack != null && isBlocking)
-            {
-                attack.StopBlock();
-                isBlocking = false;
-            }
         }
-
-        movement.SetIAMove(iaControl);
     }
 
-    private void MakeDecision()
+    void MakeDecision()
     {
+        if (Time.time < nextActionTime) return;
+
         if (attack != null && attack.animator.GetBool("IsAttacking"))
             return;
 
@@ -81,122 +100,97 @@ public class IA : MonoBehaviour
         {
             if (random < simpleAttackChance)
                 MeleeAttack();
-            else if (random < simpleAttackChance + areaAttackChance)
-            {
-                if (distanceToRival <= areaAttackDistance)
-                    AreaAttack();
-                else
-                    MeleeAttack();
-            }
+
+            else if (random < simpleAttackChance + areaAttackChance && distanceToRival <= areaAttackDistance)
+                AreaAttack();
+
             else if (random < simpleAttackChance + areaAttackChance + blockChance)
                 Block();
         }
+
         else if (distanceToRival <= projectileDistance)
         {
             if (random < projectileChance)
                 DistanceAttack();
+
             else if (random < projectileChance + ultimateChance && CanUseUltimate())
                 Ultimate();
+
             else if (random < projectileChance + ultimateChance + teleportChance && CanUseTeleport())
+                Teleport();
+        }
+        else
+        {
+            if (Random.Range(0, 100) < teleportChance && CanUseTeleport())
                 Teleport();
         }
     }
 
-    private void UpdateMovement()
+    void MeleeAttack()
     {
-        Vector2 direction;
-        float stoppingDistance = meleeAttackDistance * 0.6f;
-
-        if (distanceToRival > stoppingDistance) //PERSEGUIR
-            direction = (rival.transform.position - transform.position).normalized;
-        else if (distanceToRival < stoppingDistance)
-            direction = (transform.position - rival.transform.position).normalized;
-        else
-            direction = Vector2.zero;
-
-        movement.SetInputVector(direction);
+        attack.MeleeAttack();
+        nextActionTime = Time.time + 0.9f;
+        nextMoveTime = Time.time + reactionDelay;
+        isBlocking = false;
     }
 
-    private void MeleeAttack()
+    void AreaAttack()
     {
-        if (CanAttack())
-        {
-            attack.MeleeAttack();
-            isBlocking = false;
-            nextActionTime = Time.time + 1f;
-        }
+        attack.AreaAtack();
+        nextActionTime = Time.time + 1.1f;
+        nextMoveTime = Time.time + reactionDelay;
+        isBlocking = false;
     }
 
-    private void AreaAttack()
+    void DistanceAttack()
     {
-        if (CanAttack())
-        {
-            attack.AreaAtack();
-            isBlocking = false;
-            nextActionTime = Time.time + 1f;
-        }
+        if (!CanUseProjectile()) return;
+
+        attack.DistanceAttack();
+        nextActionTime = Time.time + 1.2f;
+        nextMoveTime = Time.time + reactionDelay;
+        isBlocking = false;
     }
 
-    private void DistanceAttack()
+    void Ultimate()
     {
-        if (CanAttack() && CanUseProjectile())
-        {
-            attack.DistanceAttack();
-            isBlocking = false;
-            nextActionTime = Time.time + 1f;
-        }
+        attack.Ultimate();
+        nextActionTime = Time.time + 2f;
+        nextMoveTime = Time.time + reactionDelay;
+        isBlocking = false;
     }
 
-    private void Ultimate()
+    void Teleport()
     {
-        if (CanAttack() && CanUseUltimate())
-        {
-            attack.Ultimate();
-            isBlocking = false;
-            nextActionTime = Time.time + 2f;
-        }
+        attack.Teleport();
+        nextActionTime = Time.time + 1f;
+        nextMoveTime = Time.time + reactionDelay;
+        isBlocking = false;
     }
 
-    private void Teleport()
+    void Block()
     {
-        if (CanUseTeleport())
-        {
-            attack.Teleport();
-            isBlocking = false;
-            nextActionTime = Time.time + 1f;
-        }
-    }
-
-    private void Block()
-    {
-        if (attack != null && !isBlocking)
+        if (!isBlocking)
         {
             attack.StartBlock();
             isBlocking = true;
-            nextActionTime = Time.time + 1.5f;
+            nextActionTime = Time.time + 1.3f;
         }
     }
 
-    private bool CanAttack()
-    {
-        return attack != null &&
-               !attack.animator.GetBool("IsAttacking") &&
-               Time.time >= nextActionTime;
-    }
-
-    private bool CanUseUltimate()
+    bool CanUseUltimate()
     {
         if (powerBar == null) return false;
         int level = Mathf.FloorToInt(powerBar.totalPower);
         return level == 1 || level == 2 || level == 4;
     }
 
-    private bool CanUseTeleport()
+    bool CanUseTeleport()
     {
         return powerBar != null && powerBar.totalPower >= 25;
     }
 
-    private bool CanUseProjectile()
+    bool CanUseProjectile()
     {
         return powerBar != null && powerBar.totalPower >= 10;
     }
@@ -204,5 +198,6 @@ public class IA : MonoBehaviour
     public void ChangeBehaviour()
     {
         iaControl = !iaControl;
+        controller.enabled = !iaControl;
     }
 }
