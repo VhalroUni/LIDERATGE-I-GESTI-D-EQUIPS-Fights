@@ -53,7 +53,6 @@ public class PlayerMovement : MonoBehaviour
 
     private bool leftWasFull = true;
     private bool rightWasFull = true;
-    private bool iaMove = false;
 
     private void Awake()
     {
@@ -83,9 +82,8 @@ public class PlayerMovement : MonoBehaviour
             currentFlipTime += Time.deltaTime;
 
         UpdateDashRecharge();
-
-        if(!iaMove)
-            Movement();
+        
+        Movement();
 
         FlipSprite(teleport);
     }
@@ -272,10 +270,5 @@ public class PlayerMovement : MonoBehaviour
     public void EndMatch()
     {
         enabled = false;
-    }
-
-    public void SetIAMove(bool value)
-    {
-        iaMove = value;
     }
 }

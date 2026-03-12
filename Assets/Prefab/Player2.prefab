@@ -1,5 +1,96 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1126269404469821130
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1258035311192477011}
+  - component: {fileID: 4261121774317048877}
+  m_Layer: 0
+  m_Name: PressX_P2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1258035311192477011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126269404469821130}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.02, y: 1.99, z: 0}
+  m_LocalScale: {x: 0.6927, y: 0.6927, z: 0.6927}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7179316818315323880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &4261121774317048877
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1126269404469821130}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: -3179232679684839668, guid: e4a2b7254212f8745bd5729c53112072, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 5, y: 2.32}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
 --- !u!1 &2495522127064544346
 GameObject:
   m_ObjectHideFlags: 0
@@ -16,7 +107,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1464902853071052989
 Transform:
   m_ObjectHideFlags: 0
@@ -134,6 +225,7 @@ Transform:
   m_Children:
   - {fileID: 1464902853071052989}
   - {fileID: 425171615298755148}
+  - {fileID: 1258035311192477011}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3854558346906199069
@@ -262,12 +354,12 @@ MonoBehaviour:
   m_DashCooldown: 0.5
   m_DashBarLeft: {fileID: 0}
   m_DashBarRight: {fileID: 0}
-  m_DashSound: {fileID: 0}
-  m_DashRechargeSound: {fileID: 0}
+  m_DashSound: {fileID: 8300000, guid: ef1648aef496ebf4f9ff5c3cddb9ea31, type: 3}
+  m_DashRechargeSound: {fileID: 8300000, guid: 0a618760f2134d2498a7cff1c7d447e6, type: 3}
   m_DashParticlesPrefab: {fileID: 0}
   m_DashParticlesFrames: 200
   m_DashFeetOffset: {x: -0.165, y: -1.11, z: 0}
-  m_DelayFlipTime: 3
+  m_DelayFlipTime: 0.75
   velocidadRotacion: 5
   m_PlayerIndex: 1
 --- !u!114 &3006818053113029580
@@ -338,7 +430,15 @@ MonoBehaviour:
     m_Id: 07b52dca-7152-4503-8477-cc9af96e10f3
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 2925cf2f-4674-4213-a627-e03f491c7876
+      m_Path: <Keyboard>/1
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Melee Attack Key Input
+      m_Flags: 0
     m_Flags: 0
   m_AreaAttackKeyInput:
     m_Name: Area Attack Key Input
@@ -347,7 +447,15 @@ MonoBehaviour:
     m_Id: 36c3956d-b6f6-4924-ba67-e2cc72581c89
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: bb577935-6a0d-44e6-bbb4-56747f28b30d
+      m_Path: <Keyboard>/2
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Area Attack Key Input
+      m_Flags: 0
     m_Flags: 0
   m_UltimateKeyInput:
     m_Name: Ultimate Key Input
@@ -356,7 +464,15 @@ MonoBehaviour:
     m_Id: 4b51729e-950c-44f4-b347-b786cb533735
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 7986dbef-0d1d-4cbf-a084-e95629f32e58
+      m_Path: <Keyboard>/3
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Ultimate Key Input
+      m_Flags: 0
     m_Flags: 0
   m_DistanceAttackKeyInput:
     m_Name: Distance Attack Key Input
@@ -368,7 +484,7 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: 2a200844-40e9-44b0-94fe-613d54770d3c
-      m_Path: <Keyboard>/numpad1
+      m_Path: <Keyboard>/4
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -382,7 +498,15 @@ MonoBehaviour:
     m_Id: 21642704-6bab-4751-955e-9698173b9b1e
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: afd4ae7d-8222-439e-b5a7-75ec573c6500
+      m_Path: <Keyboard>/5
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Teleport Key Input
+      m_Flags: 0
     m_Flags: 0
   m_BlockKeyInput:
     m_Name: Block Key Input
@@ -391,7 +515,15 @@ MonoBehaviour:
     m_Id: 98648cf6-ac44-45f2-b214-4c474ed102aa
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 58fd6e77-b038-4211-b3f8-9ae1b742dcb6
+      m_Path: <Keyboard>/6
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Block Key Input
+      m_Flags: 0
     m_Flags: 0
   m_DashKeyInput:
     m_Name: Dash Key Input
@@ -417,8 +549,8 @@ MonoBehaviour:
   MaxHP: 250
   Life: {fileID: 0}
   IsBlocking: 0
-  color100: {r: 0.4039216, g: 0.6156863, b: 0.27058825, a: 1}
-  color50: {r: 0.9339623, g: 0.91746575, b: 0.18062477, a: 1}
+  color100: {r: 0.5439065, g: 0.6603774, b: 0.47223213, a: 1}
+  color50: {r: 0.78113204, g: 0.7739773, b: 0.3876183, a: 1}
   color25: {r: 0.745283, g: 0.21444462, b: 0.21444462, a: 1}
 --- !u!114 &7934288526305630636
 MonoBehaviour:
@@ -440,7 +572,7 @@ MonoBehaviour:
   distanceDamage: 8
   areaAttackDistance: 2
   meleeAttackDistance: 3
-  projectileSpawnPoint: {fileID: 0}
+  projectileSpawnPoint: {fileID: 425171615298755148}
   ultiLevel1Projectile: {fileID: 312282904923128393, guid: 47ba7f33e86231044b89fb3778cda457, type: 3}
   ultiLevel2Projectile: {fileID: 312282904923128393, guid: 35db04adafa61bf4b9ef330966afd0ad, type: 3}
   ultiLevel4Projectile: {fileID: 312282904923128393, guid: e442df616e3ec834d951ab1911699e60, type: 3}
@@ -454,8 +586,8 @@ MonoBehaviour:
   hitboxSize: {x: 1.2, y: 1.2}
   hitboxOffset: {x: 1, y: 0}
   blockSprite: {fileID: 0}
-  maxBlockDuration: 2
-  blockCooldown: 1.5
+  maxBlockDuration: 0.5
+  blockCooldown: 0.4
   blockBar: {fileID: 0}
   samples: 30
   animator: {fileID: 0}
@@ -468,9 +600,10 @@ MonoBehaviour:
   melee2: {fileID: 8300000, guid: 9d2687b7df00de842af4148ef0a4664c, type: 3}
   area: {fileID: 8300000, guid: b5d153628768b9a448ba54cf62036df9, type: 3}
   distance: {fileID: 8300000, guid: 8dd188fe51e27534baba2880cb894d27, type: 3}
-  meleeHitDelay: 0.13
-  areaHitDelay: 0.22
-  distanceHitDelay: 0.18
+  block: {fileID: 0}
+  meleeHitDelay: 0.4
+  areaHitDelay: 0.8
+  distanceHitDelay: 0.8
   showDebug: 1
 --- !u!114 &1354029203643747087
 MonoBehaviour:
@@ -490,9 +623,9 @@ MonoBehaviour:
   strongCost: 0
   projectileCost: 10
   teleportCost: 25
-  ultimate100Cost: 0.7
-  ultimate200Cost: 1.6
-  ultimate400Cost: 3.5
+  ultimate100Cost: 100
+  ultimate200Cost: 200
+  ultimate400Cost: 400
   basic1GainOnHit: 20
   basic2GainOnHit: 20
   basic3GainOnHit: 20
