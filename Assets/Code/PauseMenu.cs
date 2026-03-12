@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,14 +7,20 @@ public class PauseMenu : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject pauseCanvas;
 
+    [Header("Transición")]
+    [SerializeField] public CanvasGroup fadeCanvasGroup;
+    [SerializeField] private float fadeDuration = 0.2f;
+
     [Header("Input (New Input System)")]
     [SerializeField] private InputAction m_PauseKeyInput;
 
     private bool m_IsPaused;
+    private bool isTransitioning;
 
     private void Awake()
     {
         m_PauseKeyInput.performed += OnPausePressed;
+        ConfigureFadeCanvas();
     }
 
     private void OnEnable()
@@ -46,8 +53,29 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-        m_IsPaused = true;
+        if (fadeCanvasGroup == null)
+        {
+            PauseImmediate();
+            return;
+        }
 
+        StartCoroutine(PauseRoutine());
+    }
+
+    public void Resume()
+    {
+        if (fadeCanvasGroup == null)
+        {
+            ResumeImmediate();
+            return;
+        }
+
+        StartCoroutine(ResumeRoutine());
+    }
+
+    private void PauseImmediate()
+    {
+        m_IsPaused = true;
         Time.timeScale = 0f;
 
         if (pauseCanvas != null)
@@ -57,10 +85,9 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void Resume()
+    private void ResumeImmediate()
     {
         m_IsPaused = false;
-
         Time.timeScale = 1f;
 
         if (pauseCanvas != null)
@@ -68,7 +95,67 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
 
+    private IEnumerator PauseRoutine()
+    {
+        if (isTransitioning)
+            yield break;
+
+        isTransitioning = true;
+
+        yield return FadeCanvas(0f, 1f);
+        PauseImmediate();
+        yield return FadeCanvas(1f, 0f);
+
+        isTransitioning = false;
+    }
+
+    private IEnumerator ResumeRoutine()
+    {
+        if (isTransitioning)
+            yield break;
+
+        isTransitioning = true;
+
+        yield return FadeCanvas(0f, 1f);
+        ResumeImmediate();
+        yield return FadeCanvas(1f, 0f);
+
+        isTransitioning = false;
+    }
+
+    private void ConfigureFadeCanvas()
+    {
+        if (fadeCanvasGroup == null) return;
+
+        fadeCanvasGroup.alpha = 0f;
+        fadeCanvasGroup.interactable = false;
+        fadeCanvasGroup.blocksRaycasts = false;
+    }
+
+    private IEnumerator FadeCanvas(float from, float to)
+    {
+        float duration = Mathf.Max(0.01f, fadeDuration);
+        float elapsed = 0f;
+
+        fadeCanvasGroup.alpha = from;
+        fadeCanvasGroup.blocksRaycasts = true;
+        fadeCanvasGroup.interactable = false;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            fadeCanvasGroup.alpha = Mathf.Lerp(from, to, elapsed / duration);
+            yield return null;
+        }
+
+        fadeCanvasGroup.alpha = to;
+
+        if (Mathf.Approximately(to, 0f))
+        {
+            fadeCanvasGroup.blocksRaycasts = false;
+        }
     }
 
     public void OnResumeButton()

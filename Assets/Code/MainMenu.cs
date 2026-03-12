@@ -17,6 +17,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject creditsCanvas;
     [SerializeField] private GameObject tscreen;
 
+    [Header("Transición")]
+    [SerializeField] public CanvasGroup fadeCanvasGroup;
+    [SerializeField] private float fadeDuration = 0.25f;
+
     [Header("Audio")]
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private Slider masterVolumeSlider;
@@ -28,10 +32,13 @@ public class MainMenu : MonoBehaviour
     private const float MinDb = -80f;
     private const float MaxDb = 0f;
 
+    private bool isTransitioning;
+
     private void Awake()
     {
         InitializeAudioSettings();
         InitializeUI();
+        ConfigureFadeCanvas();
     }
 
     private void Start()
@@ -99,6 +106,15 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    private void ConfigureFadeCanvas()
+    {
+        if (fadeCanvasGroup == null) return;
+
+        fadeCanvasGroup.alpha = 0f;
+        fadeCanvasGroup.interactable = false;
+        fadeCanvasGroup.blocksRaycasts = false;
+    }
+
     private void UnregisterAudioListeners()
     {
         if (masterVolumeSlider != null)
@@ -142,41 +158,12 @@ public class MainMenu : MonoBehaviour
         }
 
         Debug.Log("[MainMenu] Mostrando selector de mapas...");
-
-        if (mainMenuCanvas != null)
-        {
-            mainMenuCanvas.SetActive(false);
-        }
-
-        mapSelectorCanvas.SetActive(true);
+        SwitchToMenuCanvas(mapSelectorCanvas);
     }
 
     public void OnBackToMainMenu()
     {
-        if (mapSelectorCanvas != null)
-        {
-            mapSelectorCanvas.SetActive(false);
-        }
-
-        if (optionsCanvas != null)
-        {
-            optionsCanvas.SetActive(false);
-        }
-
-        if (controlsCanvas != null)
-        {
-            controlsCanvas.SetActive(false);
-        }
-
-        if (creditsCanvas != null)
-        {
-            creditsCanvas.SetActive(false);
-        }
-
-        if (mainMenuCanvas != null)
-        {
-            mainMenuCanvas.SetActive(true);
-        }
+        SwitchToMenuCanvas(mainMenuCanvas);
     }
 
     public void OnOptionsButton()
@@ -187,12 +174,7 @@ public class MainMenu : MonoBehaviour
             return;
         }
 
-        if (mainMenuCanvas != null)
-        {
-            mainMenuCanvas.SetActive(false);
-        }
-
-        optionsCanvas.SetActive(true);
+        SwitchToMenuCanvas(optionsCanvas);
     }
 
     public void OnControlsButton()
@@ -203,12 +185,7 @@ public class MainMenu : MonoBehaviour
             return;
         }
 
-        if (mainMenuCanvas != null)
-        {
-            mainMenuCanvas.SetActive(false);
-        }
-
-        controlsCanvas.SetActive(true);
+        SwitchToMenuCanvas(controlsCanvas);
     }
 
     public void OnCreditsButton()
@@ -219,12 +196,74 @@ public class MainMenu : MonoBehaviour
             return;
         }
 
-        if (mainMenuCanvas != null)
+        SwitchToMenuCanvas(creditsCanvas);
+    }
+
+    private void SwitchToMenuCanvas(GameObject targetCanvas)
+    {
+        StartCoroutine(SwitchCanvasRoutine(targetCanvas, mainMenuCanvas, mapSelectorCanvas, optionsCanvas, controlsCanvas, creditsCanvas));
+    }
+
+    private IEnumerator SwitchCanvasRoutine(GameObject toShow, params GameObject[] toHide)
+    {
+        if (isTransitioning)
+            yield break;
+
+        if (fadeCanvasGroup == null)
         {
-            mainMenuCanvas.SetActive(false);
+            SetActiveMenusImmediate(toShow, toHide);
+            yield break;
         }
 
-        creditsCanvas.SetActive(true);
+        isTransitioning = true;
+
+        yield return FadeCanvas(0f, 1f);
+
+        SetActiveMenusImmediate(toShow, toHide);
+
+        yield return FadeCanvas(1f, 0f);
+
+        isTransitioning = false;
+    }
+
+    private void SetActiveMenusImmediate(GameObject toShow, GameObject[] toHide)
+    {
+        foreach (var canvas in toHide)
+        {
+            if (canvas != null && canvas != toShow)
+            {
+                canvas.SetActive(false);
+            }
+        }
+
+        if (toShow != null)
+        {
+            toShow.SetActive(true);
+        }
+    }
+
+    private IEnumerator FadeCanvas(float from, float to)
+    {
+        float duration = Mathf.Max(0.01f, fadeDuration);
+        float elapsed = 0f;
+
+        fadeCanvasGroup.alpha = from;
+        fadeCanvasGroup.blocksRaycasts = true;
+        fadeCanvasGroup.interactable = false;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            fadeCanvasGroup.alpha = Mathf.Lerp(from, to, elapsed / duration);
+            yield return null;
+        }
+
+        fadeCanvasGroup.alpha = to;
+
+        if (Mathf.Approximately(to, 0f))
+        {
+            fadeCanvasGroup.blocksRaycasts = false;
+        }
     }
 
     #endregion
