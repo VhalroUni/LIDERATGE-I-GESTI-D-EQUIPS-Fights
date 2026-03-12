@@ -1,15 +1,17 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(Button))]
-public class MapButton : MonoBehaviour
+public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Configuración del Mapa")]
     [SerializeField] private string mapId;
 
     [Header("Referencias Visuales (Opcional)")]
     [SerializeField] private Image previewImage;
-    [SerializeField] private Text mapNameText;
+    [SerializeField] private TMP_Text mapNameText;
 
     private Button button;
     private MainMenu mainMenu;
@@ -26,6 +28,8 @@ public class MapButton : MonoBehaviour
         {
             Debug.LogError("[MapButton] No se encontró componente Button.");
         }
+
+        SetMapNameVisible(false);
     }
 
     private void Start()
@@ -52,6 +56,24 @@ public class MapButton : MonoBehaviour
         if (button != null)
         {
             button.onClick.RemoveListener(OnClick);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SetMapNameVisible(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        SetMapNameVisible(false);
+    }
+
+    private void SetMapNameVisible(bool visible)
+    {
+        if (mapNameText != null)
+        {
+            mapNameText.gameObject.SetActive(visible);
         }
     }
 

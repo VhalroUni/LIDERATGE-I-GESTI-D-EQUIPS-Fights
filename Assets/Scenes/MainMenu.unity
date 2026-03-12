@@ -505,7 +505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapButton
   mapId: lava
   previewImage: {fileID: 0}
-  mapNameText: {fileID: 0}
+  mapNameText: {fileID: 45693583}
 --- !u!114 &64288662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1386,7 +1386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapButton
   mapId: espacio
   previewImage: {fileID: 0}
-  mapNameText: {fileID: 0}
+  mapNameText: {fileID: 45693583}
 --- !u!114 &271619246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3587,7 +3587,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1382963089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5210,7 +5210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2094438488
 MonoBehaviour:
   m_ObjectHideFlags: 0
