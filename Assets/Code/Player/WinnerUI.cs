@@ -45,7 +45,7 @@ public class WinnerUI : MonoBehaviour
     public void ShowWinner(string playerName)
     {
         if (winnerText != null)
-            winnerText.text = $"Player {playerName} wins";
+            winnerText.text = $"Player {playerName} \n wins";
         else
             Debug.LogWarning("[WinnerUI] winnerText no asignado.");
 
