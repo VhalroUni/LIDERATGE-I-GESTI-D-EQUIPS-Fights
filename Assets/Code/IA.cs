@@ -33,7 +33,6 @@ public class IA : MonoBehaviour
     float distanceToRival;
     float nextDecisionTime;
     float nextActionTime;
-    float nextMoveTime;
 
     bool isBlocking = false;
 
@@ -64,8 +63,6 @@ public class IA : MonoBehaviour
 
     void UpdateMovement()
     {
-        if (Time.time < nextMoveTime) return;
-
         if (attack != null && attack.animator.GetBool("IsAttacking"))
         {
             movement.SetInputVector(Vector2.zero);
@@ -130,7 +127,6 @@ public class IA : MonoBehaviour
     {
         attack.MeleeAttack();
         nextActionTime = Time.time + 0.9f;
-        nextMoveTime = Time.time + reactionDelay;
         isBlocking = false;
     }
 
@@ -138,7 +134,6 @@ public class IA : MonoBehaviour
     {
         attack.AreaAtack();
         nextActionTime = Time.time + 1.1f;
-        nextMoveTime = Time.time + reactionDelay;
         isBlocking = false;
     }
 
@@ -148,7 +143,6 @@ public class IA : MonoBehaviour
 
         attack.DistanceAttack();
         nextActionTime = Time.time + 1.2f;
-        nextMoveTime = Time.time + reactionDelay;
         isBlocking = false;
     }
 
@@ -156,7 +150,6 @@ public class IA : MonoBehaviour
     {
         attack.Ultimate();
         nextActionTime = Time.time + 2f;
-        nextMoveTime = Time.time + reactionDelay;
         isBlocking = false;
     }
 
@@ -164,7 +157,6 @@ public class IA : MonoBehaviour
     {
         attack.Teleport();
         nextActionTime = Time.time + 1f;
-        nextMoveTime = Time.time + reactionDelay;
         isBlocking = false;
     }
 
