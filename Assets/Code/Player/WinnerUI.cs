@@ -8,6 +8,11 @@ public class WinnerUI : MonoBehaviour
 {
     [SerializeField] private GameObject winnerCanvas;
     [SerializeField] private TMP_Text winnerText;
+
+    [Header("Imágenes de Win")]
+    [SerializeField] private GameObject player1Image;
+    [SerializeField] private GameObject player2Image;
+
     [SerializeField] private int sortingOrder = 5000;
 
     [Header("Escena")]
@@ -52,6 +57,9 @@ public class WinnerUI : MonoBehaviour
                 canvasGroup.blocksRaycasts = false;
             }
         }
+
+        if (player1Image != null) player1Image.SetActive(false);
+        if (player2Image != null) player2Image.SetActive(false);
 
         isWinnerShown = false;
         isReturningToMenu = false;
@@ -99,6 +107,10 @@ public class WinnerUI : MonoBehaviour
             winnerText.text = $"Player {playerName} \n wins";
         else
             Debug.LogWarning("[WinnerUI] winnerText no asignado.");
+
+        // Activar la imagen correspondiente al jugador que ha ganado
+        if (player1Image != null) player1Image.SetActive(playerName.Contains("1"));
+        if (player2Image != null) player2Image.SetActive(playerName.Contains("2"));
 
         if (winnerCanvas != null)
         {

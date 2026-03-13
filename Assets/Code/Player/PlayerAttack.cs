@@ -86,6 +86,7 @@ public class PlayerAttack : MonoBehaviour
     [Header("Particles")]
     public GameObject meleeParticle;
     public GameObject areaParticle;
+    private GameObject activeAreaParticle;
     public GameObject teleportParticle;
     public GameObject dashParticle;
 
@@ -200,6 +201,11 @@ public class PlayerAttack : MonoBehaviour
     {
         StopAllCoroutines();
 
+        if (activeAreaParticle != null)
+        {
+            Destroy(activeAreaParticle);
+        }
+
         isAttacking = false;
         attackActive = false;
         comboStep = 0;
@@ -216,7 +222,7 @@ public class PlayerAttack : MonoBehaviour
 
     private float CalculateAttackAngle()
     {
-        if (target == null) return 90f; 
+        if (target == null) return 90f;
 
         Vector3 direction = target.transform.position - transform.position;
 
@@ -236,7 +242,7 @@ public class PlayerAttack : MonoBehaviour
 
         if (showDebug)
         {
-            Debug.Log($"Target Y difference: {direction.y:F2}, Horizontal Distance: {horizontalDistance:F2}, Angle: {angle:F1}�");
+            Debug.Log($"Target Y difference: {direction.y:F2}, Horizontal Distance: {horizontalDistance:F2}, Angle: {angle:F1}");
         }
 
         return angle;
@@ -262,7 +268,7 @@ public class PlayerAttack : MonoBehaviour
         {
             blendValue = 0.5f; // Ataque hacia arriba
         }
-        else 
+        else
         {
             blendValue = 1.0f; // Ataque recto arriba
         }
@@ -273,11 +279,12 @@ public class PlayerAttack : MonoBehaviour
                                    blendValue == -0.5f ? "Hacia Abajo" :
                                    blendValue == 0.0f ? "Horizontal" :
                                    blendValue == 0.5f ? "Hacia Arriba" : "Recto Arriba";
-            Debug.Log($"Angle {angle:F1}� -> Blend Value: {blendValue} ({animationName})");
+            Debug.Log($"Angle {angle:F1} -> Blend Value: {blendValue} ({animationName})");
         }
 
         return blendValue;
     }
+
     private Vector3 GetProjectileSpawnPosition()
     {
         return projectileSpawnPoint != null ? projectileSpawnPoint.position : transform.position;
@@ -386,8 +393,9 @@ public class PlayerAttack : MonoBehaviour
         attackActive = false;
         yield return new WaitForSeconds(recovery[step] / samples);
 
-        isAttacking = false;
         animator.SetBool(isAttackingHash, false);
+        yield return new WaitForSeconds(0.1f); 
+        isAttacking = false;
     }
 
     private void ResetComboStep()
@@ -410,7 +418,53 @@ public class PlayerAttack : MonoBehaviour
         animator.SetFloat(attackIdHash, 0.5f);
         animator.SetBool(isAttackingHash, true);
 
-        StartCoroutine(ResetAttack(areaDamage, areaInfo[0], areaInfo[1], areaInfo[2], AttackType.Area));
+        StartCoroutine(AreaAttackRoutine());
+    }
+
+    private IEnumerator AreaAttackRoutine()
+    {
+        yield return new WaitForSeconds(areaHitDelay);
+
+        attackActive = true;
+
+        sounds.PlayOneShot(area);
+        activeAreaParticle = Instantiate(areaParticle, transform.position, Quaternion.identity);
+        float particleDuration = activeAreaParticle.GetComponent<ParticleSystem>().main.duration;
+        Destroy(activeAreaParticle, particleDuration);
+
+        Vector3 hitboxCenter = transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
+        Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f);
+
+        foreach (var hit in hits)
+        {
+            if (hit.gameObject == gameObject) continue;
+
+            LifeController life = hit.GetComponent<LifeController>();
+            PowerBar targetPowerBar = hit.GetComponent<PowerBar>();
+
+            if (life != null)
+            {
+                life.LoseHealth(areaDamage, transform.position);
+                powerBar.ModifyPower(playerGains.areaGainOnHit);
+
+                if (targetPowerBar != null)
+                    powerBar.ModifyPower(playerGains.areaGainOnReceive);
+            }
+        }
+
+        float remainingActiveTime = (areaInfo[0] + areaInfo[1]) / samples - areaHitDelay;
+        if (remainingActiveTime > 0)
+        {
+            yield return new WaitForSeconds(remainingActiveTime);
+        }
+
+        attackActive = false;
+
+        yield return new WaitForSeconds(areaInfo[2] / samples);
+
+        animator.SetBool(isAttackingHash, false);
+        yield return new WaitForSeconds(0.1f);
+        isAttacking = false;
     }
 
     // ================= DISTANCE =================
@@ -560,17 +614,16 @@ public class PlayerAttack : MonoBehaviour
 
         yield return new WaitForSeconds(ultimateInfo[2] / samples);
 
-        isAttacking = false;
         animator.SetBool(isAttackingHash, false);
+        yield return new WaitForSeconds(0.1f);
+        isAttacking = false;
     }
 
     private IEnumerator ResetAttack(float attackDamage, int startupFrames, int activeFrames, int recoveryFrames, AttackType type)
     {
-        yield return new WaitForSeconds(startupFrames / samples);
+        yield return new WaitForSeconds(distanceHitDelay);
 
         attackActive = true;
-
-        yield return new WaitForSeconds(activeFrames / samples);
 
         if (type == AttackType.Distance)
         {
@@ -592,39 +645,18 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        if (type == AttackType.Area)
+        float remainingActiveTime = (startupFrames + activeFrames) / samples - distanceHitDelay;
+        if (remainingActiveTime > 0)
         {
-            Vector3 hitboxCenter = transform.position + meleeDirection * hitboxOffset.x + Vector3.up * hitboxOffset.y;
-            Collider2D[] hits = Physics2D.OverlapBoxAll(hitboxCenter, hitboxSize, 0f);
-
-            foreach (var hit in hits)
-            {
-                if (hit.gameObject == gameObject) continue;
-
-                LifeController life = hit.GetComponent<LifeController>();
-                PowerBar targetPowerBar = hit.GetComponent<PowerBar>();
-
-                if (life != null)
-                {
-                    life.LoseHealth(attackDamage, transform.position);
-                    powerBar.ModifyPower(playerGains.areaGainOnHit);
-
-                    if (targetPowerBar != null)
-                        powerBar.ModifyPower(playerGains.areaGainOnReceive);
-                }
-            }
-
-            sounds.PlayOneShot(area);
-            GameObject particle = Instantiate(areaParticle, transform.position, Quaternion.identity);
-            float duration = particle.GetComponent<ParticleSystem>().main.duration;
-            Destroy(particle, duration);
+            yield return new WaitForSeconds(remainingActiveTime);
         }
 
         attackActive = false;
 
         yield return new WaitForSeconds(recoveryFrames / samples);
 
-        isAttacking = false;
         animator.SetBool(isAttackingHash, false);
+        yield return new WaitForSeconds(0.1f);
+        isAttacking = false;
     }
 }
